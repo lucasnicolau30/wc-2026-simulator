@@ -15,10 +15,10 @@ let current = "pt";
 const btnLang = document.getElementById("btnLang");
 
 btnLang.addEventListener("click", () => {
-    if (current === "pt") {
+    if (current === "pt"){
         current = "en";
     }
-    else {
+    else{
         current = "pt";
     }
 

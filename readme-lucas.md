@@ -125,3 +125,8 @@ players        → 26 atletas por seleção
   - age
   - overall (nota geral, ex: 1-99)
   - goals_scored (histórico)
+
+  
+if (team.players.length !== 26) {
+   throw new Error("Team must have exactly 26 players");
+}
