@@ -11,7 +11,7 @@ USE wc2026;
 	GROUPS_STANDINGS 
 */
 
-CREATE TABLE groups(
+CREATE TABLE `groups`(
 	id INT AUTO_INCREMENT PRIMARY KEY,
     name CHAR(1) NOT NULL 
 );
@@ -22,7 +22,7 @@ CREATE TABLE selections(
     name VARCHAR(100) NOT NULL,
     ranking INT NOT NULL,
 	formation VARCHAR(10) NOT NULL,	
-    FOREIGN KEY (group_id) REFERENCES groups(id)
+    FOREIGN KEY (group_id) REFERENCES `groups`(id)
 );
 
 CREATE TABLE players(
@@ -46,7 +46,7 @@ CREATE TABLE matches(
 	away_score INT DEFAULT 0,
 	home_xg FLOAT DEFAULT 0,
 	away_xg FLOAT DEFAULT 0,
-	FOREIGN KEY (group_id) REFERENCES groups(id),
+	FOREIGN KEY (group_id) REFERENCES `groups`(id),
 	FOREIGN KEY (home_id) REFERENCES selections(id),
 	FOREIGN KEY (away_id) REFERENCES selections(id)
 );
@@ -63,7 +63,7 @@ CREATE TABLE groups_standings(
 	goals_for INT DEFAULT 0,
 	goals_against INT DEFAULT 0,
 	goal_difference INT DEFAULT 0,
-	FOREIGN KEY (group_id) REFERENCES groups(id),
+	FOREIGN KEY (group_id) REFERENCES `groups`(id),
 	FOREIGN KEY (selection_id) REFERENCES selections(id),
 	FOREIGN KEY (matches_id) REFERENCES matches(id)
 );

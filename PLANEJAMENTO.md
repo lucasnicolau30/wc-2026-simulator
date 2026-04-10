@@ -67,3 +67,10 @@ nota_base = 6.0
 - time perdeu       → -0.5
 - tomou gol (GK)    → -0.8
 Nota final entre 1 e 10, arredondada em 1 casa decimal.
+
+
+ref: https://uiverse.io/SamiBouchareb/warm-catfish-72
+https://www.fifa.com/pt/tournaments/mens/worldcup/canadamexicousa2026
+https://dev.mysql.com/
+https://interativos.ge.globo.com/futebol/copa-do-mundo/especial/simulador-da-copa-do-mundo-2026
+https://inside.fifa.com/fifa-world-ranking/men
