@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WC2026 Simulator</title>
+  <link rel="stylesheet" href="css/home.css" />
+</head>
+
+<body>
+  <canvas id="particles"></canvas>
+
+  <button id="btnLang">EN</button>
+
+  <main class="container">
+    <div class="logo-wrapper">
+      <img class="logo" src="img/wc-logo.avif" alt="FIFA World Cup 2026" />
+    </div>
+
+    <div class="hero-text">
+      <h1>WORLD CUP SIMULATOR</h1>
+      <p>Simulate entire tournaments with real teams.</p>
+    </div>
+
+    <button class="custom-button" id="startSimulation">
+      <span class="button-content">
+        <span class="button-text">Simulações</span>
+        <span class="button-icon">→</span>
+      </span>
+      <span class="button-background"></span>
+    </button>
+  </main>
+
+  <div id="pageLoader">
+  <div class="loader-content">
+
+    <img src="img/wc-logo.avif" class="loader-logo"/>
+
+    <p>Carregando simulação...</p>
+
+  </div>
+</div>
+
+  <script src="js/translation.js"></script>
+  <script src="js/particles.js"></script>
+
+<script>
+const btn = document.getElementById("startSimulation");
+const loader = document.getElementById("pageLoader");
+
+btn.addEventListener("click", () => {
+
+  loader.classList.add("active");
+
+  setTimeout(() => {
+
+    window.location.href = "simulation.html";
+
+  }, 750);
+
+});
+</script>
+
+</body>
+</html>

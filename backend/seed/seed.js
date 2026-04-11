@@ -48,6 +48,4 @@ async function seed(){
     await connection.end();
 };
 
-
-
 seed();
