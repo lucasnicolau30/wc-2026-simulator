@@ -1,10 +1,15 @@
 const translations = {
 pt: {
-    // index.html
-    simulations: "Simulações",
+    // home.html
+    homeHeader: "WC2026 Simulador",
+    homeTitle: "SIMULADOR DA COPA DO MUNDO",
+    homeDescription: "Simule o maior torneio do mundo.",
+    loading: "Carregando modos...",
+    startSimulation: "Simular Agora",
     lang: "EN",
 
-    // simulacao.html
+    // simulation.html
+    simHeader: "Escolha o Modo de Simulação — WC2026",
     simTitle: "Escolha o Modo de Simulação",
     simSubtitle: "Selecione entre simulação automática com base em estatísticas reais ou simule manualmente as partidas.",
     realTitle: "Simulação Real",
@@ -15,11 +20,16 @@ pt: {
 },
 
 en: {
-    // index.html
-    simulations: "Simulations",
+    // home.html
+    homeHeader: "WC2026 Simulator",
+    homeTitle: "WORLD CUP SIMULATOR",
+    homeDescription: "Simulate the biggest tournament in the world.",
+    loading: "Loading modes...",
+    startSimulation: "Simulate Now",
     lang: "PT",
 
-    // simulacao.html
+    // simulation.html
+    simHeader: "Choose Simulation Mode — WC2026",
     simTitle: "Choose Simulation Mode",
     simSubtitle: "Select between automatic simulation based on real statistics or manually simulate each match.",
     realTitle: "Real Simulation",
@@ -42,36 +52,21 @@ btnLang.addEventListener("click", () => {
         current = "pt";
     }
 
-    const t = translations[current];
-
-    // index.html
-    const btnText = document.querySelector(".button-text");
-    if (btnText) btnText.textContent = t.simulations;
-
-    btnLang.textContent = t.lang;
-
     btnLang.classList.remove("pop");
     void btnLang.offsetWidth; // reinicia a animação se clicar rápido
     btnLang.classList.add("pop");
 
-    // simulacao.html
+    // translation 
     applyTranslation();
 });
 
-// simulacao.html
 function applyTranslation() {
     const t = translations[current];
     document.querySelectorAll("[data-i18n]").forEach(el => {
         const key = el.getAttribute("data-i18n");
         if (t[key]) el.textContent = t[key];
     });
+    btnLang.textContent = t.lang;
 }
 
-// simulacao.html
-document.querySelectorAll(".sim-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-        const mode = btn.getAttribute("data-mode");
-        // Futuramente: redirecionar para a página de grupos/partidas com o modo escolhido
-        console.log("Modo selecionado:", mode);
-    });
-});
+applyTranslation();

@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-  <title>Modo de Simulação — WC2026</title>
-
+  <title data-i18n="simHeader">Escolha o Modo de Simulação — WC2026</title>
+  <link rel="icon" href="img/wc-logo.avif" type="image/avif" />
   <link rel="stylesheet" href="css/simulation.css" />
 </head>
 
@@ -20,7 +19,6 @@
 
     <div class="sim-header">
       <h1 class="sim-title" data-i18n="simTitle"> Escolha o Modo de Simulação</h1>
-
       <p class="sim-subtitle" data-i18n="simSubtitle"> Selecione entre simulação automática com base em estatísticas reais ou simule manualmente as partidas.</p>
     </div>
 
@@ -34,7 +32,6 @@
         </div>
 
         <h2 class="sim-card-title" data-i18n="realTitle"> Simulação Real</h2>
-
         <p class="sim-card-desc" data-i18n="realDesc"> Simule os torneios usando estatísticas e dados reais para resultados mais precisos.</p>
 
         <button class="sim-btn" data-mode="real" data-i18n="continue"> Continuar</button>
@@ -48,7 +45,6 @@
         </div>
 
         <h2 class="sim-card-title" data-i18n="manualTitle"> Simulação Manual</h2>
-
         <p class="sim-card-desc" data-i18n="manualDesc"> Simule cada partida manualmente, escolhendo os vencedores a cada confronto.</p>
 
         <button class="sim-btn sim-btn--secondary" data-mode="manual" data-i18n="continue">Continuar</button>
@@ -57,5 +53,6 @@
   </main>
 
   <script src="js/translation.js"></script>
+  <script src="js/simulation.js"></script>
 </body>
 </html>

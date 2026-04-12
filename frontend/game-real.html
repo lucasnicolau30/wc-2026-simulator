@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WC2026 — Group Stage</title>
+  <link rel="stylesheet" href="css/game-real.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="navbar-logo">
+      <img src="img/wc-logo.avif" alt="WC2026" />
+    </div>
+    <div class="navbar-tabs">
+      <button class="tab active" data-tab="groups">Groups</button>
+      <button class="tab" data-tab="matches">Matches</button>
+      <button class="tab" data-tab="knockout">Knockout</button>
+    </div>
+  </nav>
+
+  <!-- GROUPS -->
+  <main class="page active" id="page-groups">
+    <h1 class="page-title">Group Stage</h1>
+    <div class="groups-grid" id="groups-grid">
+      <div class="loading">Loading groups...</div>
+    </div>
+    <div class="page-footer">
+      <button class="btn-simulate" id="btn-simulate-groups">Simulate</button>
+    </div>
+  </main>
+
+  <!-- MATCHES -->
+  <main class="page" id="page-matches">
+    <h1 class="page-title">Matches</h1>
+    <div class="matches-list" id="matches-list">
+      <div class="loading">Loading matches...</div>
+    </div>
+    <div class="page-footer">
+      <button class="btn-simulate">Simulate All</button>
+    </div>
+  </main>
+
+  <!-- KNOCKOUT -->
+  <main class="page" id="page-knockout">
+    <h1 class="page-title">Knockout Stage</h1>
+    <div class="knockout-wrap">
+      <p class="knockout-placeholder">Simulate the group stage first.</p>
+    </div>
+  </main>
+
+  <script src="js/game-real.js"></script>
+</body>
+</html>
