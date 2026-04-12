@@ -21,8 +21,8 @@ async function loadGroups(){
 
   // agrupa por group_name
   const groups = {};
-  for (const selection of selections){
-    if (!groups[selection.group_name]){
+  for(const selection of selections){
+    if(!groups[selection.group_name]){
       groups[selection.group_name] = [];
     }
     groups[selection.group_name].push(selection);
@@ -31,7 +31,7 @@ async function loadGroups(){
   const grid = document.getElementById("groups-grid");
   grid.innerHTML = "";
 
-  for (const groupName of Object.keys(groups).sort()){
+  for(const groupName of Object.keys(groups).sort()){
     const card = document.createElement("div");
     card.className = "group-card";
 

@@ -3,7 +3,7 @@
         {
                 "name": "México",
                 "group": "A",
-                "ranking": 17,
+                "ranking": 15,
                 "formation": "4-3-3",
                 "players": [
 
@@ -47,7 +47,7 @@
         {
                 "name": "África do Sul",
                 "group": "A",
-                "ranking": 59,
+                "ranking": 60,
                 "formation": "4-2-3-1",
                 "players": [
 
@@ -91,7 +91,7 @@
         {
                 "name": "Coreia do Sul",
                 "group": "A",
-                "ranking": 23,
+                "ranking": 25,
                 "formation": "4-3-3",
                 "players": [
 
@@ -135,7 +135,7 @@
         {
                 "name": "República Tcheca",
                 "group": "A",
-                "ranking": 39,
+                "ranking": 41,
                 "formation": "4-2-3-1",
                 "players": [
 
@@ -179,7 +179,7 @@
         {
                 "name": "Canadá",
                 "group": "B",
-                "ranking": 29,
+                "ranking": 30,
                 "formation": "4-4-2",
                 "players": [
 
@@ -311,7 +311,7 @@
         {
                 "name": "Suíça",
                 "group": "B",
-                "ranking": 18,
+                "ranking": 19,
                 "formation": "4-2-3-1",
                 "players": [
 
@@ -482,7 +482,7 @@
         {
                 "name": "Escócia",
                 "group": "C",
-                "ranking": 38,
+                "ranking": 43,
                 "formation": "3-4-2-1",
                 "players": [
                     { "name": "Angus Gunn", "age": 29, "position": "GK", "rating": 81, "is_starter": true },
@@ -569,7 +569,7 @@
         {
                 "name": "Paraguai",
                 "group": "D",
-                "ranking": 52,
+                "ranking": 40,
                 "formation": "4-3-3",
                 "players": [
                     { "name": "Antony Silva", "age": 38, "position": "GK", "rating": 78, "is_starter": true },
@@ -607,7 +607,7 @@
         {
                 "name": "Austrália",
                 "group": "D",
-                "ranking": 24,
+                "ranking": 27,
                 "formation": "4-2-3-1",
                 "players": [
 
@@ -651,7 +651,7 @@
         {
                 "name": "Turquia",
                 "group": "D",
-                "ranking": 36,
+                "ranking": 22,
                 "formation": "4-2-3-1",
                 "players": [
 
@@ -738,7 +738,7 @@
         {
                 "name": "Curaçao",
                 "group": "E",
-                "ranking": 81,
+                "ranking": 82,
                 "formation": "4-3-3",
                 "players": [
                     { "name": "Eloy Room", "age": 37, "position": "GK", "rating": 76, "is_starter": true },
@@ -781,7 +781,7 @@
         {
                 "name": "Costa do Marfim",
                 "group": "E",
-                "ranking": 37,
+                "ranking": 34,
                 "formation": "4-3-3",
                 "players": [
                     { "name": "Yahia Fofana", "age": 25, "position": "GK", "rating": 80, "is_starter": true },
@@ -824,7 +824,7 @@
         {
                 "name": "Equador",
                 "group": "E",
-                "ranking": 25,
+                "ranking": 23,
                 "formation": "4-3-3",
                 "players": [
                     { "name": "Hernán Galíndez", "age": 39, "position": "GK", "rating": 80, "is_starter": true },
@@ -910,7 +910,7 @@
         {
                     "name": "Japão",
                     "group": "F",
-                    "ranking": 19,
+                    "ranking": 18,
                     "formation": "4-2-3-1",
                     "players": [
                         { "name": "Zion Suzuki", "age": 23, "position": "GK", "rating": 80, "is_starter": true },
@@ -953,7 +953,7 @@
         {
                     "name": "Suécia",
                     "group": "F",
-                    "ranking": 42,
+                    "ranking": 38,
                     "formation": "4-4-2",
                     "players": [
                         { "name": "Robin Olsen", "age": 36, "position": "GK", "rating": 80, "is_starter": true },
@@ -996,7 +996,7 @@
         {
                     "name": "Tunísia",
                     "group": "F",
-                    "ranking": 47,
+                    "ranking": 44,
                     "formation": "4-3-3",
                     "players": [
                         { "name": "Aymen Dahmen", "age": 29, "position": "GK", "rating": 79, "is_starter": true },
@@ -1082,7 +1082,7 @@
         {
                 "name": "Egito",
                 "group": "G",
-                "ranking": 31,
+                "ranking": 29,
                 "formation": "4-3-3",
                 "players": [
                     { "name": "Mohamed El Shenawy", "age": 36, "position": "GK", "rating": 82, "is_starter": true },
@@ -1169,7 +1169,7 @@
         {
                 "name": "Nova Zelândia",
                 "group": "G",
-                "ranking": 94,
+                "ranking": 85,
                 "formation": "4-4-2",
                 "players": [
 
@@ -1433,7 +1433,7 @@
         {
                 "name": "Senegal",
                 "group": "I",
-                "ranking": 12,
+                "ranking": 14,
                 "formation": "4-3-3",
                 "players": [
 
@@ -1477,7 +1477,7 @@
         {
                 "name": "Iraque",
                 "group": "I",
-                "ranking": 58,
+                "ranking": 57,
                 "formation": "4-2-3-1",
                 "players": [
 
@@ -1521,7 +1521,7 @@
         {
                 "name": "Noruega",
                 "group": "I",
-                "ranking": 32,
+                "ranking": 31,
                 "formation": "4-3-3",
                 "players": [
 
@@ -1741,7 +1741,7 @@
         {
                 "name": "Portugal",
                 "group": "K",
-                "ranking": 7,
+                "ranking": 5,
                 "formation": "4-3-3",
                 "players": [
 
@@ -1785,7 +1785,7 @@
         {
                 "name": "Colômbia",
                 "group": "K",
-                "ranking": 14,
+                "ranking": 13,
                 "formation": "4-3-3",
                 "players": [
 
@@ -1829,7 +1829,7 @@
         {
                 "name": "Uzbequistão",
                 "group": "K",
-                "ranking": 68,
+                "ranking": 50,
                 "formation": "4-2-3-1",
                 "players": [
 
@@ -1873,7 +1873,7 @@
         {
                 "name": "Congo",
                 "group": "K",
-                "ranking": 99,
+                "ranking": 46,
                 "formation": "4-3-3",
                 "players": [
 
@@ -1917,7 +1917,7 @@
         {
                 "name": "Inglaterra",
                 "group": "L",
-                "ranking": 5,
+                "ranking": 4,
                 "formation": "4-3-3",
                 "players": [
 
@@ -1961,7 +1961,7 @@
         {
                 "name": "Croácia",
                 "group": "L",
-                "ranking": 10,
+                "ranking": 11,
                 "formation": "4-3-3",
                 "players": [
 
@@ -2005,7 +2005,7 @@
         {
                 "name": "Gana",
                 "group": "L",
-                "ranking": 72,
+                "ranking": 74,
                 "formation": "4-2-3-1",
                 "players": [
                     { "name": "Lawrence Ati-Zigi", "age": 29, "position": "GK", "rating": 79, "is_starter": true },

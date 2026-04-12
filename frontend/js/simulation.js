@@ -11,10 +11,7 @@ document.querySelectorAll(".sim-btn").forEach(btn => {
             body: JSON.stringify({ mode })
         });
 
-        // HTTP POST para enviar o modo selecionado para o backend, que pode ser "real" ou "manual"
-        const data = await response.json();
-
-        if (mode === "real") {
+        if(mode === "real"){
             window.location.href = "game-real.html";
         }
     });
