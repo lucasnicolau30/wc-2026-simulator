@@ -42,3 +42,25 @@ app.post('/simulation', async(req, res) => {
     }
 });
 
+app.post('/simulate/match', async(req, res) => {
+    const { selectionA, selectionB } = req.body;
+
+    const strengths = await calculateStrength();
+    const response = await fetch("http://localhost:8000/starters");
+    const starterPlayers = await response.json();
+
+    const teams = {};
+    for(const player of starterPlayers){
+        if(!teams[player.selection_name]){
+            teams[player.selection_name] = [];
+        } 
+        teams[player.selection_name].push(player);
+    }
+
+    const result = simulateMatchGroupStage(
+        selectionA, teams[selectionA], strengths[selectionA],
+        selectionB, teams[selectionB], strengths[selectionB]
+    );
+
+    res.json(result);
+});

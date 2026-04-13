@@ -164,13 +164,13 @@ function generateGoalMinutes(scorersA, selectionA, scorersB, selectionB){
 
     if(scorersA.length > 0){
         for(let i = 0; i < scorersA.length; i++){
-            minA.push({ player: scorersA[i], minute: Math.floor(Math.random() * 90) + 1 });
+            minA.push({ player: scorersA[i].name, minute: Math.floor(Math.random() * 90) + 1 });
         }
     }
 
     if(scorersB.length > 0){
         for(let i = 0; i < scorersB.length; i++){
-            minB.push({ player: scorersB[i], minute: Math.floor(Math.random() * 90) + 1 });
+            minB.push({ player: scorersB[i].name, minute: Math.floor(Math.random() * 90) + 1 });
         }
     }
     
@@ -258,43 +258,14 @@ function simulateMatchGroupStage(selectionA, playersA, strengthA, selectionB, pl
         playerRatingsB.push({ player: player.name, position: player.position, rating });
     }
 
-    return { winner, loser, pointsA, pointsB, goalsA, goalsB, xgA, xgB, events, playerRatingsA, playerRatingsB, assistsA, assistsB };
+    return { 
+    winner, loser, pointsA, pointsB, goalsA, goalsB, xgA, xgB, events, playerRatingsA, playerRatingsB,
+    scorersA: scorersA.map(s => ({ name: s.name, position: s.position })),
+    scorersB: scorersB.map(s => ({ name: s.name, position: s.position })),
+    assistsA: assistsA.map(a => ({ name: a.name, position: a.position })),
+    assistsB: assistsB.map(a => ({ name: a.name, position: a.position }))
+    };
 }
 
 module.exports = { calculateStrength, calculateWinProbability, calculateSelectionsRatings, calculateXG, poisson, calculateCleanSheet, selectGoalscorer, selectAssist, generateGoalMinutes, calculateGroupStageResult, calculatePlayerRating, simulateMatchGroupStage };
 
-async function test() {
-    const strengths = await calculateStrength();
-    const response = await fetch("http://localhost:8000/starters");
-    const starterPlayers = await response.json();
-
-    const teams = {};
-    for(const player of starterPlayers){
-        if(!teams[player.selection_name]) teams[player.selection_name] = [];
-        teams[player.selection_name].push(player);
-    }
-
-    const result = simulateMatchGroupStage(
-        'Brasil', teams['Brasil'], strengths['Brasil'],
-        'Argentina', teams['Argentina'], strengths['Argentina']
-    );
-
-    console.log(`\nBrasil ${result.goalsA} x ${result.goalsB} Argentina`);
-    console.log(`Vencedor: ${result.winner ?? 'Empate'}`);
-    console.log(`XG: ${result.xgA} x ${result.xgB}`);
-    console.log(`Pontos: Brasil ${result.pointsA} x Argentina ${result.pointsB}`);
-
-    console.log('\nEventos:');
-    result.events.forEach(e => console.log(`  ${e.minute}' - ${e.player.name} (${e.team})`));
-
-    console.log('\nAssistências Brasil:', result.assistsA.map(a => a.name));
-    console.log('Assistências Argentina:', result.assistsB.map(a => a.name));
-
-    console.log('\nNotas Brasil:');
-    result.playerRatingsA.forEach(p => console.log(`  ${p.player} (${p.position}): ${p.rating}`));
-
-    console.log('\nNotas Argentina:');
-    result.playerRatingsB.forEach(p => console.log(`  ${p.player} (${p.position}): ${p.rating}`));
-}
-
-test();
