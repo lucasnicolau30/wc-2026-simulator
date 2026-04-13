@@ -75,6 +75,7 @@ CREATE TABLE player_match_stats(
 	goals INT DEFAULT 0,
 	assists INT DEFAULT 0,
 	rating FLOAT DEFAULT 0,
+    goal_minute INT NULL,
 	FOREIGN KEY (player_id) REFERENCES players(id),
 	FOREIGN KEY (match_id) REFERENCES matches(id)
 );
