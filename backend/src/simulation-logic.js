@@ -78,6 +78,20 @@ function poisson(xG){
     return k - 1;
 }
 
+function calculateCleanSheet(goalsA, goalsB){
+    let cleanSheetA = false;
+    let cleanSheetB = false;
+
+    if(goalsA === 0){
+        cleanSheetA = true;
+    }
+    if(goalsB === 0){
+        cleanSheetB = true;
+    }
+
+    return { cleanSheetA, cleanSheetB };
+}
+
 function selectGoalscorer(players, goals){
     const attackers = players.filter(player => player.position === 'FWD');
     const middfielders = players.filter(player => player.position === 'MID');
@@ -111,6 +125,39 @@ function selectGoalscorer(players, goals){
     return goalscorers;
 }
 
+function selectAssist(players, goals){
+    const attackers = players.filter(player => player.position === 'FWD');
+    const middfielders = players.filter(player => player.position === 'MID');
+    const defenders = players.filter(player => player.position === 'DEF');
+    const gks = players.filter(player => player.position === 'GK');
+    const assists = [];
+
+    for(let i = 0; i < goals; i++){
+        const random = Math.random();
+        let assister;
+
+        if(random < 0.3 && attackers.length > 0){
+            assister = attackers[Math.floor(Math.random() * attackers.length)];
+        } 
+        else if(random < 0.8 && middfielders.length > 0){
+            assister = middfielders[Math.floor(Math.random() * middfielders.length)];
+        } 
+        else if(random < 0.95 && defenders.length > 0){
+            assister = defenders[Math.floor(Math.random() * defenders.length)];
+        } 
+        else if(gks.length > 0){
+            assister = gks[Math.floor(Math.random() * gks.length)];
+        }
+
+        if(!assister){
+            assister = players[Math.floor(Math.random() * players.length)];
+        }
+
+        assists.push(assister);
+    }
+    return assists;
+}
+
 function generateGoalMinutes(scorersA, selectionA, scorersB, selectionB){
     const minA = [];
     const minB = [];
@@ -134,34 +181,90 @@ function generateGoalMinutes(scorersA, selectionA, scorersB, selectionB){
 
 function calculateGroupStageResult(selectionA, goalsA, selectionB, goalsB){
     let winner;
+    let loser;
     let pointsA = 0;
     let pointsB = 0;
     if(goalsA > goalsB){
         winner = selectionA;
+        loser = selectionB;
         pointsA = 3;
     }
     else if(goalsB > goalsA){
         winner = selectionB;
+        loser = selectionA;
         pointsB = 3;
     }
     else{
+        winner = null;
+        loser = null;
         pointsA = 1;
         pointsB = 1;
     }
 
-    return { winner, pointsA, pointsB };
+    return { winner, loser, pointsA, pointsB };
 }
 
-// function adjustScore(winner, selectionA, goalsA, selectionB, goalsB){
-//     let aux;
-//     if(winner == sele)
-// }
+function calculatePlayerRating(player, scored, assisted, teamWon, teamLost, cleanSheet, goalsConceded){
+    let rating = 6.0;
 
-module.exports = { calculateStrength, calculateWinProbability, calculateSelectionsRatings };
+    rating += scored * 1.5;
+    rating += assisted * 1.0;
+
+    if(teamWon) rating += 0.5;
+    if(teamLost) rating -= 0.5;
+
+    if(cleanSheet && (player.position === 'DEF' || player.position === 'GK')){
+        rating += 0.8;
+    }
+    if(!cleanSheet && player.position === 'GK'){
+        rating -= 0.8;
+    }
+    if(player.position === 'GK'){
+        rating -= goalsConceded * 0.3;
+    }
+
+    return parseFloat(Math.min(10, Math.max(1, rating)).toFixed(1));
+}
+
+function simulateMatchGroupStage(selectionA, playersA, strengthA, selectionB, playersB, strengthB){
+    const { probabilityA, probabilityB } = calculateWinProbability(selectionA, strengthA, selectionB, strengthB);
+    const { attackRating: attackRatingA, defenseRating: defenseRatingA } = calculateSelectionsRatings(playersA);
+    const { attackRating: attackRatingB, defenseRating: defenseRatingB } = calculateSelectionsRatings(playersB);
+    const { xgA, xgB } = calculateXG(attackRatingA, defenseRatingA, probabilityA, attackRatingB, defenseRatingB, probabilityB);
+    const goalsA = poisson(xgA);
+    const goalsB = poisson(xgB);
+    const { cleanSheetA, cleanSheetB } = calculateCleanSheet(goalsA, goalsB);
+    const scorersA = selectGoalscorer(playersA, goalsA);
+    const scorersB = selectGoalscorer(playersB, goalsB);
+    const assistsA = selectAssist(playersA, goalsA);
+    const assistsB = selectAssist(playersB, goalsB);
+    const events = generateGoalMinutes(scorersA, selectionA, scorersB, selectionB);
+    const { winner, loser, pointsA, pointsB } = calculateGroupStageResult(selectionA, goalsA, selectionB, goalsB);
+    const playerRatingsA = [];
+    for(let i = 0; i < playersA.length; i++){
+        const player = playersA[i];
+        const scored = scorersA.filter(s => s.id === player.id).length;
+        const assisted = assistsA.filter(a => a.id === player.id).length;
+        const rating = calculatePlayerRating(player, scored, assisted, winner === selectionA, loser === selectionA, cleanSheetA, goalsB);
+        playerRatingsA.push({ player: player.name, position: player.position, rating });
+    }
+
+    const playerRatingsB = [];
+    for(let i = 0; i < playersB.length; i++){
+        const player = playersB[i];
+        const scored = scorersB.filter(s => s.id === player.id).length;
+        const assisted = assistsB.filter(a => a.id === player.id).length;
+        const rating = calculatePlayerRating(player, scored, assisted, winner === selectionB, loser === selectionB, cleanSheetB, goalsA);
+        playerRatingsB.push({ player: player.name, position: player.position, rating });
+    }
+
+    return { winner, loser, pointsA, pointsB, goalsA, goalsB, xgA, xgB, events, playerRatingsA, playerRatingsB, assistsA, assistsB };
+}
+
+module.exports = { calculateStrength, calculateWinProbability, calculateSelectionsRatings, calculateXG, poisson, calculateCleanSheet, selectGoalscorer, selectAssist, generateGoalMinutes, calculateGroupStageResult, calculatePlayerRating, simulateMatchGroupStage };
 
 async function test() {
     const strengths = await calculateStrength();
-
     const response = await fetch("http://localhost:8000/starters");
     const starterPlayers = await response.json();
 
@@ -171,59 +274,27 @@ async function test() {
         teams[player.selection_name].push(player);
     }
 
-    const brasilRatings = calculateSelectionsRatings(teams['Brasil']);
-    const argentinaRatings = calculateSelectionsRatings(teams['Argentina']);
-    const francaRatings = calculateSelectionsRatings(teams['França']);
-    const haitiRatings = calculateSelectionsRatings(teams['Haiti']);
-    const novaZelandiaRatings = calculateSelectionsRatings(teams['Nova Zelândia']);
+    const result = simulateMatchGroupStage(
+        'Brasil', teams['Brasil'], strengths['Brasil'],
+        'Argentina', teams['Argentina'], strengths['Argentina']
+    );
 
-    console.log('--- Brasil vs Argentina ---');
-    const { probabilityA: prob1A, probabilityB: prob1B } = calculateWinProbability('Brasil', strengths['Brasil'], 'Argentina', strengths['Argentina']);
-    const xg1 = calculateXG(brasilRatings.attackRating, brasilRatings.defenseRating, prob1A, argentinaRatings.attackRating, argentinaRatings.defenseRating, prob1B);
-    const goals1A = poisson(xg1.xgA);
-    const goals1B = poisson(xg1.xgB);
-    console.log(`Probabilidade: ${prob1A} x ${prob1B}`);
-    console.log(`XG: ${xg1.xgA} x ${xg1.xgB}`);
-    console.log(`Gols: Brasil ${goals1A} x Argentina ${goals1B}`);
-    const scorers1A = selectGoalscorer(teams['Brasil'], goals1A);
-    const scorers1B = selectGoalscorer(teams['Argentina'], goals1B);
-    const events1 = generateGoalMinutes(scorers1A, 'Brasil', scorers1B, 'Argentina');
-    events1.forEach(e => console.log(`${e.minute}' - ${e.player.name} (${e.team})`));
-    const result1 = calculateGroupStageResult('Brasil', goals1A, 'Argentina', goals1B);
-    console.log(`Vencedor: ${result1.winner ?? 'Empate'}`);
-    console.log(`Pontos: Brasil ${result1.pointsA} x Argentina ${result1.pointsB}`);
+    console.log(`\nBrasil ${result.goalsA} x ${result.goalsB} Argentina`);
+    console.log(`Vencedor: ${result.winner ?? 'Empate'}`);
+    console.log(`XG: ${result.xgA} x ${result.xgB}`);
+    console.log(`Pontos: Brasil ${result.pointsA} x Argentina ${result.pointsB}`);
 
-    console.log('--- França vs Haiti ---');
-    const { probabilityA: prob2A, probabilityB: prob2B } = calculateWinProbability('França', strengths['França'], 'Haiti', strengths['Haiti']);
-    const xg2 = calculateXG(francaRatings.attackRating, francaRatings.defenseRating, prob2A, haitiRatings.attackRating, haitiRatings.defenseRating, prob2B);
-    const goals2A = poisson(xg2.xgA);
-    const goals2B = poisson(xg2.xgB);
-    console.log(`Probabilidade: ${prob2A} x ${prob2B}`);
-    console.log(`XG: ${xg2.xgA} x ${xg2.xgB}`);
-    console.log(`Gols: França ${goals2A} x Haiti ${goals2B}`);
-    const scorers2A = selectGoalscorer(teams['França'], goals2A);
-    const scorers2B = selectGoalscorer(teams['Haiti'], goals2B);
-    const events2 = generateGoalMinutes(scorers2A, 'França', scorers2B, 'Haiti');
-    events2.forEach(e => console.log(`${e.minute}' - ${e.player.name} (${e.team})`));
-    const result2 = calculateGroupStageResult('França', goals2A, 'Haiti', goals2B);
-    console.log(`Vencedor: ${result2.winner ?? 'Empate'}`);
-    console.log(`Pontos: França ${result2.pointsA} x Haiti ${result2.pointsB}`);
+    console.log('\nEventos:');
+    result.events.forEach(e => console.log(`  ${e.minute}' - ${e.player.name} (${e.team})`));
 
-    console.log('--- Brasil vs Nova Zelândia ---');
-    const { probabilityA: prob3A, probabilityB: prob3B } = calculateWinProbability('Brasil', strengths['Brasil'], 'Nova Zelândia', strengths['Nova Zelândia']);
-    const xg3 = calculateXG(brasilRatings.attackRating, brasilRatings.defenseRating, prob3A, novaZelandiaRatings.attackRating, novaZelandiaRatings.defenseRating, prob3B);
-    const goals3A = poisson(xg3.xgA);
-    const goals3B = poisson(xg3.xgB);
-    console.log(`Probabilidade: ${prob3A} x ${prob3B}`);
-    console.log(`XG: ${xg3.xgA} x ${xg3.xgB}`);
-    console.log(`Gols: Brasil ${goals3A} x Nova Zelândia ${goals3B}`);
-    const scorers3A = selectGoalscorer(teams['Brasil'], goals3A);
-    const scorers3B = selectGoalscorer(teams['Nova Zelândia'], goals3B);
-    const events3 = generateGoalMinutes(scorers3A, 'Brasil', scorers3B, 'Nova Zelândia');
-    events3.forEach(e => console.log(`${e.minute}' - ${e.player.name} (${e.team})`));
-    const result3 = calculateGroupStageResult('Brasil', goals3A, 'Nova Zelândia', goals3B);
-    console.log(`Vencedor: ${result3.winner ?? 'Empate'}`);
-    console.log(`Pontos: Brasil ${result3.pointsA} x Nova Zelândia ${result3.pointsB}`);
+    console.log('\nAssistências Brasil:', result.assistsA.map(a => a.name));
+    console.log('Assistências Argentina:', result.assistsB.map(a => a.name));
+
+    console.log('\nNotas Brasil:');
+    result.playerRatingsA.forEach(p => console.log(`  ${p.player} (${p.position}): ${p.rating}`));
+
+    console.log('\nNotas Argentina:');
+    result.playerRatingsB.forEach(p => console.log(`  ${p.player} (${p.position}): ${p.rating}`));
 }
 
 test();

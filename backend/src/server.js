@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const mysql = require('mysql2');
 const cors = require('cors');
-const { calculateStrength, calculateWinProbability } = require('./simulation-logic');
+const { calculateStrength, calculateWinProbability, calculateSelectionsRatings, calculateXG, poisson, calculateCleanSheet, selectGoalscorer, selectAssist, generateGoalMinutes, calculateGroupStageResult, calculatePlayerRating, simulateMatchGroupStage } = require('./simulation-logic');
 
 app.use(cors());
 app.use(express.json());
