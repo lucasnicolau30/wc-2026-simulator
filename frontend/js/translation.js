@@ -16,6 +16,7 @@ pt: {
     realDesc: "Simule os torneios usando estatísticas e dados reais para resultados mais precisos.",
     manualTitle: "Simulação Manual",
     manualDesc: "Simule cada partida manualmente, escolhendo os vencedores a cada confronto.",
+    loadingSimulation: "Carregando simulação...",
     continue: "Continuar"
 },
 
@@ -36,6 +37,7 @@ en: {
     realDesc: "Simulate tournaments using real statistics and data for more accurate results.",
     manualTitle: "Manual Simulation",
     manualDesc: "Simulate each match manually, choosing the winners at each matchup.",
+    loadingSimulation: "Loading simulation...",
     continue: "Continue"
 }
 };
