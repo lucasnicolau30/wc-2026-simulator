@@ -68,6 +68,24 @@ app.get('/player-stats/:playerId', async(req, res) => {
     res.json(rows);
 });
 
+app.get('/matches', async(req, res) => {
+    const [rows] = await pool.query(`
+        SELECT m.id, m.round, m.stage, m.home_score, m.away_score, m.home_xg, m.away_xg,
+        h.name AS home_name, a.name AS away_name FROM matches m JOIN selections h ON m.home_id = h.id JOIN selections a ON m.away_id = a.id WHERE m.stage = 'group' ORDER BY m.round ASC, m.id ASC`
+    );
+    res.json(rows);
+});
+
+app.get('/matches/:id/events', async(req, res) => {
+    const matchId = req.params.id;
+
+    const [rows] = await pool.query(`
+        SELECT ge.minute, p.name AS player_name, sel.name AS team_name FROM goal_events ge JOIN players p ON ge.player_id = p.id JOIN selections sel ON p.selection_id = sel.id WHERE ge.match_id = ? ORDER BY ge.minute ASC`,
+        [matchId]
+    );
+    res.json(rows);
+});
+
 app.post('/simulation', async(req, res) => {
     const mode = req.body.mode;
     if(mode == 'real'){
@@ -77,7 +95,18 @@ app.post('/simulation', async(req, res) => {
 });
 
 app.post('/simulate/match', async(req, res) => {
-    const { selectionA, selectionB } = req.body;
+    const { matchId } = req.body;
+
+    const [matchRows] = await pool.query(
+        'SELECT m.*, h.name AS home_name, a.name AS away_name FROM matches m JOIN selections h ON m.home_id = h.id JOIN selections a ON m.away_id = a.id WHERE m.id = ?',
+        [matchId]
+    );
+    const match = matchRows[0];
+    const selectionA = match.home_name;
+    const selectionB = match.away_name;
+    const groupId = match.group_id;
+    const idA = match.home_id;
+    const idB = match.away_id;
 
     const strengths = await calculateStrength();
     const response = await fetch("http://localhost:8000/starters");
@@ -96,22 +125,10 @@ app.post('/simulate/match', async(req, res) => {
         selectionB, teams[selectionB], strengths[selectionB]
     );
 
-    const [rowsSelectionA] = await pool.query('SELECT id, group_id FROM selections WHERE name = ?', 
-        [selectionA])
-    ;
-    const [rowsSelectionB] = await pool.query('SELECT id, group_id FROM selections WHERE name = ?', 
-        [selectionB]
+    await pool.query(
+        'UPDATE matches SET home_score = ?, away_score = ?, home_xg = ?, away_xg = ? WHERE id = ?',
+        [result.goalsA, result.goalsB, result.xgA, result.xgB, matchId]
     );
-
-    const idA = rowsSelectionA[0].id;
-    const idB = rowsSelectionB[0].id;
-    const groupId = rowsSelectionA[0].group_id; 
-
-    const [matchResult] = await pool.query('INSERT INTO matches (home_id, away_id, stage, home_score, away_score, home_xg, away_xg) VALUES (?, ?, ?, ?, ?, ?, ?)',
-        [idA, idB, 'group', result.goalsA, result.goalsB, result.xgA, result.xgB]
-    );
-
-    const matchId = matchResult.insertId;
 
     let winsA = 0, drawsA = 0, lossesA = 0;
     if(result.pointsA === 3){
@@ -186,4 +203,34 @@ app.post('/simulate/match', async(req, res) => {
     }
 
     res.json(result);
+});
+
+app.post('/generate-schedule', async(req, res) => {
+    const [groups] = await pool.query('SELECT * FROM `groups`');
+
+    const roundMap = {
+        '0-1': 1, '2-3': 1,
+        '0-2': 2, '1-3': 2,
+        '0-3': 3, '1-2': 3
+    };
+
+    for(const group of groups){
+        const [selections] = await pool.query('SELECT * FROM selections WHERE group_id = ?', [group.id]);
+        const groupName = group.name;
+        for(let i = 0; i < selections.length; i++){
+            let selectionA = selections[i];
+            for(let j = i + 1; j < selections.length; j++){
+                let selectionB = selections[j];
+
+                const round = roundMap[`${i}-${j}`];
+
+                await pool.query(
+                    'INSERT INTO matches (home_id, away_id, stage, group_id, round) VALUES (?, ?, ?, ?, ?)',
+                    [selectionA.id, selectionB.id, 'group', group.id, round]
+                );
+            }    
+        }
+    }
+
+    res.json({ status: 'Schedule generated' });
 });

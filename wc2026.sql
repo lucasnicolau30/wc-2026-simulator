@@ -46,6 +46,7 @@ CREATE TABLE matches(
 	away_score INT DEFAULT 0,
 	home_xg FLOAT DEFAULT 0,
 	away_xg FLOAT DEFAULT 0,
+	round INT NULL,
 	FOREIGN KEY (group_id) REFERENCES `groups`(id),
 	FOREIGN KEY (home_id) REFERENCES selections(id),
 	FOREIGN KEY (away_id) REFERENCES selections(id)

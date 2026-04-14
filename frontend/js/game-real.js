@@ -2,7 +2,7 @@ const tabs = document.querySelectorAll(".tab");
 const pages = document.querySelectorAll(".page");
 
 /* navegação entre abas */
-function setBodyBackground(tabName) {
+function setBodyBackground(tabName){
   document.body.classList.remove("bg-groups", "bg-matches", "bg-knockout", "bg-performance");
   document.body.classList.add(`bg-${tabName}`);
 }
@@ -152,33 +152,43 @@ async function loadGroups(){
     }
 } 
 
-/* matches mock */
-const mockMatches = [
-  { home: "Brasil", away: "Argentina" },
-  { home: "França", away: "México" },
-  { home: "Alemanha", away: "Japão" },
-  { home: "Espanha", away: "Cabo Verde" },
-  { home: "Arábia Saudita", away: "Irã" },
-  { home: "Uruguai", away: "Panamá" }
-];
+async function loadMatches(){
+    const response = await fetch("http://localhost:8000/matches");
+    const matches = await response.json();
 
-function loadMatches() {
-  const container = document.getElementById("matches-list");
-  container.innerHTML = mockMatches.map(match => `
-    <article class="match-card">
-      <div class="match-main">
-        <div class="match-team">
-          <img class="match-flag" src="${getFlagSrc(match.home)}" alt="${match.home}" />
-          <span class="match-team-name">${match.home}</span>
-        </div>
-        <div class="match-score">0 — 0</div>
-        <div class="match-team away">
-          <img class="match-flag" src="${getFlagSrc(match.away)}" alt="${match.away}" />
-          <span class="match-team-name">${match.away}</span>
-        </div>
-      </div>
-    </article>
-  `).join("");
+    const container = document.getElementById("matches-list");
+    container.innerHTML = "";
+
+    for(const match of matches){
+        const eventsResponse = await fetch(`http://localhost:8000/matches/${match.id}/events`);
+        const events = await eventsResponse.json();
+
+        const homeGoals = events.filter(e => e.team_name === match.home_name);
+        const awayGoals = events.filter(e => e.team_name === match.away_name);
+
+        const homeGoalsHtml = homeGoals.map(e => `<span>${e.player_name} ${e.minute}'</span>`).join("");
+        const awayGoalsHtml = awayGoals.map(e => `<span>${e.player_name} ${e.minute}'</span>`).join("");
+
+        container.innerHTML += `
+            <article class="match-card">
+                <div class="match-main">
+                    <div class="match-team">
+                        <img class="match-flag" src="${getFlagSrc(match.home_name)}" alt="${match.home_name}" />
+                        <span class="match-team-name">${match.home_name}</span>
+                    </div>
+                    <div class="match-score">${match.home_score} — ${match.away_score}</div>
+                    <div class="match-team away">
+                        <img class="match-flag" src="${getFlagSrc(match.away_name)}" alt="${match.away_name}" />
+                        <span class="match-team-name">${match.away_name}</span>
+                    </div>
+                </div>
+                <div class="match-events">
+                    <div class="match-goals home-goals">${homeGoalsHtml}</div>
+                    <div class="match-goals away-goals">${awayGoalsHtml}</div>
+                </div>
+            </article>
+        `;
+    }
 }
 
 /* performance mock */
