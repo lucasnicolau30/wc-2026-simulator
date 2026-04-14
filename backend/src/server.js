@@ -56,12 +56,7 @@ app.get('/standings/:groupId', async(req, res) => {
 app.get('/player-stats/:playerId', async(req, res) => {
     const playerId = req.params.playerId;
 
-    const [rows] = await pool.query(`
-        SELECT p.name, pms.player_id,
-        SUM(pms.goals) AS total_goals,
-        SUM(pms.assists) AS total_assists,
-        SUM(pms.clean_sheet) AS total_clean_sheets,
-        AVG(pms.rating) AS average_rating FROM player_match_stats pms JOIN players p ON pms.player_id = p.id WHERE pms.player_id = ? GROUP BY pms.player_id, p.name`,
+    const [rows] = await pool.query(`SELECT p.name, pms.player_id, SUM(pms.goals) AS total_goals, SUM(pms.assists) AS total_assists, SUM(pms.clean_sheet) AS total_clean_sheets, AVG(pms.rating) AS average_rating FROM player_match_stats pms JOIN players p ON pms.player_id = p.id WHERE pms.player_id = ? GROUP BY pms.player_id, p.name`,
         [playerId]
     );
 
@@ -69,8 +64,7 @@ app.get('/player-stats/:playerId', async(req, res) => {
 });
 
 app.get('/matches', async(req, res) => {
-    const [rows] = await pool.query(`
-        SELECT m.id, m.round, m.stage, m.home_score, m.away_score, m.home_xg, m.away_xg,
+    const [rows] = await pool.query(`SELECT m.id, m.round, m.stage, m.home_score, m.away_score, m.home_xg, m.away_xg,
         h.name AS home_name, a.name AS away_name FROM matches m JOIN selections h ON m.home_id = h.id JOIN selections a ON m.away_id = a.id WHERE m.stage = 'group' ORDER BY m.round ASC, m.id ASC`
     );
     res.json(rows);
@@ -79,10 +73,35 @@ app.get('/matches', async(req, res) => {
 app.get('/matches/:id/events', async(req, res) => {
     const matchId = req.params.id;
 
-    const [rows] = await pool.query(`
-        SELECT ge.minute, p.name AS player_name, sel.name AS team_name FROM goal_events ge JOIN players p ON ge.player_id = p.id JOIN selections sel ON p.selection_id = sel.id WHERE ge.match_id = ? ORDER BY ge.minute ASC`,
+    const [rows] = await pool.query(`SELECT ge.minute, p.name AS player_name, sel.name AS team_name FROM goal_events ge JOIN players p ON ge.player_id = p.id JOIN selections sel ON p.selection_id = sel.id WHERE ge.match_id = ? ORDER BY ge.minute ASC`,
         [matchId]
     );
+    res.json(rows);
+});
+
+app.get('/performance/:metric', async(req, res) => {
+    const metric = req.params.metric;
+
+    const metricMap = {
+        'goals': 'SUM(pms.goals)',
+        'assists': 'SUM(pms.assists)',
+        'cleanSheets': 'SUM(pms.clean_sheet)',
+        'rating': 'AVG(pms.rating)'
+    };
+
+    const orderBy = metricMap[metric];
+    if(!orderBy){
+        return res.status(400).json({ error: 'metric inválido' });
+    } 
+
+    const [rows] = await pool.query(`SELECT p.name AS player_name, sel.name AS selection_name, p.position,
+        SUM(pms.goals) AS total_goals,
+        SUM(pms.assists) AS total_assists,
+        SUM(pms.clean_sheet) AS total_clean_sheets,
+        AVG(pms.rating) AS average_rating
+        FROM player_match_stats pms JOIN players p ON pms.player_id = p.id JOIN selections sel ON p.selection_id = sel.id GROUP BY pms.player_id, p.name, sel.name, p.position ORDER BY ${orderBy} DESC LIMIT 10`
+    )
+    
     res.json(rows);
 });
 

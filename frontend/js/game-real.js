@@ -1,5 +1,6 @@
 const tabs = document.querySelectorAll(".tab");
 const pages = document.querySelectorAll(".page");
+const performanceFilter = document.getElementById("performance-filter");
 
 /* navegação entre abas */
 function setBodyBackground(tabName){
@@ -217,60 +218,44 @@ document.getElementById("simulate-all-matches").addEventListener("click", async 
     loadGroups();
 });
 
-/* performance mock */
-const performanceData = {
-  rating: [
-    { rank: 1, name: "Vinícius Júnior", team: "Brasil", position: "FW", value: "7.8" },
-    { rank: 2, name: "Kylian Mbappé", team: "França", position: "FW", value: "7.7" },
-    { rank: 3, name: "Lionel Messi", team: "Argentina", position: "FW", value: "7.6" },
-    { rank: 4, name: "Jude Bellingham", team: "Inglaterra", position: "MF", value: "7.5" },
-    { rank: 5, name: "Rodri", team: "Espanha", position: "MF", value: "7.4" }
-  ],
-  goals: [
-    { rank: 1, name: "Kylian Mbappé", team: "França", position: "FW", value: "5" },
-    { rank: 2, name: "Harry Kane", team: "Inglaterra", position: "FW", value: "4" },
-    { rank: 3, name: "Vinícius Júnior", team: "Brasil", position: "FW", value: "4" },
-    { rank: 4, name: "Julián Álvarez", team: "Argentina", position: "FW", value: "3" },
-    { rank: 5, name: "Morata", team: "Espanha", position: "FW", value: "3" }
-  ],
-  assists: [
-    { rank: 1, name: "De Bruyne", team: "Bélgica", position: "MF", value: "4" },
-    { rank: 2, name: "Messi", team: "Argentina", position: "FW", value: "3" },
-    { rank: 3, name: "Bruno Fernandes", team: "Portugal", position: "MF", value: "3" },
-    { rank: 4, name: "Bellingham", team: "Inglaterra", position: "MF", value: "2" },
-    { rank: 5, name: "Valverde", team: "Uruguai", position: "MF", value: "2" }
-  ],
-  cleanSheets: [
-    { rank: 1, name: "Alisson", team: "Brasil", position: "GK", value: "4" },
-    { rank: 2, name: "Maignan", team: "França", position: "GK", value: "3" },
-    { rank: 3, name: "Emiliano Martínez", team: "Argentina", position: "GK", value: "3" },
-    { rank: 4, name: "Unai Simón", team: "Espanha", position: "GK", value: "2" },
-    { rank: 5, name: "Courtois", team: "Bélgica", position: "GK", value: "2" }
-  ]
-};
+function getValue(player, metric){
+    if(metric === 'goals'){
+      return player.total_goals;
+    } 
+    if(metric === 'assists'){
+      return player.total_assists;
+    } 
+    if(metric === 'cleanSheets'){
+      return player.total_clean_sheets;
+    } 
+    if(metric === 'rating'){
+      return parseFloat(player.average_rating).toFixed(1);
+    } 
+}
 
-const performanceFilter = document.getElementById("performance-filter");
+async function renderPerformance(){
+    const metric = performanceFilter.value;
+    
+    const response = await fetch(`http://localhost:8000/performance/${metric}`);
+    const players = await response.json();
 
-function renderPerformance() {
-  const list = document.getElementById("performance-list");
-  const metric = performanceFilter.value;
-  const items = performanceData[metric];
+    const list = document.getElementById("performance-list");
 
-  list.innerHTML = items.map(player => `
-    <article class="performance-card">
-      <div class="performance-rank">#${player.rank}</div>
-      <div class="performance-player">
-        <img class="performance-flag" src="${getFlagSrc(player.team)}" alt="${player.team}" />
-        <div class="performance-player-info">
-          <div class="performance-player-name">${player.name}</div>
-          <div class="performance-player-meta">${player.team}</div>
-        </div>
-      </div>
-      <div class="performance-team"><span>${player.team}</span></div>
-      <div class="performance-pos">${player.position}</div>
-      <div class="performance-value">${player.value}</div>
-    </article>
-  `).join("");
+    list.innerHTML = players.map((player, index) => `
+        <article class="performance-card">
+            <div class="performance-rank">#${index + 1}</div>
+            <div class="performance-player">
+                <img class="performance-flag" src="${getFlagSrc(player.selection_name)}" alt="${player.selection_name}" />
+                <div class="performance-player-info">
+                    <div class="performance-player-name">${player.player_name}</div>
+                    <div class="performance-player-meta">${player.selection_name}</div>
+                </div>
+            </div>
+            <div class="performance-team"><span>${player.selection_name}</span></div>
+            <div class="performance-pos">${player.position}</div>
+            <div class="performance-value">${getValue(player, metric)}</div>
+        </article>
+    `).join("");
 }
 
 performanceFilter.addEventListener("change", renderPerformance);
