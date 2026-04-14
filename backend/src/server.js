@@ -34,6 +34,38 @@ app.get('/starters', async(req, res) => {
     res.json(rows);
 });
 
+app.get('/standings/:groupId', async(req, res) => {
+    const groupId = req.params.groupId;
+    
+    const [rows] = await pool.query(`SELECT selection_id, 
+        SUM(points) AS total_points,
+        SUM(wins) AS total_wins,
+        SUM(draws) AS total_draws,
+        SUM(losses) AS total_losses,
+        SUM(goals_for) AS total_goals_for,
+        SUM(goals_against) AS total_goals_against,
+        SUM(goal_difference) AS total_goal_difference FROM groups_standings WHERE group_id = ? GROUP BY selection_id ORDER BY total_points DESC, total_goal_difference DESC`, 
+        [groupId]
+    );
+
+    res.json(rows);
+});
+
+app.get('/player-stats/:playerId', async(req, res) => {
+    const playerId = req.params.playerId;
+
+    const [rows] = await pool.query(`
+        SELECT p.name, pms.player_id,
+        SUM(pms.goals) AS total_goals,
+        SUM(pms.assists) AS total_assists,
+        SUM(pms.clean_sheet) AS total_clean_sheets,
+        AVG(pms.rating) AS average_rating FROM player_match_stats pms JOIN players p ON pms.player_id = p.id WHERE pms.player_id = ? GROUP BY pms.player_id, p.name`,
+        [playerId]
+    );
+
+    res.json(rows);
+});
+
 app.post('/simulation', async(req, res) => {
     const mode = req.body.mode;
     if(mode == 'real'){
@@ -61,6 +93,95 @@ app.post('/simulate/match', async(req, res) => {
         selectionA, teams[selectionA], strengths[selectionA],
         selectionB, teams[selectionB], strengths[selectionB]
     );
+
+    const [rowsSelectionA] = await pool.query('SELECT id, group_id FROM selections WHERE name = ?', 
+        [selectionA])
+    ;
+    const [rowsSelectionB] = await pool.query('SELECT id, group_id FROM selections WHERE name = ?', 
+        [selectionB]
+    );
+
+    const idA = rowsSelectionA[0].id;
+    const idB = rowsSelectionB[0].id;
+    const groupId = rowsSelectionA[0].group_id; 
+
+    const [matchResult] = await pool.query('INSERT INTO matches (home_id, away_id, stage, home_score, away_score, home_xg, away_xg) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        [idA, idB, 'group', result.goalsA, result.goalsB, result.xgA, result.xgB]
+    );
+
+    const matchId = matchResult.insertId;
+
+    let winsA = 0, drawsA = 0, lossesA = 0;
+    if(result.pointsA === 3){
+        winsA = 1;
+    }
+    else if(result.pointsA === 1){
+        drawsA = 1;
+    }
+    else{
+        lossesA = 1;
+    }
+
+    let winsB = 0, drawsB = 0, lossesB = 0;
+    if(result.pointsB === 3){
+        winsB = 1;
+    }
+    else if(result.pointsB === 1){
+        drawsB = 1;
+    }
+    else{
+        lossesB = 1;
+    }
+
+    await pool.query(
+        'INSERT INTO groups_standings (group_id, selection_id, matches_id, points, wins, draws, losses, goals_for, goals_against, goal_difference) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [groupId, idA, matchId, result.pointsA, winsA, drawsA, lossesA, result.goalsA, result.goalsB, result.goalsA - result.goalsB]
+    );
+
+    await pool.query(
+        'INSERT INTO groups_standings (group_id, selection_id, matches_id, points, wins, draws, losses, goals_for, goals_against, goal_difference) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [groupId, idB, matchId, result.pointsB, winsB, drawsB, lossesB, result.goalsB, result.goalsA, result.goalsB - result.goalsA]
+    );
+
+    for(const player of teams[selectionA]){
+        const scored = result.scorersA.filter(s => s.name === player.name).length;
+        const assisted = result.assistsA.filter(a => a.name === player.name).length;
+        const playerRating = result.playerRatingsA.find(p => p.player === player.name);
+        const cleanSheet = player.position === 'GK' && result.goalsB === 0;
+
+        await pool.query(
+            'INSERT INTO player_match_stats (player_id, match_id, goals, assists, rating, clean_sheet) VALUES (?, ?, ?, ?, ?, ?)',
+            [player.id, matchId, scored, assisted, playerRating.rating, cleanSheet]
+        );
+
+        const playerEvents = result.events.filter(e => e.player === player.name && e.team === selectionA);
+        for(const event of playerEvents){
+            await pool.query(
+                'INSERT INTO goal_events (match_id, player_id, minute) VALUES (?, ?, ?)',
+                [matchId, player.id, event.minute]
+            );
+        }
+    }
+
+    for(const player of teams[selectionB]){
+        const scored = result.scorersB.filter(s => s.name === player.name).length;
+        const assisted = result.assistsB.filter(a => a.name === player.name).length;
+        const playerRating = result.playerRatingsB.find(p => p.player === player.name);
+        const cleanSheet = player.position === 'GK' && result.goalsA === 0;
+
+        await pool.query(
+            'INSERT INTO player_match_stats (player_id, match_id, goals, assists, rating, clean_sheet) VALUES (?, ?, ?, ?, ?, ?)',
+            [player.id, matchId, scored, assisted, playerRating.rating, cleanSheet]
+        );
+
+        const playerEvents = result.events.filter(e => e.player === player.name && e.team === selectionB);
+        for(const event of playerEvents){
+            await pool.query(
+                'INSERT INTO goal_events (match_id, player_id, minute) VALUES (?, ?, ?)',
+                [matchId, player.id, event.minute]
+            );
+        }
+    }
 
     res.json(result);
 });

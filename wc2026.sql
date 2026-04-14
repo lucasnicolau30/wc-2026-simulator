@@ -74,6 +74,7 @@ CREATE TABLE player_match_stats(
 	match_id INT NOT NULL,
 	goals INT DEFAULT 0,
 	assists INT DEFAULT 0,
+	clean_sheet BOOLEAN DEFAULT FALSE,
 	rating FLOAT DEFAULT 0,
     goal_minute INT NULL,
 	FOREIGN KEY (player_id) REFERENCES players(id),
@@ -86,4 +87,13 @@ CREATE TABLE KNOCKOUTS(
 	winner_id INT NOT NULL,
 	FOREIGN KEY (match_id) REFERENCES matches(id),
 	FOREIGN KEY (winner_id) REFERENCES selections(id)
+);
+
+CREATE TABLE goal_events(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    match_id INT NOT NULL,
+    player_id INT NOT NULL,
+    minute INT NOT NULL,
+    FOREIGN KEY (match_id) REFERENCES matches(id),
+    FOREIGN KEY (player_id) REFERENCES players(id)
 );

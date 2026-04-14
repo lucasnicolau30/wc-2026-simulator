@@ -3,53 +3,106 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>WC2026 — Group Stage</title>
+  <title data-i18n="gameHeader">WC2026 — Fase de Grupos</title>
+  <link rel="icon" href="img/wc-logo.avif" type="image/avif" />
   <link rel="stylesheet" href="css/game-real.css" />
 </head>
-<body>
+<body class="bg-groups">
+  <canvas id="particles"></canvas>
 
-  <!-- NAVBAR -->
+  <button id="btnLang">EN</button>
+
   <nav class="navbar">
     <div class="navbar-logo">
       <img src="img/wc-logo.avif" alt="WC2026" />
     </div>
+
     <div class="navbar-tabs">
-      <button class="tab active" data-tab="groups">Groups</button>
-      <button class="tab" data-tab="matches">Matches</button>
-      <button class="tab" data-tab="knockout">Knockout</button>
+      <button class="tab active" data-tab="groups" data-i18n="groupsTab">Groups</button>
+      <button class="tab" data-tab="matches" data-i18n="matchesTab">Matches</button>
+      <button class="tab" data-tab="knockout" data-i18n="knockoutTab">Knockout</button>
+      <button class="tab" data-tab="performance" data-i18n="performanceTab">Desempenhos</button>
     </div>
   </nav>
 
-  <!-- GROUPS -->
   <main class="page active" id="page-groups">
-    <h1 class="page-title">Group Stage</h1>
+    <div class="page-header">
+      <h1 class="page-title" data-i18n="groupStageTitle">Group Stage</h1>
+    </div>
+
     <div class="groups-grid" id="groups-grid">
-      <div class="loading">Loading groups...</div>
-    </div>
-    <div class="page-footer">
-      <button class="btn-simulate" id="btn-simulate-groups">Simulate</button>
+      <div class="loading" data-i18n="loadingGroups">Loading groups...</div>
     </div>
   </main>
 
-  <!-- MATCHES -->
   <main class="page" id="page-matches">
-    <h1 class="page-title">Matches</h1>
+    <div class="page-header page-header--with-filter">
+      <h1 class="page-title" data-i18n="matchesTitle">Matches</h1>
+
+      <div class="page-filter-wrap">
+        <select class="page-filter" id="matches-round-filter">
+          <option value="1">Round 1</option>
+          <option value="2">Round 2</option>
+          <option value="3">Round 3</option>
+        </select>
+      </div>
+    </div>
+
     <div class="matches-list" id="matches-list">
-      <div class="loading">Loading matches...</div>
+      <div class="loading" data-i18n="loadingMatches">Loading matches...</div>
     </div>
+
     <div class="page-footer">
-      <button class="btn-simulate">Simulate All</button>
+      <button class="custom-button" id="simulate-all-matches">
+        <span class="button-content">
+          <span class="button-text" data-i18n="simulateAll">Simulate All</span>
+          <span class="button-icon">→</span>
+        </span>
+        <span class="button-background"></span>
+      </button>
     </div>
   </main>
 
-  <!-- KNOCKOUT -->
   <main class="page" id="page-knockout">
-    <h1 class="page-title">Knockout Stage</h1>
+    <div class="page-header page-header--with-filter">
+      <h1 class="page-title" data-i18n="knockoutStageTitle">Knockout Stage</h1>
+
+      <div class="page-filter-wrap">
+        <select class="page-filter" id="knockout-stage-filter">
+          <option value="r16" data-i18n="roundOf16">Round of 16</option>
+          <option value="quarter" data-i18n="quarterFinals">Quarter-finals</option>
+          <option value="semi" data-i18n="semiFinals">Semi-finals</option>
+          <option value="final" data-i18n="finalTab">Final</option>
+        </select>
+      </div>
+    </div>
+
     <div class="knockout-wrap">
-      <p class="knockout-placeholder">Simulate the group stage first.</p>
+      <p class="knockout-placeholder" data-i18n="knockoutPlaceholder">
+        Simulate the group stage first.
+      </p>
     </div>
   </main>
 
+  <main class="page" id="page-performance">
+    <div class="page-header page-header--with-filter">
+      <h1 class="page-title" data-i18n="performancePageTitle">Desempenhos</h1>
+
+      <div class="page-filter-wrap">
+        <select class="page-filter" id="performance-filter">
+          <option value="rating" data-i18n="performanceRating">Média de Nota</option>
+          <option value="goals" data-i18n="performanceGoals">Artilheiros</option>
+          <option value="assists" data-i18n="performanceAssists">Assistências</option>
+          <option value="cleanSheets" data-i18n="performanceCleanSheets">Clean Sheets</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="performance-list" id="performance-list"></div>
+  </main>
+
+  <script src="js/translation.js"></script>
+  <script src="js/particles.js"></script>
   <script src="js/game-real.js"></script>
 </body>
 </html>
