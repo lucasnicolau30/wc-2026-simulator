@@ -17,8 +17,39 @@ pt: {
     manualTitle: "Simulação Manual",
     manualDesc: "Simule cada partida manualmente, escolhendo os vencedores a cada confronto.",
     loadingSimulation: "Carregando simulação...",
-    continue: "Continuar"
-},
+    continue: "Continuar",
+
+    // game-real.html — navbar
+    gameHeader: "WC2026 — Fase de Grupos",
+    groupsTab: "Grupos",
+    matchesTab: "Partidas",
+    knockoutTab: "Eliminatórias",
+    performanceTab: "Desempenhos",
+
+    // game-real.html — groups
+    groupStageTitle: "Fase de Grupos",
+    loadingGroups: "Carregando grupos...",
+
+    // game-real.html — matches
+    matchesTitle: "Partidas",
+    loadingMatches: "Carregando partidas...",
+    simulateAll: "Simular Todas",
+
+    // game-real.html — knockout
+    knockoutStageTitle: "Fase Eliminatória",
+    roundOf16: "Oitavas de Final",
+    quarterFinals: "Quartas de Final",
+    semiFinals: "Semifinais",
+    finalTab: "Final",
+    knockoutPlaceholder: "Simule a fase de grupos primeiro.",
+
+    // game-real.html — performance
+    performancePageTitle: "Desempenhos",
+    performanceRating: "Média de Nota",
+    performanceGoals: "Artilheiros",
+    performanceAssists: "Assistências",
+    performanceCleanSheets: "Clean Sheets"
+    },
 
 en: {
     // home.html
@@ -38,27 +69,58 @@ en: {
     manualTitle: "Manual Simulation",
     manualDesc: "Simulate each match manually, choosing the winners at each matchup.",
     loadingSimulation: "Loading simulation...",
-    continue: "Continue"
-}
+    continue: "Continue",
+
+    // game-real.html — navbar
+    gameHeader: "WC2026 — Group Stage",
+    groupsTab: "Groups",
+    matchesTab: "Matches",
+    knockoutTab: "Knockout",
+    performanceTab: "Performance",
+
+    // game-real.html — groups
+    groupStageTitle: "Group Stage",
+    loadingGroups: "Loading groups...",
+
+    // game-real.html — matches
+    matchesTitle: "Matches",
+    loadingMatches: "Loading matches...",
+    simulateAll: "Simulate All",
+
+    // game-real.html — knockout
+    knockoutStageTitle: "Knockout Stage",
+    roundOf16: "Round of 16",
+    quarterFinals: "Quarter-finals",
+    semiFinals: "Semi-finals",
+    finalTab: "Final",
+    knockoutPlaceholder: "Simulate the group stage first.",
+
+    // game-real.html — performance
+    performancePageTitle: "Performance",
+    performanceRating: "Average Rating",
+    performanceGoals: "Top Scorers",
+    performanceAssists: "Assists",
+    performanceCleanSheets: "Clean Sheets"
+    }
 };
 
-let current = "pt";
+let current = localStorage.getItem("lang") || "pt";
 
 const btnLang = document.getElementById("btnLang");
 
 btnLang.addEventListener("click", () => {
-    if (current === "pt"){
-        current = "en";
-    }
+    if(current === "pt"){
+    current = "en";
+    } 
     else{
-        current = "pt";
+    current = "pt";
     }
+    localStorage.setItem("lang", current);
 
     btnLang.classList.remove("pop");
-    void btnLang.offsetWidth; // reinicia a animação se clicar rápido
+    void btnLang.offsetWidth;
     btnLang.classList.add("pop");
 
-    // translation 
     applyTranslation();
 });
 
@@ -66,7 +128,9 @@ function applyTranslation() {
     const t = translations[current];
     document.querySelectorAll("[data-i18n]").forEach(el => {
         const key = el.getAttribute("data-i18n");
-        if (t[key]) el.textContent = t[key];
+        if(t[key]){
+            el.textContent = t[key];
+        }
     });
     btnLang.textContent = t.lang;
 }

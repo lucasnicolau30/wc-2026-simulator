@@ -37,14 +37,16 @@ app.get('/starters', async(req, res) => {
 app.get('/standings/:groupId', async(req, res) => {
     const groupId = req.params.groupId;
     
-    const [rows] = await pool.query(`SELECT selection_id, 
-        SUM(points) AS total_points,
-        SUM(wins) AS total_wins,
-        SUM(draws) AS total_draws,
-        SUM(losses) AS total_losses,
-        SUM(goals_for) AS total_goals_for,
-        SUM(goals_against) AS total_goals_against,
-        SUM(goal_difference) AS total_goal_difference FROM groups_standings WHERE group_id = ? GROUP BY selection_id ORDER BY total_points DESC, total_goal_difference DESC`, 
+    const [rows] = await pool.query(`
+        SELECT s.name, pms.selection_id,
+        SUM(pms.points) AS total_points,
+        SUM(pms.wins) AS total_wins,
+        SUM(pms.draws) AS total_draws,
+        SUM(pms.losses) AS total_losses,
+        SUM(pms.wins + pms.draws + pms.losses) AS total_played,
+        SUM(pms.goals_for) AS total_goals_for,
+        SUM(pms.goals_against) AS total_goals_against,
+        SUM(pms.goal_difference) AS total_goal_difference FROM groups_standings pms JOIN selections s ON pms.selection_id = s.id WHERE pms.group_id = ? GROUP BY pms.selection_id, s.name ORDER BY total_points DESC, total_goal_difference DESC`,
         [groupId]
     );
 
