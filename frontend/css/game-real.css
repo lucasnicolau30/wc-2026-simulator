@@ -1,6 +1,7 @@
 body {
   color: #FFFFFF;
   background-color: #05081a;
+  overflow-y: auto;
 }
 
 /* fundos por aba */
@@ -294,10 +295,8 @@ body.bg-performance {
 
 /* matches */
 .matches-list {
-  width: 100%;
-  max-width: 1180px;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 12px;
 }
 

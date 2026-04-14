@@ -88,7 +88,30 @@ app.get('/matches/:id/events', async(req, res) => {
 
 app.post('/simulation', async(req, res) => {
     const mode = req.body.mode;
-    if(mode == 'real'){
+    if(mode === 'real'){
+        const [rows] = await pool.query('SELECT COUNT(*) AS total FROM matches');
+        
+        if(rows[0].total === 0){
+            const [groups] = await pool.query('SELECT * FROM `groups`');
+            const roundMap = {
+                '0-1': 1, '2-3': 1,
+                '0-2': 2, '1-3': 2,
+                '0-3': 3, '1-2': 3
+            };
+            for(const group of groups){
+                const [selections] = await pool.query('SELECT * FROM selections WHERE group_id = ?', [group.id]);
+                for(let i = 0; i < selections.length; i++){
+                    for(let j = i + 1; j < selections.length; j++){
+                        const round = roundMap[`${i}-${j}`];
+                        await pool.query(
+                            'INSERT INTO matches (home_id, away_id, stage, group_id, round) VALUES (?, ?, ?, ?, ?)',
+                            [selections[i].id, selections[j].id, 'group', group.id, round]
+                        );
+                    }
+                }
+            }
+        }
+
         const strength = await calculateStrength();
         res.json({ strength });
     }
@@ -203,34 +226,4 @@ app.post('/simulate/match', async(req, res) => {
     }
 
     res.json(result);
-});
-
-app.post('/generate-schedule', async(req, res) => {
-    const [groups] = await pool.query('SELECT * FROM `groups`');
-
-    const roundMap = {
-        '0-1': 1, '2-3': 1,
-        '0-2': 2, '1-3': 2,
-        '0-3': 3, '1-2': 3
-    };
-
-    for(const group of groups){
-        const [selections] = await pool.query('SELECT * FROM selections WHERE group_id = ?', [group.id]);
-        const groupName = group.name;
-        for(let i = 0; i < selections.length; i++){
-            let selectionA = selections[i];
-            for(let j = i + 1; j < selections.length; j++){
-                let selectionB = selections[j];
-
-                const round = roundMap[`${i}-${j}`];
-
-                await pool.query(
-                    'INSERT INTO matches (home_id, away_id, stage, group_id, round) VALUES (?, ?, ?, ?, ?)',
-                    [selectionA.id, selectionB.id, 'group', group.id, round]
-                );
-            }    
-        }
-    }
-
-    res.json({ status: 'Schedule generated' });
 });

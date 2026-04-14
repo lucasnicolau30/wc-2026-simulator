@@ -153,13 +153,17 @@ async function loadGroups(){
 } 
 
 async function loadMatches(){
+    const round = document.getElementById("matches-round-filter").value;
+
     const response = await fetch("http://localhost:8000/matches");
     const matches = await response.json();
+
+    const filtered = matches.filter(m => m.round == round);
 
     const container = document.getElementById("matches-list");
     container.innerHTML = "";
 
-    for(const match of matches){
+    for(const match of filtered){
         const eventsResponse = await fetch(`http://localhost:8000/matches/${match.id}/events`);
         const events = await eventsResponse.json();
 
@@ -176,7 +180,7 @@ async function loadMatches(){
                         <img class="match-flag" src="${getFlagSrc(match.home_name)}" alt="${match.home_name}" />
                         <span class="match-team-name">${match.home_name}</span>
                     </div>
-                    <div class="match-score">${match.home_score} — ${match.away_score}</div>
+                    <div class="match-score">${match.home_score !== null ? `${match.home_score} — ${match.away_score}` : 'vs'}</div>
                     <div class="match-team away">
                         <img class="match-flag" src="${getFlagSrc(match.away_name)}" alt="${match.away_name}" />
                         <span class="match-team-name">${match.away_name}</span>
@@ -190,6 +194,28 @@ async function loadMatches(){
         `;
     }
 }
+document.getElementById("matches-round-filter").addEventListener("change", loadMatches);
+
+document.getElementById("simulate-all-matches").addEventListener("click", async () => {
+    console.log("clicou");
+    const round = document.getElementById("matches-round-filter").value;
+    
+    const response = await fetch("http://localhost:8000/matches");
+    const matches = await response.json();
+
+    const filtered = matches.filter(m => m.round == round && m.home_score === null);
+
+    for(const match of filtered){
+        await fetch("http://localhost:8000/simulate/match", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ matchId: match.id })
+        });
+    }
+
+    loadMatches();
+    loadGroups();
+});
 
 /* performance mock */
 const performanceData = {
