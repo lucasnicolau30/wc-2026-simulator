@@ -29,11 +29,17 @@ pt: {
     // game-real.html — groups
     groupStageTitle: "Fase de Grupos",
     loadingGroups: "Carregando grupos...",
+    statP: "PJ",
+    statGD: "SG",
+    statPts: "Pts",
 
     // game-real.html — matches
     matchesTitle: "Partidas",
     loadingMatches: "Carregando partidas...",
     simulateAll: "Simular Todas",
+    round1: "Rodada 1",
+    round2: "Rodada 2",
+    round3: "Rodada 3",
 
     // game-real.html — knockout
     knockoutStageTitle: "Fase Eliminatória",
@@ -81,11 +87,17 @@ en: {
     // game-real.html — groups
     groupStageTitle: "Group Stage",
     loadingGroups: "Loading groups...",
+    statP: "MP",
+    statGD: "GD",
+    statPts: "Pts",
 
     // game-real.html — matches
     matchesTitle: "Matches",
     loadingMatches: "Loading matches...",
     simulateAll: "Simulate All",
+    round1: "Round 1",
+    round2: "Round 2",
+    round3: "Round 3",
 
     // game-real.html — knockout
     knockoutStageTitle: "Knockout Stage",

@@ -6,7 +6,7 @@ body {
       rgba(5,10,26,0.55) 40%,
       rgba(5,10,26,0.85) 100%
     ),
-    url("../img/bg-home.png");
+    url("../img/bg-home.jpg");
 }
 
 .container {

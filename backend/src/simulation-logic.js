@@ -267,5 +267,9 @@ function simulateMatchGroupStage(selectionA, playersA, strengthA, selectionB, pl
     };
 }
 
+function simulatePenaltyShootout(playersA, selectionA, playersB, selectionB){
+    
+}
+
 module.exports = { calculateStrength, calculateWinProbability, calculateSelectionsRatings, calculateXG, poisson, calculateCleanSheet, selectGoalscorer, selectAssist, generateGoalMinutes, calculateGroupStageResult, calculatePlayerRating, simulateMatchGroupStage };
 

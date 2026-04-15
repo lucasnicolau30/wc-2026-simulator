@@ -99,7 +99,7 @@ app.get('/performance/:metric', async(req, res) => {
         SUM(pms.assists) AS total_assists,
         SUM(pms.clean_sheet) AS total_clean_sheets,
         AVG(pms.rating) AS average_rating
-        FROM player_match_stats pms JOIN players p ON pms.player_id = p.id JOIN selections sel ON p.selection_id = sel.id GROUP BY pms.player_id, p.name, sel.name, p.position ORDER BY ${orderBy} DESC LIMIT 10`
+        FROM player_match_stats pms JOIN players p ON pms.player_id = p.id JOIN selections sel ON p.selection_id = sel.id GROUP BY pms.player_id, p.name, sel.name, p.position ORDER BY ${orderBy} DESC LIMIT 25`
     )
     
     res.json(rows);

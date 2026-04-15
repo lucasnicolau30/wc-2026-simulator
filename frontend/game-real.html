@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title data-i18n="gameHeader">WC2026 — Fase de Grupos</title>
-  <link rel="icon" href="img/wc-logo.avif" type="image/avif" />
+  <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="css/shared.css" />
   <link rel="stylesheet" href="css/game-real.css" />
 </head>
@@ -13,11 +13,11 @@
 
   <button id="btnLang">EN</button>
 
-  <nav class="navbar">
-    <div class="navbar-logo">
-      <img src="img/wc-logo.avif" alt="WC2026" />
-    </div>
+  <div class="navbar-logo">
+    <img src="img/wc-logo.avif" alt="WC2026" />
+  </div>
 
+  <nav class="navbar">
     <div class="navbar-tabs">
       <button class="tab active" data-tab="groups" data-i18n="groupsTab">Groups</button>
       <button class="tab" data-tab="matches" data-i18n="matchesTab">Matches</button>
@@ -41,11 +41,11 @@
       <h1 class="page-title" data-i18n="matchesTitle">Matches</h1>
 
       <div class="page-filter-wrap">
-        <select class="page-filter" id="matches-round-filter">
-          <option value="1">Round 1</option>
-          <option value="2">Round 2</option>
-          <option value="3">Round 3</option>
-        </select>
+        <div class="round-filter" id="matches-round-filter">
+          <button class="round-btn active" data-round="1" data-i18n="round1">Rodada 1</button>
+          <button class="round-btn" data-round="2" data-i18n="round2">Rodada 2</button>
+          <button class="round-btn" data-round="3" data-i18n="round3">Rodada 3</button>
+        </div>
       </div>
     </div>
 
@@ -69,12 +69,12 @@
       <h1 class="page-title" data-i18n="knockoutStageTitle">Knockout Stage</h1>
 
       <div class="page-filter-wrap">
-        <select class="page-filter" id="knockout-stage-filter">
-          <option value="r16" data-i18n="roundOf16">Round of 16</option>
-          <option value="quarter" data-i18n="quarterFinals">Quarter-finals</option>
-          <option value="semi" data-i18n="semiFinals">Semi-finals</option>
-          <option value="final" data-i18n="finalTab">Final</option>
-        </select>
+        <div class="round-filter" id="knockout-stage-filter">
+          <button class="round-btn active" data-stage="r16" data-i18n="roundOf16">Oitavas de Final</button>
+          <button class="round-btn" data-stage="quarter" data-i18n="quarterFinals">Quartas de Final</button>
+          <button class="round-btn" data-stage="semi" data-i18n="semiFinals">Semifinais</button>
+          <button class="round-btn" data-stage="final" data-i18n="finalTab">Final</button>
+        </div>
       </div>
     </div>
 
@@ -90,12 +90,12 @@
       <h1 class="page-title" data-i18n="performancePageTitle">Desempenhos</h1>
 
       <div class="page-filter-wrap">
-        <select class="page-filter" id="performance-filter">
-          <option value="rating" data-i18n="performanceRating">Média de Nota</option>
-          <option value="goals" data-i18n="performanceGoals">Artilheiros</option>
-          <option value="assists" data-i18n="performanceAssists">Assistências</option>
-          <option value="cleanSheets" data-i18n="performanceCleanSheets">Clean Sheets</option>
-        </select>
+        <div class="round-filter" id="performance-filter">
+          <button class="round-btn active" data-metric="rating" data-i18n="performanceRating">Média de Nota</button>
+          <button class="round-btn" data-metric="goals" data-i18n="performanceGoals">Artilheiros</button>
+          <button class="round-btn" data-metric="assists" data-i18n="performanceAssists">Assistências</button>
+          <button class="round-btn" data-metric="cleanSheets" data-i18n="performanceCleanSheets">Clean Sheets</button>
+        </div>
       </div>
     </div>
 
