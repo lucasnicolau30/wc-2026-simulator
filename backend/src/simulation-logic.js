@@ -378,31 +378,3 @@ function assignThirds(firsts, thirds){
 
 module.exports = { calculateStrength, calculateWinProbability, calculateSelectionsRatings, calculateXG, poisson, calculateCleanSheet, selectGoalscorer, selectAssist, generateGoalMinutes, calculateGroupStageResult, calculatePlayerRating, simulateMatchGroupStage, simulatePenaltyShootout, assignThirds };
 
-async function testPenalties() {
-    const response = await fetch("http://localhost:8000/starters");
-    const starterPlayers = await response.json();
-
-    const teams = {};
-    for(const player of starterPlayers){
-        if(!teams[player.selection_name]) teams[player.selection_name] = [];
-        teams[player.selection_name].push(player);
-    }
-
-    console.log('--- Brasil vs Argentina ---');
-    for(let i = 0; i < 3; i++){
-        const result = simulatePenaltyShootout(teams['Brasil'], 'Brasil', teams['Argentina'], 'Argentina');
-        console.log(`Vencedor: ${result.winner} | ${result.goalsA} x ${result.goalsB}`);
-        console.log('Brasil:', result.eventsA.map(e => `${e.player} ${e.scored ? '✓' : '✗'}`).join(', '));
-        console.log('Argentina:', result.eventsB.map(e => `${e.player} ${e.scored ? '✓' : '✗'}`).join(', '));
-    }
-
-    console.log('\n--- Brasil vs Haiti ---');
-    for(let i = 0; i < 3; i++){
-        const result = simulatePenaltyShootout(teams['Brasil'], 'Brasil', teams['Haiti'], 'Haiti');
-        console.log(`Vencedor: ${result.winner} | ${result.goalsA} x ${result.goalsB}`);
-        console.log('Brasil:', result.eventsA.map(e => `${e.player} ${e.scored ? '✓' : '✗'}`).join(', '));
-        console.log('Haiti:', result.eventsB.map(e => `${e.player} ${e.scored ? '✓' : '✗'}`).join(', '));
-    }
-}
-
-testPenalties();

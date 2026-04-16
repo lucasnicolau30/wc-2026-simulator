@@ -305,7 +305,7 @@ app.post('/simulate/match', async(req, res) => {
     res.json(result);
 });
 
-app.post('/generate-knockout', async(req, res) => {
+app.post('/generate-r32', async(req, res) => {
     const response = await fetch("http://localhost:8000/qualifiers");
     const { qualifiers, best8Thirds } = await response.json();
 
