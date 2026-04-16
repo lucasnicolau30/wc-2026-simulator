@@ -268,8 +268,141 @@ function simulateMatchGroupStage(selectionA, playersA, strengthA, selectionB, pl
 }
 
 function simulatePenaltyShootout(playersA, selectionA, playersB, selectionB){
-    
+    const gkA = playersA.find(p => p.position === 'GK');
+    const gkB = playersB.find(p => p.position === 'GK');
+
+    const sortedA = [...playersA].sort((a, b) => {
+        if(b.rating > a.rating){
+            return 1;
+        } 
+        if(a.rating > b.rating){
+            return -1;
+        } 
+        return 0;
+    });
+
+    const sortedB = [...playersB].sort((a, b) => {
+        if(b.rating > a.rating){
+            return 1;
+        } 
+        if(a.rating > b.rating){
+            return -1;
+        } 
+        return 0;
+    });
+
+    const kickersA = sortedA.slice(0, 5);
+    const kickersB = sortedB.slice(0, 5);
+
+    let goalsA = 0;
+    let goalsB = 0;
+    let eventsA = [];
+    let eventsB = [];
+
+    for(let i = 0; i < 5; i++){
+        const chanceA = (kickersA[i].rating - gkB.rating + 150) / 200;
+        if(Math.random() < chanceA){
+            goalsA++;
+            eventsA.push({ player: kickersA[i].name, scored: true });
+        } 
+        else{
+            eventsA.push({ player: kickersA[i].name, scored: false });
+        }
+
+        const chanceB = (kickersB[i].rating - gkA.rating + 150) / 200;
+        if(Math.random() < chanceB){
+            goalsB++;
+            eventsB.push({ player: kickersB[i].name, scored: true });
+        } 
+        else{
+            eventsB.push({ player: kickersB[i].name, scored: false });
+        }
+    }
+
+    // morte súbita — começa do 6º jogador
+    let kickerIndex = 5;
+    while(goalsA === goalsB){
+        const kA = sortedA[kickerIndex % sortedA.length];
+        const chanceA = (kA.rating - gkB.rating + 150) / 200;
+        const scoredA = Math.random() < chanceA;
+        if(scoredA){
+            goalsA++;
+            eventsA.push({ player: kA.name, scored: scoredA });
+        } 
+        else{
+            eventsA.push({ player: kA.name, scored: false });
+        }
+
+        const kB = sortedB[kickerIndex % sortedB.length];
+        const chanceB = (kB.rating - gkA.rating + 150) / 200;
+        const scoredB = Math.random() < chanceB;
+        if(scoredB){
+            goalsB++;
+            eventsB.push({ player: kB.name, scored: scoredB });
+        }
+        else{
+            eventsB.push({ player: kB.name, scored: false });            
+        }
+
+        kickerIndex++;
+    }
+
+    let winner;
+    if(goalsA > goalsB){
+        winner = selectionA;
+    } 
+    else{
+        winner = selectionB;
+    }
+
+    return { winner, goalsA, goalsB, eventsA, eventsB };
 }
 
-module.exports = { calculateStrength, calculateWinProbability, calculateSelectionsRatings, calculateXG, poisson, calculateCleanSheet, selectGoalscorer, selectAssist, generateGoalMinutes, calculateGroupStageResult, calculatePlayerRating, simulateMatchGroupStage };
+function assignThirds(firsts, thirds){
+    const shuffled = [...thirds].sort(() => Math.random() - 0.5);
+    const assignments = [];
+    const used = new Set();
 
+    for(const first of firsts){
+        const validThird = shuffled.find(t => t.group_id !== first.group_id && !used.has(t.id));
+        
+        // if apenas por precaução, mas não deve acontecer de não encontrar um terceiro válido
+        if(validThird){
+            used.add(validThird.id);
+            assignments.push({ first, third: validThird });
+        }
+    }
+
+    return assignments;
+}
+
+module.exports = { calculateStrength, calculateWinProbability, calculateSelectionsRatings, calculateXG, poisson, calculateCleanSheet, selectGoalscorer, selectAssist, generateGoalMinutes, calculateGroupStageResult, calculatePlayerRating, simulateMatchGroupStage, simulatePenaltyShootout, assignThirds };
+
+async function testPenalties() {
+    const response = await fetch("http://localhost:8000/starters");
+    const starterPlayers = await response.json();
+
+    const teams = {};
+    for(const player of starterPlayers){
+        if(!teams[player.selection_name]) teams[player.selection_name] = [];
+        teams[player.selection_name].push(player);
+    }
+
+    console.log('--- Brasil vs Argentina ---');
+    for(let i = 0; i < 3; i++){
+        const result = simulatePenaltyShootout(teams['Brasil'], 'Brasil', teams['Argentina'], 'Argentina');
+        console.log(`Vencedor: ${result.winner} | ${result.goalsA} x ${result.goalsB}`);
+        console.log('Brasil:', result.eventsA.map(e => `${e.player} ${e.scored ? '✓' : '✗'}`).join(', '));
+        console.log('Argentina:', result.eventsB.map(e => `${e.player} ${e.scored ? '✓' : '✗'}`).join(', '));
+    }
+
+    console.log('\n--- Brasil vs Haiti ---');
+    for(let i = 0; i < 3; i++){
+        const result = simulatePenaltyShootout(teams['Brasil'], 'Brasil', teams['Haiti'], 'Haiti');
+        console.log(`Vencedor: ${result.winner} | ${result.goalsA} x ${result.goalsB}`);
+        console.log('Brasil:', result.eventsA.map(e => `${e.player} ${e.scored ? '✓' : '✗'}`).join(', '));
+        console.log('Haiti:', result.eventsB.map(e => `${e.player} ${e.scored ? '✓' : '✗'}`).join(', '));
+    }
+}
+
+testPenalties();

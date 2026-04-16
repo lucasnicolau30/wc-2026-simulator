@@ -41,7 +41,7 @@ CREATE TABLE matches(
 	group_id INT NULL,
 	home_id INT NOT NULL,
 	away_id INT NOT NULL,
-	stage ENUM('group', 'r16', 'qf', 'sf', '3rd', 'final') NOT NULL,
+	stage ENUM('group', 'r32', 'r16', 'qf', 'sf', '3rd', 'final') NOT NULL,
 	home_score INT DEFAULT NULL,
 	away_score INT DEFAULT NULL,
 	home_xg FLOAT DEFAULT 0,

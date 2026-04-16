@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const mysql = require('mysql2');
 const cors = require('cors');
-const { calculateStrength, calculateWinProbability, calculateSelectionsRatings, calculateXG, poisson, calculateCleanSheet, selectGoalscorer, selectAssist, generateGoalMinutes, calculateGroupStageResult, calculatePlayerRating, simulateMatchGroupStage } = require('./simulation-logic');
+const { calculateStrength, calculateWinProbability, calculateSelectionsRatings, calculateXG, poisson, calculateCleanSheet, selectGoalscorer, selectAssist, generateGoalMinutes, calculateGroupStageResult, calculatePlayerRating, simulateMatchGroupStage, simulatePenaltyShootout, assignThirds } = require('./simulation-logic');
 
 app.use(cors());
 app.use(express.json());
@@ -103,6 +103,64 @@ app.get('/performance/:metric', async(req, res) => {
     )
     
     res.json(rows);
+});
+
+app.get('/qualifiers', async(req, res) => {
+    const [rows] = await pool.query('SELECT s.name, s.id, gs.group_id, g.name AS group_name, ' +
+    'SUM(gs.points) AS total_points, ' +
+    'SUM(gs.wins + gs.draws + gs.losses) AS total_played, ' +
+    'SUM(gs.goals_for) AS total_goals_for, ' +
+    'SUM(gs.goal_difference) AS total_goal_difference ' +
+    'FROM groups_standings gs ' + 'JOIN selections s ON gs.selection_id = s.id ' + 'JOIN `groups` g ON gs.group_id = g.id ' + 'GROUP BY gs.selection_id, s.name, gs.group_id, g.name ' + 'ORDER BY gs.group_id ASC, total_points DESC, total_goal_difference DESC'
+    );
+
+    const groupedByGroup = {};
+    for(const row of rows){
+        if(!groupedByGroup[row.group_id]) groupedByGroup[row.group_id] = [];
+        groupedByGroup[row.group_id].push(row);
+    }
+
+    const qualifiers = [];
+    const thirds = [];
+
+    for(const groupId of Object.keys(groupedByGroup)){
+        const group = groupedByGroup[groupId];
+        qualifiers.push({ ...group[0], position: 1 }); // 1º
+        qualifiers.push({ ...group[1], position: 2 }); // 2º
+        thirds.push({ ...group[2], position: 3 });     // 3º
+    }
+    // a -> -1
+    //b -> 1
+
+    thirds.sort((a, b) => {
+    if(a.total_points > b.total_points){
+        return -1; 
+    } 
+    if(b.total_points > a.total_points){
+        return 1; 
+    } 
+
+    if(a.total_goal_difference > b.total_goal_difference){
+        return -1;
+    } 
+    if(b.total_goal_difference > a.total_goal_difference){
+        return 1;
+    } 
+
+    if(a.total_goals_for > b.total_goals_for){
+        return -1;
+    } 
+    if(b.total_goals_for > a.total_goals_for){
+        return 1;
+    } 
+
+    return 0; 
+    });
+
+    const best8Thirds = thirds.slice(0, 8);
+    qualifiers.push(...best8Thirds);
+
+    res.json({ qualifiers, thirds, best8Thirds });
 });
 
 app.post('/simulation', async(req, res) => {
@@ -245,4 +303,53 @@ app.post('/simulate/match', async(req, res) => {
     }
 
     res.json(result);
+});
+
+app.post('/generate-knockout', async(req, res) => {
+    const response = await fetch("http://localhost:8000/qualifiers");
+    const { qualifiers, best8Thirds } = await response.json();
+
+    const first = {}; 
+    const second = {};
+
+    for(const team of qualifiers){
+        if(team.position === 1) first[team.group_name] = team;
+        if(team.position === 2) second[team.group_name] = team;
+    }
+
+    const firsts = [first['E'], first['I'], first['A'], first['L'], first['D'], first['G'], first['B'], first['K']];
+    const assigned = assignThirds(firsts, best8Thirds);
+
+    const matches = [
+    // confrontos fixos
+    { home: second['A'], away: second['B'] }, // jogo 73
+    { home: first['F'],  away: second['C'] }, // jogo 75
+    { home: first['C'],  away: second['F'] }, // jogo 76
+    { home: second['E'], away: second['I'] }, // jogo 78
+    { home: second['K'], away: second['L'] }, // jogo 83
+    { home: first['H'],  away: second['J'] }, // jogo 84
+    { home: first['J'],  away: second['H'] }, // jogo 86
+    { home: second['D'], away: second['G'] }, // jogo 88
+
+    // confrontos com terceiros sorteados
+    { home: assigned[0].first, away: assigned[0].third }, // jogo 74
+    { home: assigned[1].first, away: assigned[1].third }, // jogo 77
+    { home: assigned[2].first, away: assigned[2].third }, // jogo 79
+    { home: assigned[3].first, away: assigned[3].third }, // jogo 80
+    { home: assigned[4].first, away: assigned[4].third }, // jogo 81
+    { home: assigned[5].first, away: assigned[5].third }, // jogo 82
+    { home: assigned[6].first, away: assigned[6].third }, // jogo 85
+    { home: assigned[7].first, away: assigned[7].third }, // jogo 87
+    ];
+
+    const stage = 'r32';
+    
+    for(const match of matches){
+        await pool.query(
+            'INSERT INTO matches (home_id, away_id, stage) VALUES (?, ?, ?)',
+            [match.home.id, match.away.id, stage]
+        );
+    }
+
+    res.json({ matches });
 });
