@@ -23,7 +23,7 @@ async function calculateStrength(){
             totalOverRating += players[i].rating;
         }
         const overRating = totalOverRating / players.length;
-        teamStrength[selectionName] = parseFloat(((overRating * 0.7) + (rankingRating * 0.3)).toFixed(2));
+        teamStrength[selectionName] = parseFloat(((overRating * 0.4) + (rankingRating * 0.6)).toFixed(2));
     }
     return teamStrength;
 }
@@ -57,12 +57,12 @@ function calculateSelectionsRatings(players){
 
 function calculateXG(attackRatingA, defenseRatingA, probabilityA, attackRatingB, defenseRatingB, probabilityB){
     const potencialA = (attackRatingA - defenseRatingB)/100;
-    const bonusA = (probabilityA - 0.5) * 0.5;
-    const xgA = parseFloat((1.3 + (potencialA * 3.0) + bonusA).toFixed(1));
+    const bonusA = (probabilityA - 0.5) * 1.5;
+    const xgA = parseFloat((1.0 + (potencialA * 5.0) + bonusA).toFixed(1));
 
     const potencialB = (attackRatingB - defenseRatingA)/100;
-    const bonusB = (probabilityB - 0.5) * 0.5;
-    const xgB = parseFloat((1.3 + (potencialB * 3.0) + bonusB).toFixed(1));
+    const bonusB = (probabilityB - 0.5) * 1.5;
+    const xgB = parseFloat((1.0 + (potencialB * 5.0) + bonusB).toFixed(1));
 
     return { xgA, xgB };
 }
