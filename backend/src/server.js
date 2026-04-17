@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const mysql = require('mysql2');
 const cors = require('cors');
-const { calculateStrength, calculateWinProbability, calculateSelectionsRatings, calculateXG, poisson, calculateCleanSheet, selectGoalscorer, selectAssist, generateGoalMinutes, calculateGroupStageResult, calculatePlayerRating, simulateMatchGroupStage, simulatePenaltyShootout, assignThirds } = require('./simulation-logic');
+const { calculateStrength, calculateWinProbability, calculateSelectionsRatings, calculateXG, poisson, calculateCleanSheet, selectGoalscorer, selectAssist, generateGoalMinutes, calculateGroupStageResult, calculatePlayerRating, simulateMatchGroupStage, simulatePenaltyShootout, assignThirds, calculateKnockoutResult, simulateMatchKnockout } = require('./simulation-logic');
 
 app.use(cors());
 app.use(express.json());
@@ -22,6 +22,32 @@ const pool = mysql.createPool({
     password: '2516',
     database: 'wc2026'
 }).promise();
+
+// funções helpers para gerar r16, qf, sf, 3rd, final
+async function getWinnerByMatchNumber(matchNumber){
+    const [rows] = await pool.query(
+        'SELECT k.winner_id FROM knockouts k JOIN matches m ON k.match_id = m.id WHERE m.match_number = ?',
+        [matchNumber]
+    );
+    return rows[0].winner_id;
+}
+
+async function getLoserByMatchNumber(matchNumber){
+    const [rows] = await pool.query(
+        `SELECT m.home_id, m.away_id, k.winner_id FROM knockouts k  JOIN matches m ON k.match_id = m.id WHERE m.match_number = ?`,
+        [matchNumber]
+    );
+    
+    const row = rows[0];
+    let loserId;
+    if(row.home_id === row.winner_id){
+        loserId = row.away_id;
+    }
+    else{
+        loserId = row.home_id;
+    }
+    return loserId;
+}
 
 app.get('/selections', async(req, res) => {    
     // join para eu pegar o nome do grupo, seleciono tudo de selections e o nome do grupo, depois faço o join com a tabela de grupos usando o group_id
@@ -321,35 +347,268 @@ app.post('/generate-r32', async(req, res) => {
     const assigned = assignThirds(firsts, best8Thirds);
 
     const matches = [
-    // confrontos fixos
-    { home: second['A'], away: second['B'] }, // jogo 73
-    { home: first['F'],  away: second['C'] }, // jogo 75
-    { home: first['C'],  away: second['F'] }, // jogo 76
-    { home: second['E'], away: second['I'] }, // jogo 78
-    { home: second['K'], away: second['L'] }, // jogo 83
-    { home: first['H'],  away: second['J'] }, // jogo 84
-    { home: first['J'],  away: second['H'] }, // jogo 86
-    { home: second['D'], away: second['G'] }, // jogo 88
+        // confrontos fixos
+        { match_number: 73, home: second['A'], away: second['B'] },
+        { match_number: 75, home: first['F'],  away: second['C'] },
+        { match_number: 76, home: first['C'],  away: second['F'] },
+        { match_number: 78, home: second['E'], away: second['I'] },
+        { match_number: 83, home: second['K'], away: second['L'] },
+        { match_number: 84, home: first['H'],  away: second['J'] },
+        { match_number: 86, home: first['J'],  away: second['H'] },
+        { match_number: 88, home: second['D'], away: second['G'] },
 
-    // confrontos com terceiros sorteados
-    { home: assigned[0].first, away: assigned[0].third }, // jogo 74
-    { home: assigned[1].first, away: assigned[1].third }, // jogo 77
-    { home: assigned[2].first, away: assigned[2].third }, // jogo 79
-    { home: assigned[3].first, away: assigned[3].third }, // jogo 80
-    { home: assigned[4].first, away: assigned[4].third }, // jogo 81
-    { home: assigned[5].first, away: assigned[5].third }, // jogo 82
-    { home: assigned[6].first, away: assigned[6].third }, // jogo 85
-    { home: assigned[7].first, away: assigned[7].third }, // jogo 87
+        // confrontos com terceiros sorteados
+        { match_number: 74, home: assigned[0].first, away: assigned[0].third },
+        { match_number: 77, home: assigned[1].first, away: assigned[1].third },
+        { match_number: 79, home: assigned[2].first, away: assigned[2].third },
+        { match_number: 80, home: assigned[3].first, away: assigned[3].third },
+        { match_number: 81, home: assigned[4].first, away: assigned[4].third },
+        { match_number: 82, home: assigned[5].first, away: assigned[5].third },
+        { match_number: 85, home: assigned[6].first, away: assigned[6].third },
+        { match_number: 87, home: assigned[7].first, away: assigned[7].third },
     ];
 
     const stage = 'r32';
     
     for(const match of matches){
         await pool.query(
-            'INSERT INTO matches (home_id, away_id, stage) VALUES (?, ?, ?)',
-            [match.home.id, match.away.id, stage]
+            'INSERT INTO matches (home_id, away_id, stage, match_number) VALUES (?, ?, ?, ?)',
+            [match.home.id, match.away.id, stage, match.match_number]
         );
     }
 
     res.json({ matches });
+});
+
+app.post('/generate-r16', async(req, res) => {
+    const matches = [
+        { match_number: 89, home: 74, away: 77 },
+        { match_number: 90, home: 73, away: 75 },
+        { match_number: 91, home: 76, away: 78 },
+        { match_number: 92, home: 79, away: 80 },
+        { match_number: 93, home: 83, away: 84 },
+        { match_number: 94, home: 81, away: 82 },
+        { match_number: 95, home: 86, away: 88 },
+        { match_number: 96, home: 85, away: 87 },
+    ];
+
+    const stage = 'r16';
+
+    for(const match of matches){
+        const homeId = await getWinnerByMatchNumber(match.home);
+        const awayId = await getWinnerByMatchNumber(match.away);
+        await pool.query(
+            'INSERT INTO matches (home_id, away_id, stage, match_number) VALUES (?, ?, ?, ?)',
+            [homeId, awayId, stage, match.match_number]
+        );
+    }
+
+    res.json({ message: `${matches.length} confrontos do r16 gerados` });
+});
+
+app.post('/generate-qf', async(req, res) => {
+    const matches = [
+        { match_number: 97,  home: 89, away: 90 },
+        { match_number: 98,  home: 93, away: 94 },
+        { match_number: 99,  home: 91, away: 92 },
+        { match_number: 100, home: 95, away: 96 },
+    ];
+
+    const stage = 'qf';
+
+    for(const match of matches){
+        const homeId = await getWinnerByMatchNumber(match.home);
+        const awayId = await getWinnerByMatchNumber(match.away);
+        await pool.query(
+            'INSERT INTO matches (home_id, away_id, stage, match_number) VALUES (?, ?, ?, ?)',
+            [homeId, awayId, stage, match.match_number]
+        );
+    }
+
+    res.json({ message: `${matches.length} confrontos do qf gerados` });
+});
+
+app.post('/generate-sf', async(req, res) => {
+    const matches = [
+        { match_number: 101, home: 97, away: 98 },
+        { match_number: 102, home: 99, away: 100 },
+    ];
+
+    const stage = 'sf';
+
+    for(const match of matches){
+        const homeId = await getWinnerByMatchNumber(match.home);
+        const awayId = await getWinnerByMatchNumber(match.away);
+        await pool.query(
+            'INSERT INTO matches (home_id, away_id, stage, match_number) VALUES (?, ?, ?, ?)',
+            [homeId, awayId, stage, match.match_number]
+        );
+    }
+
+    res.json({ message: `${matches.length} confrontos do sf gerados` });
+});
+
+app.post('/generate-final', async(req, res) => {
+    const loser101 = await getLoserByMatchNumber(101);
+    const loser102 = await getLoserByMatchNumber(102);
+
+    await pool.query(
+        'INSERT INTO matches (home_id, away_id, stage, match_number) VALUES (?, ?, ?, ?)',
+        [loser101, loser102, '3rd', 103]
+    );
+
+    const winner101 = await getWinnerByMatchNumber(101);
+    const winner102 = await getWinnerByMatchNumber(102);
+
+    await pool.query(
+        'INSERT INTO matches (home_id, away_id, stage, match_number) VALUES (?, ?, ?, ?)',
+        [winner101, winner102, 'final', 104]
+    );
+
+    res.json({ message: 'jogos 103 (3º lugar) e 104 (final) gerados' });
+});
+
+app.post('/simulate/knockout', async(req, res) => {
+    const { matchId } = req.body;
+
+    const [matchRows] = await pool.query(
+        'SELECT m.*, h.name AS home_name, a.name AS away_name FROM matches m JOIN selections h ON m.home_id = h.id JOIN selections a ON m.away_id = a.id WHERE m.id = ?',
+        [matchId]
+    );
+    const match = matchRows[0];
+    const selectionA = match.home_name;
+    const selectionB = match.away_name;
+    const idA = match.home_id;
+    const idB = match.away_id;
+
+    const strengths = await calculateStrength();
+    const response = await fetch("http://localhost:8000/starters");
+    const starterPlayers = await response.json();
+
+    const teams = {};
+    for(const player of starterPlayers){
+        if(!teams[player.selection_name]){
+            teams[player.selection_name] = [];
+        } 
+        teams[player.selection_name].push(player);
+    }
+
+    const result = simulateMatchKnockout(
+        selectionA, teams[selectionA], strengths[selectionA],
+        selectionB, teams[selectionB], strengths[selectionB]
+    );
+
+    const winnerId = result.winner === selectionA ? idA : idB;
+
+    await pool.query(
+        'UPDATE matches SET home_score = ?, away_score = ?, home_xg = ?, away_xg = ? WHERE id = ?',
+        [result.goalsA, result.goalsB, result.xgA, result.xgB, matchId]
+    );
+
+    await pool.query(
+        'INSERT INTO knockouts (match_id, winner_id) VALUES (?, ?)',
+        [matchId, winnerId]
+    );
+
+    for(const player of teams[selectionA]){
+        const scored = result.scorersA.filter(s => s.name === player.name).length;
+        const assisted = result.assistsA.filter(a => a.name === player.name).length;
+        const playerRating = result.playerRatingsA.find(p => p.player === player.name);
+        const cleanSheet = player.position === 'GK' && result.goalsB === 0;
+
+        await pool.query(
+            'INSERT INTO player_match_stats (player_id, match_id, goals, assists, rating, clean_sheet) VALUES (?, ?, ?, ?, ?, ?)',
+            [player.id, matchId, scored, assisted, playerRating.rating, cleanSheet]
+        );
+
+        const playerEvents = result.events.filter(e => e.player === player.name && e.team === selectionA);
+        for(const event of playerEvents){
+            await pool.query(
+                'INSERT INTO goal_events (match_id, player_id, minute) VALUES (?, ?, ?)',
+                [matchId, player.id, event.minute]
+            );
+        }
+    }
+
+    for(const player of teams[selectionB]){
+        const scored = result.scorersB.filter(s => s.name === player.name).length;
+        const assisted = result.assistsB.filter(a => a.name === player.name).length;
+        const playerRating = result.playerRatingsB.find(p => p.player === player.name);
+        const cleanSheet = player.position === 'GK' && result.goalsA === 0;
+
+        await pool.query(
+            'INSERT INTO player_match_stats (player_id, match_id, goals, assists, rating, clean_sheet) VALUES (?, ?, ?, ?, ?, ?)',
+            [player.id, matchId, scored, assisted, playerRating.rating, cleanSheet]
+        );
+
+        const playerEvents = result.events.filter(e => e.player === player.name && e.team === selectionB);
+        for(const event of playerEvents){
+            await pool.query(
+                'INSERT INTO goal_events (match_id, player_id, minute) VALUES (?, ?, ?)',
+                [matchId, player.id, event.minute]
+            );
+        }
+    }
+
+    res.json(result);
+});
+
+app.post('/simulate/all-knockouts', async(req, res) => {
+    const { stage } = req.body;
+
+    const [matches] = await pool.query(
+        'SELECT * FROM matches WHERE stage = ? AND home_score IS NULL',
+        [stage]
+    );
+
+    for(const match of matches){
+        const result = await fetch("http://localhost:8000/simulate/knockout", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ matchId: match.id })
+        });
+        const data = await result.json();
+    }
+
+    res.json({ message: `${matches.length} partidas simuladas!` });
+});
+
+app.post('/simulate-knockout-stage', async(req, res) => {
+    const baseUrl = "http://localhost:8000";
+    const stages = ['r32', 'r16', 'qf', 'sf', 'final'];
+    const log = [];
+
+    for(const stage of stages){
+        let generateRoute;
+        if(stage === 'final'){
+            generateRoute = 'generate-final';
+        }
+        else{
+            generateRoute = `generate-${stage}`;
+        }
+
+        const genRes = await fetch(`${baseUrl}/${generateRoute}`, { method: 'POST' });
+        const genData = await genRes.json();
+        log.push({ step: `generate-${stage}`, data: genData });
+
+        let stagesToSimulate;
+        if(stage === 'final'){
+            stagesToSimulate = ['3rd', 'final'];
+        }
+        else{
+            stagesToSimulate = [stage];
+        }
+
+        for(const s of stagesToSimulate){
+            const simRes = await fetch(`${baseUrl}/simulate/all-knockouts`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ stage: s })
+            });
+            const simData = await simRes.json();
+            log.push({ step: `simulate-${s}`, data: simData });
+        }
+    }
+
+    res.json({ message: 'Mata-mata completo simulado!', log });
 });

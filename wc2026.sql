@@ -47,6 +47,7 @@ CREATE TABLE matches(
 	home_xg FLOAT DEFAULT 0,
 	away_xg FLOAT DEFAULT 0,
 	round INT NULL,
+    match_number INT NULL,
 	FOREIGN KEY (group_id) REFERENCES `groups`(id),
 	FOREIGN KEY (home_id) REFERENCES selections(id),
 	FOREIGN KEY (away_id) REFERENCES selections(id)
@@ -82,7 +83,7 @@ CREATE TABLE player_match_stats(
 	FOREIGN KEY (match_id) REFERENCES matches(id)
 );
 
-CREATE TABLE KNOCKOUTS(
+CREATE TABLE knockouts(
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	match_id INT NOT NULL,
 	winner_id INT NOT NULL,

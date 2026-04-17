@@ -376,5 +376,75 @@ function assignThirds(firsts, thirds){
     return assignments;
 }
 
-module.exports = { calculateStrength, calculateWinProbability, calculateSelectionsRatings, calculateXG, poisson, calculateCleanSheet, selectGoalscorer, selectAssist, generateGoalMinutes, calculateGroupStageResult, calculatePlayerRating, simulateMatchGroupStage, simulatePenaltyShootout, assignThirds };
+function calculateKnockoutResult(selectionA, goalsA, selectionB, goalsB){
+    let winner;
+    let loser;
+    if(goalsA > goalsB){
+        winner = selectionA;
+        loser = selectionB;
+    }
+    else if(goalsB > goalsA){
+        winner = selectionB;
+        loser = selectionA;
+    }
+    else{
+        winner = null;
+        loser = null;
+    }
 
+    return { winner, loser };
+}
+
+function simulateMatchKnockout(selectionA, playersA, strengthA, selectionB, playersB, strengthB){
+    const { probabilityA, probabilityB } = calculateWinProbability(selectionA, strengthA, selectionB, strengthB);
+    const { attackRating: attackRatingA, defenseRating: defenseRatingA } = calculateSelectionsRatings(playersA);
+    const { attackRating: attackRatingB, defenseRating: defenseRatingB } = calculateSelectionsRatings(playersB);
+    const { xgA, xgB } = calculateXG(attackRatingA, defenseRatingA, probabilityA, attackRatingB, defenseRatingB, probabilityB);
+    const goalsA = poisson(xgA);
+    const goalsB = poisson(xgB);
+    const { cleanSheetA, cleanSheetB } = calculateCleanSheet(goalsA, goalsB);
+    const scorersA = selectGoalscorer(playersA, goalsA);
+    const scorersB = selectGoalscorer(playersB, goalsB);
+    const assistsA = selectAssist(playersA, goalsA);
+    const assistsB = selectAssist(playersB, goalsB);
+    const events = generateGoalMinutes(scorersA, selectionA, scorersB, selectionB);
+    let shootout = null;
+    let { winner, loser } = calculateKnockoutResult(selectionA, goalsA, selectionB, goalsB);
+    if(!winner){
+        shootout = simulatePenaltyShootout(playersA, selectionA, playersB, selectionB);
+        winner = shootout.winner;
+        if(winner === selectionA){
+            loser = selectionB;
+        } 
+        else {
+            loser = selectionA;
+        }
+    }
+    const playerRatingsA = [];
+    for(let i = 0; i < playersA.length; i++){
+        const player = playersA[i];
+        const scored = scorersA.filter(s => s.id === player.id).length;
+        const assisted = assistsA.filter(a => a.id === player.id).length;
+        const rating = calculatePlayerRating(player, scored, assisted, winner === selectionA, loser === selectionA, cleanSheetA, goalsB);
+        playerRatingsA.push({ player: player.name, position: player.position, rating });
+    }
+
+    const playerRatingsB = [];
+    for(let i = 0; i < playersB.length; i++){
+        const player = playersB[i];
+        const scored = scorersB.filter(s => s.id === player.id).length;
+        const assisted = assistsB.filter(a => a.id === player.id).length;
+        const rating = calculatePlayerRating(player, scored, assisted, winner === selectionB, loser === selectionB, cleanSheetB, goalsA);
+        playerRatingsB.push({ player: player.name, position: player.position, rating });
+    }
+
+    return { 
+    winner, loser, goalsA, goalsB, xgA, xgB, events, shootout, playerRatingsA, playerRatingsB,
+    scorersA: scorersA.map(s => ({ name: s.name, position: s.position })),
+    scorersB: scorersB.map(s => ({ name: s.name, position: s.position })),
+    assistsA: assistsA.map(a => ({ name: a.name, position: a.position })),
+    assistsB: assistsB.map(a => ({ name: a.name, position: a.position }))
+    };
+}
+
+module.exports = { calculateStrength, calculateWinProbability, calculateSelectionsRatings, calculateXG, poisson, calculateCleanSheet, selectGoalscorer, selectAssist, generateGoalMinutes, calculateGroupStageResult, calculatePlayerRating, simulateMatchGroupStage, simulatePenaltyShootout, assignThirds, calculateKnockoutResult, simulateMatchKnockout };
