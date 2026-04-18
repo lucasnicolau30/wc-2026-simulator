@@ -42,9 +42,15 @@
 
       <div class="page-filter-wrap">
         <div class="round-filter" id="matches-round-filter">
-          <button class="round-btn active" data-round="1" data-i18n="round1">Rodada 1</button>
-          <button class="round-btn" data-round="2" data-i18n="round2">Rodada 2</button>
-          <button class="round-btn" data-round="3" data-i18n="round3">Rodada 3</button>
+          <button class="round-btn active" data-phase="group" data-round="1" data-i18n="round1">Rodada 1</button>
+          <button class="round-btn" data-phase="group" data-round="2" data-i18n="round2">Rodada 2</button>
+          <button class="round-btn" data-phase="group" data-round="3" data-i18n="round3">Rodada 3</button>
+          <button class="round-btn" data-phase="knockout" data-stage="r32">R32</button>
+          <button class="round-btn" data-phase="knockout" data-stage="r16">R16</button>
+          <button class="round-btn" data-phase="knockout" data-stage="qf">QF</button>
+          <button class="round-btn" data-phase="knockout" data-stage="sf">SF</button>
+          <button class="round-btn" data-phase="knockout" data-stage="3rd">3º</button>
+          <button class="round-btn" data-phase="knockout" data-stage="final">Final</button>
         </div>
       </div>
     </div>
@@ -65,23 +71,12 @@
   </main>
 
   <main class="page" id="page-knockout">
-    <div class="page-header page-header--with-filter">
+    <div class="page-header">
       <h1 class="page-title" data-i18n="knockoutStageTitle">Knockout Stage</h1>
-
-      <div class="page-filter-wrap">
-        <div class="round-filter" id="knockout-stage-filter">
-          <button class="round-btn active" data-stage="r16" data-i18n="roundOf16">Oitavas de Final</button>
-          <button class="round-btn" data-stage="quarter" data-i18n="quarterFinals">Quartas de Final</button>
-          <button class="round-btn" data-stage="semi" data-i18n="semiFinals">Semifinais</button>
-          <button class="round-btn" data-stage="final" data-i18n="finalTab">Final</button>
-        </div>
-      </div>
     </div>
 
-    <div class="knockout-wrap">
-      <p class="knockout-placeholder" data-i18n="knockoutPlaceholder">
-        Simulate the group stage first.
-      </p>
+    <div class="knockout-wrap" id="knockout-wrap">
+      <p class="knockout-placeholder">Simule a fase de grupos primeiro.</p>
     </div>
   </main>
 

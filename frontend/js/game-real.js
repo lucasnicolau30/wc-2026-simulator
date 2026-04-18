@@ -211,78 +211,6 @@ async function loadGroups(){
     }
 } 
 
-async function loadMatches(){
-    const round = document.querySelector(".round-btn.active")?.dataset.round ?? "1";
-
-    const response = await fetch("http://localhost:8000/matches");
-    const matches = await response.json();
-
-    const filtered = matches.filter(m => m.round == round);
-
-    const container = document.getElementById("matches-list");
-    container.innerHTML = "";
-
-    for(const match of filtered){
-        const eventsResponse = await fetch(`http://localhost:8000/matches/${match.id}/events`);
-        const events = await eventsResponse.json();
-
-        const homeGoals = events.filter(e => e.team_name === match.home_name);
-        const awayGoals = events.filter(e => e.team_name === match.away_name);
-
-        const homeGoalsHtml = homeGoals.map(e => `<span>${e.player_name} ${e.minute}'</span>`).join("");
-        const awayGoalsHtml = awayGoals.map(e => `<span>${e.player_name} ${e.minute}'</span>`).join("");
-
-        container.innerHTML += `
-            <article class="match-card">
-                <div class="match-main">
-                    <div class="match-team">
-                        <img class="match-flag" src="${getFlagSrc(match.home_name)}" alt="${match.home_name}" />
-                        <span class="match-team-name">${getDisplayName(match.home_name)}</span>
-                    </div>
-                    <div class="match-score">${match.home_score !== null ? `${match.home_score} — ${match.away_score}` : 'vs'}</div>
-                    <div class="match-team away">
-                        <img class="match-flag" src="${getFlagSrc(match.away_name)}" alt="${match.away_name}" />
-                        <span class="match-team-name">${getDisplayName(match.away_name)}</span>
-                    </div>
-                </div>
-                <div class="match-events">
-                    <div class="match-goals home-goals">${homeGoalsHtml}</div>
-                    <div></div>
-                    <div class="match-goals away-goals">${awayGoalsHtml}</div>
-                </div>
-            </article>
-        `;
-    }
-}
-document.querySelectorAll(".round-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".round-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    loadMatches();
-  });
-});
-
-document.getElementById("simulate-all-matches").addEventListener("click", async () => {
-    console.log("clicou");
-    const round = document.querySelector(".round-btn.active")?.dataset.round ?? "1";
-    
-    const response = await fetch("http://localhost:8000/matches");
-    const matches = await response.json();
-
-    const filtered = matches.filter(m => m.round == round && m.home_score === null);
-
-    for(const match of filtered){
-        await fetch("http://localhost:8000/simulate/match", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ matchId: match.id })
-        });
-    }
-
-    loadMatches();
-    loadGroups();
-});
-
 function getValue(player, metric){
     if(metric === 'goals'){
       return player.total_goals;
@@ -329,6 +257,266 @@ document.querySelectorAll("#performance-filter .round-btn").forEach(btn => {
     btn.classList.add("active");
     renderPerformance();
   });
+});
+
+/* ===== matches (grupos + mata-mata) ===== */
+
+async function loadMatches(){
+    const activeBtn = document.querySelector("#matches-round-filter .round-btn.active");
+    const phase = activeBtn?.dataset.phase ?? "group";
+    const container = document.getElementById("matches-list");
+
+    container.innerHTML = "";
+    container.classList.remove("single-match");
+
+    if(phase === "group"){
+        const round = activeBtn.dataset.round;
+        const response = await fetch("http://localhost:8000/matches");
+        const matches = await response.json();
+        const filtered = matches.filter(m => m.round == round);
+        await renderMatchCards(filtered, container);
+        return;
+    }
+
+    const stage = activeBtn.dataset.stage;
+
+    const response = await fetch("http://localhost:8000/knockout-matches");
+    const allKnockout = await response.json();
+    const filtered = allKnockout.filter(m => m.stage === stage);
+
+    if ((stage === "final" || stage === "3rd") && filtered.length === 1) {
+        container.classList.add("single-match");
+    }
+
+    if(filtered.length === 0){
+        const generated = await tryGenerateStage(stage);
+        if(!generated){
+            container.innerHTML = `<p class="knockout-placeholder">Simule a fase anterior primeiro.</p>`;
+            return;
+        }
+
+        const response2 = await fetch("http://localhost:8000/knockout-matches");
+        const allKnockout2 = await response2.json();
+        const filtered2 = allKnockout2.filter(m => m.stage === stage);
+
+        if ((stage === "final" || stage === "3rd") && filtered2.length === 1) {
+            container.classList.add("single-match");
+        }
+
+        await renderMatchCards(filtered2, container);
+        return;
+    }
+
+    await renderMatchCards(filtered, container);
+}
+
+async function renderMatchCards(matches, container){
+    for(const match of matches){
+        const eventsResponse = await fetch(`http://localhost:8000/matches/${match.id}/events`);
+        const events = await eventsResponse.json();
+
+        const homeGoals = events.filter(e => e.team_name === match.home_name);
+        const awayGoals = events.filter(e => e.team_name === match.away_name);
+
+        const homeGoalsHtml = homeGoals.map(e => `<span>${e.player_name} ${e.minute}'</span>`).join("");
+        const awayGoalsHtml = awayGoals.map(e => `<span>${e.player_name} ${e.minute}'</span>`).join("");
+
+        container.innerHTML += `
+            <article class="match-card">
+                <div class="match-main">
+                    <div class="match-team">
+                        <img class="match-flag" src="${getFlagSrc(match.home_name)}" alt="${match.home_name}" />
+                        <span class="match-team-name">${getDisplayName(match.home_name)}</span>
+                    </div>
+                    <div class="match-score">${match.home_score !== null ? `${match.home_score} — ${match.away_score}` : 'vs'}</div>
+                    <div class="match-team away">
+                        <img class="match-flag" src="${getFlagSrc(match.away_name)}" alt="${match.away_name}" />
+                        <span class="match-team-name">${getDisplayName(match.away_name)}</span>
+                    </div>
+                </div>
+                <div class="match-events">
+                    <div class="match-goals home-goals">${homeGoalsHtml}</div>
+                    <div></div>
+                    <div class="match-goals away-goals">${awayGoalsHtml}</div>
+                </div>
+            </article>
+        `;
+    }
+}
+
+// tenta gerar os confrontos de uma fase do mata-mata
+// retorna true se gerou com sucesso, false se faltam pré-condições
+async function tryGenerateStage(stage){
+    // pra gerar final, precisa que 3rd tbm seja disparado (a rota /generate-final cria os dois)
+    let route;
+    if(stage === '3rd' || stage === 'final'){
+        route = 'generate-final';
+    }
+    else{
+        route = `generate-${stage}`;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:8000/${route}`, { method: 'POST' });
+        if(!response.ok) return false;
+        return true;
+    }
+    catch(err){
+        return false;
+    }
+}
+
+document.querySelectorAll("#matches-round-filter .round-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("#matches-round-filter .round-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    loadMatches();
+  });
+});
+
+document.getElementById("simulate-all-matches").addEventListener("click", async () => {
+    const activeBtn = document.querySelector("#matches-round-filter .round-btn.active");
+    const phase = activeBtn?.dataset.phase ?? "group";
+
+    if(phase === "group"){
+        const round = activeBtn.dataset.round;
+        const response = await fetch("http://localhost:8000/matches");
+        const matches = await response.json();
+        const filtered = matches.filter(m => m.round == round && m.home_score === null);
+
+        for(const match of filtered){
+            await fetch("http://localhost:8000/simulate/match", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ matchId: match.id })
+            });
+        }
+
+        loadMatches();
+        loadGroups();
+        return;
+    }
+
+    // phase === "knockout"
+    const stage = activeBtn.dataset.stage;
+
+    // garante que a fase foi gerada antes de simular
+    const kResponse = await fetch("http://localhost:8000/knockout-matches");
+    const allKnockout = await kResponse.json();
+    const existing = allKnockout.filter(m => m.stage === stage);
+
+    if(existing.length === 0){
+        await tryGenerateStage(stage);
+    }
+
+    await fetch("http://localhost:8000/simulate/all-knockouts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ stage: stage })
+    });
+
+    loadMatches();
+    loadKnockout();
+});
+
+/* ===== knockout bracket (só visualização) ===== */
+
+const BRACKET_LAYOUT = {
+  r32Left:  [74, 77, 73, 75, 76, 78, 79, 80],
+  r32Right: [83, 84, 86, 88, 81, 82, 85, 87],
+  r16Left:  [89, 90, 91, 92],
+  r16Right: [93, 95, 94, 96],
+  qfLeft:   [97, 99],
+  qfRight:  [98, 100],
+  sfLeft:   [101],
+  sfRight:  [102],
+  finalMatch: 104,
+  thirdMatch: 103
+};
+
+function renderBracketMatch(match, label = null){
+  if(!match){
+    return `<div class="bracket-match"><div class="bracket-tbd">—</div></div>`;
+  }
+
+  const played = match.home_score !== null;
+  let homeWon = false;
+  let awayWon = false;
+  if(played){
+    homeWon = match.home_score > match.away_score;
+    awayWon = match.away_score > match.home_score;
+  }
+
+  const homeClasses = [];
+  const awayClasses = [];
+  if(homeWon) homeClasses.push('winner');
+  if(played && !homeWon) homeClasses.push('loser');
+  if(awayWon) awayClasses.push('winner');
+  if(played && !awayWon) awayClasses.push('loser');
+
+  const homeAbbr = teamAbbr[match.home_name] || match.home_name;
+  const awayAbbr = teamAbbr[match.away_name] || match.away_name;
+
+  return `
+    <div class="bracket-match ${played ? 'played' : ''}">
+      ${label ? `<div class="bracket-match-label">${label}</div>` : ''}
+      <div class="bracket-team ${homeClasses.join(' ')}">
+        <img class="bracket-flag" src="${getFlagSrc(match.home_name)}" alt="${match.home_name}" />
+        <span class="bracket-team-name">${homeAbbr}</span>
+        <span class="bracket-score">${played ? match.home_score : '-'}</span>
+      </div>
+      <div class="bracket-team ${awayClasses.join(' ')}">
+        <img class="bracket-flag" src="${getFlagSrc(match.away_name)}" alt="${match.away_name}" />
+        <span class="bracket-team-name">${awayAbbr}</span>
+        <span class="bracket-score">${played ? match.away_score : '-'}</span>
+      </div>
+    </div>
+  `;
+}
+
+async function loadKnockout(){
+  const wrap = document.getElementById('knockout-wrap');
+
+  const response = await fetch('http://localhost:8000/knockout-matches');
+  const matches = await response.json();
+
+  if(matches.length === 0){
+    wrap.innerHTML = `<p class="knockout-placeholder">Simule a fase de grupos primeiro.</p>`;
+    return;
+  }
+
+  const byNum = {};
+  for(const m of matches){
+    byNum[m.match_number] = m;
+  }
+
+  const buildCol = (nums, label) => nums.map(n => renderBracketMatch(byNum[n], label)).join('');
+
+  const thirdMatch = byNum[BRACKET_LAYOUT.thirdMatch];
+  const thirdHtml = thirdMatch ? `
+    <div class="bracket-third">
+      ${renderBracketMatch(thirdMatch, '3º LUGAR')}
+    </div>
+  ` : '';
+
+  wrap.innerHTML = `
+    <div class="knockout-bracket">
+      <div class="bracket-col">${buildCol(BRACKET_LAYOUT.r32Left, 'R32')}</div>
+      <div class="bracket-col">${buildCol(BRACKET_LAYOUT.r16Left, 'R16')}</div>
+      <div class="bracket-col">${buildCol(BRACKET_LAYOUT.qfLeft, 'QF')}</div>
+      <div class="bracket-col">${buildCol(BRACKET_LAYOUT.sfLeft, 'SF')}</div>
+      <div class="bracket-col final-col">${renderBracketMatch(byNum[BRACKET_LAYOUT.finalMatch], 'FINAL')}</div>
+      <div class="bracket-col">${buildCol(BRACKET_LAYOUT.sfRight, 'SF')}</div>
+      <div class="bracket-col">${buildCol(BRACKET_LAYOUT.qfRight, 'QF')}</div>
+      <div class="bracket-col">${buildCol(BRACKET_LAYOUT.r16Right, 'R16')}</div>
+      <div class="bracket-col">${buildCol(BRACKET_LAYOUT.r32Right, 'R32')}</div>
+    </div>
+    ${thirdHtml}
+  `;
+}
+
+document.querySelector('[data-tab="knockout"]').addEventListener('click', () => {
+  loadKnockout();
 });
 
 /* re-render ao trocar idioma */

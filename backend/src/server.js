@@ -189,6 +189,15 @@ app.get('/qualifiers', async(req, res) => {
     res.json({ qualifiers, thirds, best8Thirds });
 });
 
+app.get('/knockout-matches', async(req, res) => {
+    const [rows] = await pool.query(`
+        SELECT m.id, m.stage, m.match_number, m.home_score, m.away_score, m.home_xg, m.away_xg,
+        h.name AS home_name, a.name AS away_name
+        FROM matches m JOIN selections h ON m.home_id = h.id JOIN selections a ON m.away_id = a.id WHERE m.stage IN ('r32','r16','qf','sf','3rd','final') ORDER BY m.match_number ASC`);
+
+    res.json(rows);
+});
+
 app.post('/simulation', async(req, res) => {
     const mode = req.body.mode;
     if(mode === 'real'){
