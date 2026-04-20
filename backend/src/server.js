@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const mysql = require('mysql2');
@@ -8,6 +9,12 @@ const path = require('path');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
 const { calculateStrength, calculateWinProbability, calculateSelectionsRatings, calculateXG, poisson, calculateCleanSheet, selectGoalscorer, selectAssist, generateGoalMinutes, calculateGroupStageResult, calculatePlayerRating, simulateMatchGroupStage, simulatePenaltyShootout, assignThirds, calculateKnockoutResult, simulateMatchKnockout } = require('./simulation-logic');
+
+const DB_HOST = process.env.DB_HOST || 'localhost';
+const DB_USER = process.env.DB_USER || 'root';
+const DB_PASSWORD = process.env.DB_PASSWORD;
+const DB_NAME = process.env.DB_NAME || 'wc2026';
+const PORT = process.env.PORT || 8000;
 
 app.use(cors());
 app.use(express.json());
@@ -28,18 +35,28 @@ app.get('/', (req, res) => {
 
 let pool = null;
 
-app.listen(8000, async () => {
-    console.log('Server is running on port 8000');
+app.listen(PORT, async () => {
+    console.log('Server is running on port ${PORT}');
     await initializeDatabase();
     console.log('Database initialized');
 });
 
 async function initializeDatabase() {
-    const initConn = await mysqlPromise.createConnection({ host: 'localhost', user: 'root', password: '2516' });
-    await initConn.query('CREATE DATABASE IF NOT EXISTS wc2026');
+    const initConn = await mysqlPromise.createConnection({
+        host: DB_HOST,
+        user: DB_USER,
+        password: DB_PASSWORD
+    });
+
+    await initConn.query(`CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\``);
     await initConn.end();
 
-    const conn = await mysqlPromise.createConnection({ host: 'localhost', user: 'root', password: '2516', database: 'wc2026' });
+    const conn = await mysqlPromise.createConnection({
+        host: DB_HOST,
+        user: DB_USER,
+        password: DB_PASSWORD,
+        database: DB_NAME
+    });
 
     await conn.execute(`CREATE TABLE IF NOT EXISTS \`groups\` (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -131,13 +148,22 @@ async function initializeDatabase() {
     )`);
 
     const [countRows] = await conn.execute('SELECT COUNT(*) AS total FROM selections');
+
     if (countRows[0].total === 0) {
         console.log('Populando banco de dados...');
-        const data = JSON.parse(fs.readFileSync(path.join(__dirname, '../seed/selections.json'), 'utf-8'));
+
+        const data = JSON.parse(
+            fs.readFileSync(path.join(__dirname, '../seed/selections.json'), 'utf-8')
+        );
 
         for (const selection of data.selections) {
             await conn.execute('INSERT IGNORE INTO `groups` (name) VALUES (?)', [selection.group]);
-            const [groupRows] = await conn.execute('SELECT id FROM `groups` WHERE name = ?', [selection.group]);
+
+            const [groupRows] = await conn.execute(
+                'SELECT id FROM `groups` WHERE name = ?',
+                [selection.group]
+            );
+
             const group_id = groupRows[0].id;
 
             await conn.execute(
@@ -145,30 +171,44 @@ async function initializeDatabase() {
                 [group_id, selection.name, selection.ranking, selection.formation]
             );
 
-            const [selRows] = await conn.execute('SELECT id FROM selections WHERE name = ?', [selection.name]);
+            const [selRows] = await conn.execute(
+                'SELECT id FROM selections WHERE name = ?',
+                [selection.name]
+            );
+
             const selection_id = selRows[0].id;
 
             for (const player of selection.players) {
                 await conn.execute(
                     'INSERT INTO players (selection_id, name, age, position, rating, is_starter) VALUES (?, ?, ?, ?, ?, ?)',
-                    [selection_id, player.name, player.age, player.position, player.rating, player.is_starter]
+                    [
+                        selection_id,
+                        player.name,
+                        player.age,
+                        player.position,
+                        player.rating,
+                        player.is_starter
+                    ]
                 );
             }
+
             console.log(`✓ ${selection.name} inserida`);
         }
+
         console.log('Seed concluído!');
     }
 
     await conn.end();
 
-    pool = mysql.createPool({
-        host: 'localhost',
-        user: 'root',
-        password: '2516',
-        database: 'wc2026'
-    }).promise();
+    if (!pool) {
+        pool = mysql.createPool({
+            host: DB_HOST,
+            user: DB_USER,
+            password: DB_PASSWORD,
+            database: DB_NAME
+        }).promise();
+    }
 }
-
 
 // funções helpers para gerar r16, qf, sf, 3rd, final
 async function getWinnerByMatchNumber(matchNumber){
@@ -610,13 +650,11 @@ app.post('/manual/knockout', async(req, res) => {
 app.post('/simulation', async(req, res) => {
     const mode = req.body.mode;
     if(mode === 'manual'){
-        await initializeDatabase();
         await resetGameData();
         await createGroupMatches();
         return res.json({ ok: true });
     }
     if(mode === 'real'){
-        await initializeDatabase();
         const [rows] = await pool.query('SELECT COUNT(*) AS total FROM matches');
         
         if(rows[0].total === 0){
