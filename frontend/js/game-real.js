@@ -18,6 +18,9 @@ tabs.forEach(tab => {
   });
 });
 
+/* shootouts em memória — matchId → { winner, goalsA, goalsB, eventsA, eventsB, homeTeam, awayTeam } */
+const shootoutCache = new Map();
+
 /* mapa de bandeiras */
 const countryFlags = {
   "México": "mx",
@@ -128,7 +131,6 @@ function getDisplayName(ptName) {
 /* groups */
 async function loadGroups(){
     const response = await fetch("http://localhost:8000/selections");
-
     const selectionsRes = await response.json();
 
     const groups = {};
@@ -142,7 +144,6 @@ async function loadGroups(){
       groups[selection.group_name].push(selection);
     }
 
-    // busca standings de cada grupo
     const standingsMap = {};
     const grid = document.getElementById("groups-grid");
     await Promise.all(Object.entries(groupIds).map(async ([groupName, groupId]) => {
@@ -151,9 +152,9 @@ async function loadGroups(){
 
           standingsMap[groupName] = {};
 
-            for(const row of data){
-                standingsMap[groupName][row.selection_id] = row;
-            }
+          for(const row of data){
+              standingsMap[groupName][row.selection_id] = row;
+          }
         })
     );
 
@@ -163,7 +164,7 @@ async function loadGroups(){
       const card = document.createElement("div");
       card.className = "group-card";
 
-        const t = translations[current];
+      const t = translations[current];
 
       const teamsHtml = groups[groupName]
         .slice()
@@ -209,26 +210,26 @@ async function loadGroups(){
 
       grid.appendChild(card);
     }
-} 
+}
 
 function getValue(player, metric){
     if(metric === 'goals'){
       return player.total_goals;
-    } 
+    }
     if(metric === 'assists'){
       return player.total_assists;
-    } 
+    }
     if(metric === 'cleanSheets'){
       return player.total_clean_sheets;
-    } 
+    }
     if(metric === 'rating'){
       return parseFloat(player.average_rating).toFixed(1);
-    } 
+    }
 }
 
 async function renderPerformance(){
     const metric = document.querySelector("#performance-filter .round-btn.active")?.dataset.metric ?? "rating";
-    
+
     const response = await fetch(`http://localhost:8000/performance/${metric}`);
     const players = await response.json();
 
@@ -284,8 +285,10 @@ async function loadMatches(){
     const allKnockout = await response.json();
     const filtered = allKnockout.filter(m => m.stage === stage);
 
-    if ((stage === "final" || stage === "3rd") && filtered.length === 1) {
-        container.classList.add("single-match");
+    if(stage === "final" || stage === "3rd"){
+        if(filtered.length === 1){
+            container.classList.add("single-match");
+        }
     }
 
     if(filtered.length === 0){
@@ -299,8 +302,10 @@ async function loadMatches(){
         const allKnockout2 = await response2.json();
         const filtered2 = allKnockout2.filter(m => m.stage === stage);
 
-        if ((stage === "final" || stage === "3rd") && filtered2.length === 1) {
-            container.classList.add("single-match");
+        if(stage === "final" || stage === "3rd"){
+            if(filtered2.length === 1){
+                container.classList.add("single-match");
+            }
         }
 
         await renderMatchCards(filtered2, container);
@@ -308,6 +313,36 @@ async function loadMatches(){
     }
 
     await renderMatchCards(filtered, container);
+}
+
+function buildShootoutHtml(shootout){
+    if(!shootout) return '';
+
+    const homeEvents = shootout.eventsA;
+    const awayEvents = shootout.eventsB;
+
+    const homeBalls = homeEvents.map(h => {
+        const cls = h.scored ? 'pk-scored' : 'pk-missed';
+        return `<span class="pk-kick ${cls}"><span class="pk-ball"></span><span class="pk-name">${h.player}</span></span>`;
+    }).join('');
+
+    const awayBalls = awayEvents.map(a => {
+        const cls = a.scored ? 'pk-scored' : 'pk-missed';
+        return `<span class="pk-kick ${cls}"><span class="pk-ball"></span><span class="pk-name">${a.player}</span></span>`;
+    }).join('');
+
+    const label = current === 'pt' ? 'Pênaltis' : 'Penalties';
+
+    return `
+        <div class="match-penalties">
+            <div class="pk-col pk-col-home">${homeBalls}</div>
+            <div class="pk-header">
+                <span class="pk-label">${label}</span>
+                <span class="pk-score">${shootout.goalsA} – ${shootout.goalsB}</span>
+            </div>
+            <div class="pk-col pk-col-away">${awayBalls}</div>
+        </div>
+    `;
 }
 
 async function renderMatchCards(matches, container){
@@ -320,6 +355,12 @@ async function renderMatchCards(matches, container){
 
         const homeGoalsHtml = homeGoals.map(e => `<span>${e.player_name} ${e.minute}'</span>`).join("");
         const awayGoalsHtml = awayGoals.map(e => `<span>${e.player_name} ${e.minute}'</span>`).join("");
+
+        let shootout = null;
+        if(shootoutCache.has(match.id)){
+            shootout = shootoutCache.get(match.id);
+        }
+        const shootoutHtml = buildShootoutHtml(shootout);
 
         container.innerHTML += `
             <article class="match-card">
@@ -339,15 +380,15 @@ async function renderMatchCards(matches, container){
                     <div></div>
                     <div class="match-goals away-goals">${awayGoalsHtml}</div>
                 </div>
+                ${shootoutHtml}
             </article>
         `;
     }
 }
 
-// tenta gerar os confrontos de uma fase do mata-mata
-// retorna true se gerou com sucesso, false se faltam pré-condições
+/* tenta gerar os confrontos de uma fase do mata-mata */
+/* retorna true se gerou com sucesso, false se faltam pré-condições */
 async function tryGenerateStage(stage){
-    // pra gerar final, precisa que 3rd tbm seja disparado (a rota /generate-final cria os dois)
     let route;
     if(stage === '3rd' || stage === 'final'){
         route = 'generate-final';
@@ -400,7 +441,6 @@ document.getElementById("simulate-all-matches").addEventListener("click", async 
     // phase === "knockout"
     const stage = activeBtn.dataset.stage;
 
-    // garante que a fase foi gerada antes de simular
     const kResponse = await fetch("http://localhost:8000/knockout-matches");
     const allKnockout = await kResponse.json();
     const existing = allKnockout.filter(m => m.stage === stage);
@@ -409,11 +449,48 @@ document.getElementById("simulate-all-matches").addEventListener("click", async 
         await tryGenerateStage(stage);
     }
 
-    await fetch("http://localhost:8000/simulate/all-knockouts", {
+    const simResponse = await fetch("http://localhost:8000/simulate/all-knockouts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ stage: stage })
     });
+    const simData = await simResponse.json();
+
+    if(simData.results){
+        const refreshRes = await fetch("http://localhost:8000/knockout-matches");
+        const refreshed = await refreshRes.json();
+
+        const matchMap = {};
+        for(const m of refreshed){
+            matchMap[m.id] = m;
+        }
+
+        for(const r of simData.results){
+            if(r.shootout){
+                const m = matchMap[r.matchId];
+
+                let homeTeam = null;
+                if(m){
+                    homeTeam = m.home_name;
+                }
+
+                let awayTeam = null;
+                if(m){
+                    awayTeam = m.away_name;
+                }
+
+                shootoutCache.set(r.matchId, {
+                    winner: r.shootout.winner,
+                    goalsA: r.shootout.goalsA,
+                    goalsB: r.shootout.goalsB,
+                    eventsA: r.shootout.eventsA,
+                    eventsB: r.shootout.eventsB,
+                    homeTeam: homeTeam,
+                    awayTeam: awayTeam
+                });
+            }
+        }
+    }
 
     loadMatches();
     loadKnockout();
@@ -434,7 +511,7 @@ const BRACKET_LAYOUT = {
   thirdMatch: 103
 };
 
-function renderBracketMatch(match, label = null){
+function renderBracketMatch(match, label = null, shootout = null){
   if(!match){
     return `<div class="bracket-match"><div class="bracket-tbd">—</div></div>`;
   }
@@ -443,8 +520,13 @@ function renderBracketMatch(match, label = null){
   let homeWon = false;
   let awayWon = false;
   if(played){
-    homeWon = match.home_score > match.away_score;
-    awayWon = match.away_score > match.home_score;
+    if(shootout){
+      homeWon = shootout.winner === match.home_name;
+      awayWon = shootout.winner === match.away_name;
+    } else {
+      homeWon = match.home_score > match.away_score;
+      awayWon = match.away_score > match.home_score;
+    }
   }
 
   const homeClasses = [];
@@ -457,18 +539,27 @@ function renderBracketMatch(match, label = null){
   const homeAbbr = teamAbbr[match.home_name] || match.home_name;
   const awayAbbr = teamAbbr[match.away_name] || match.away_name;
 
+  const playedClass = played ? 'played' : '';
+  const labelHtml = label ? `<div class="bracket-match-label">${label}</div>` : '';
+
+  const homeScore = played ? match.home_score : '-';
+  const awayScore = played ? match.away_score : '-';
+
+  const homePk = (shootout && played) ? ` <span class="bracket-pk">(${shootout.goalsA})</span>` : '';
+  const awayPk = (shootout && played) ? ` <span class="bracket-pk">(${shootout.goalsB})</span>` : '';
+
   return `
-    <div class="bracket-match ${played ? 'played' : ''}">
-      ${label ? `<div class="bracket-match-label">${label}</div>` : ''}
+    <div class="bracket-match ${playedClass}">
+      ${labelHtml}
       <div class="bracket-team ${homeClasses.join(' ')}">
         <img class="bracket-flag" src="${getFlagSrc(match.home_name)}" alt="${match.home_name}" />
-        <span class="bracket-team-name">${homeAbbr}</span>
-        <span class="bracket-score">${played ? match.home_score : '-'}</span>
+        <span class="bracket-team-name">${homeAbbr}${homePk}</span>
+        <span class="bracket-score">${homeScore}</span>
       </div>
       <div class="bracket-team ${awayClasses.join(' ')}">
         <img class="bracket-flag" src="${getFlagSrc(match.away_name)}" alt="${match.away_name}" />
-        <span class="bracket-team-name">${awayAbbr}</span>
-        <span class="bracket-score">${played ? match.away_score : '-'}</span>
+        <span class="bracket-team-name">${awayAbbr}${awayPk}</span>
+        <span class="bracket-score">${awayScore}</span>
       </div>
     </div>
   `;
@@ -490,14 +581,26 @@ async function loadKnockout(){
     byNum[m.match_number] = m;
   }
 
-  const buildCol = (nums, label) => nums.map(n => renderBracketMatch(byNum[n], label)).join('');
+  const buildCol = (nums, label) => nums.map(n => {
+    const m = byNum[n];
+    const so = m ? shootoutCache.get(m.id) || null : null;
+    return renderBracketMatch(m, label, so);
+  }).join('');
 
   const thirdMatch = byNum[BRACKET_LAYOUT.thirdMatch];
-  const thirdHtml = thirdMatch ? `
-    <div class="bracket-third">
-      ${renderBracketMatch(thirdMatch, '3º LUGAR')}
-    </div>
-  ` : '';
+  const finalMatch = byNum[BRACKET_LAYOUT.finalMatch];
+
+  let thirdHtml = '';
+  if(thirdMatch){
+      const thirdSo = shootoutCache.get(thirdMatch.id) || null;
+      thirdHtml = `
+        <div class="bracket-third">
+          ${renderBracketMatch(thirdMatch, '3º LUGAR', thirdSo)}
+        </div>
+      `;
+  }
+
+  const finalSo = finalMatch ? shootoutCache.get(finalMatch.id) || null : null;
 
   wrap.innerHTML = `
     <div class="knockout-bracket">
@@ -505,7 +608,7 @@ async function loadKnockout(){
       <div class="bracket-col">${buildCol(BRACKET_LAYOUT.r16Left, 'R16')}</div>
       <div class="bracket-col">${buildCol(BRACKET_LAYOUT.qfLeft, 'QF')}</div>
       <div class="bracket-col">${buildCol(BRACKET_LAYOUT.sfLeft, 'SF')}</div>
-      <div class="bracket-col final-col">${renderBracketMatch(byNum[BRACKET_LAYOUT.finalMatch], 'FINAL')}</div>
+      <div class="bracket-col final-col">${renderBracketMatch(finalMatch, 'FINAL', finalSo)}</div>
       <div class="bracket-col">${buildCol(BRACKET_LAYOUT.sfRight, 'SF')}</div>
       <div class="bracket-col">${buildCol(BRACKET_LAYOUT.qfRight, 'QF')}</div>
       <div class="bracket-col">${buildCol(BRACKET_LAYOUT.r16Right, 'R16')}</div>
@@ -530,3 +633,46 @@ setBodyBackground("groups");
 loadGroups();
 loadMatches();
 renderPerformance();
+
+/* refresh */
+
+const resetModal = document.getElementById("resetModal");
+const resetCancel = document.getElementById("resetCancel");
+const resetConfirm = document.getElementById("resetConfirm");
+
+function openResetModal(){
+  resetModal.classList.add("active");
+  resetModal.setAttribute("aria-hidden", "false");
+}
+
+function closeResetModal(){
+  resetModal.classList.remove("active");
+  resetModal.setAttribute("aria-hidden", "true");
+}
+
+document.getElementById("btnRefresh").addEventListener("click", openResetModal);
+resetCancel.addEventListener("click", closeResetModal);
+resetModal.addEventListener("click", (e) => {
+  if(e.target === resetModal) closeResetModal();
+});
+document.addEventListener("keydown", (e) => {
+  if(e.key === "Escape" && resetModal.classList.contains("active")) closeResetModal();
+});
+
+resetConfirm.addEventListener("click", async () => {
+  closeResetModal();
+
+  await fetch("http://localhost:8000/reset", { method: "POST" });
+
+  await fetch("http://localhost:8000/simulation", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ mode: "real" })
+  });
+
+  shootoutCache.clear();
+
+  loadGroups();
+  loadMatches();
+  renderPerformance();
+});

@@ -1,7 +1,10 @@
 const express = require('express');
 const app = express();
 const mysql = require('mysql2');
+const mysqlPromise = require('mysql2/promise');
 const cors = require('cors');
+const fs = require('fs');
+const path = require('path');
 const { calculateStrength, calculateWinProbability, calculateSelectionsRatings, calculateXG, poisson, calculateCleanSheet, selectGoalscorer, selectAssist, generateGoalMinutes, calculateGroupStageResult, calculatePlayerRating, simulateMatchGroupStage, simulatePenaltyShootout, assignThirds, calculateKnockoutResult, simulateMatchKnockout } = require('./simulation-logic');
 
 app.use(cors());
@@ -11,17 +14,147 @@ app.get('/', (req, res) => {
     res.send('Hello World!');
 });
 
+let pool = null;
+
 app.listen(8000, () => {
     console.log('Server is running on port 8000');
 });
 
-// promise pra poder usar async 
-const pool = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: '2516',
-    database: 'wc2026'
-}).promise();
+async function initializeDatabase() {
+    const initConn = await mysqlPromise.createConnection({ host: 'localhost', user: 'root', password: '2516' });
+    await initConn.query('CREATE DATABASE IF NOT EXISTS wc2026');
+    await initConn.end();
+
+    const conn = await mysqlPromise.createConnection({ host: 'localhost', user: 'root', password: '2516', database: 'wc2026' });
+
+    await conn.execute(`CREATE TABLE IF NOT EXISTS \`groups\` (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name CHAR(1) NOT NULL
+    )`);
+
+    await conn.execute(`CREATE TABLE IF NOT EXISTS selections (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        group_id INT NOT NULL,
+        name VARCHAR(100) NOT NULL,
+        ranking INT NOT NULL,
+        formation VARCHAR(10) NOT NULL,
+        FOREIGN KEY (group_id) REFERENCES \`groups\`(id)
+    )`);
+
+    await conn.execute(`CREATE TABLE IF NOT EXISTS players (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        selection_id INT NOT NULL,
+        name VARCHAR(100) NOT NULL,
+        age INT NOT NULL,
+        position ENUM('GK', 'DEF', 'MID', 'FWD') NOT NULL,
+        rating INT NOT NULL,
+        is_starter BOOLEAN DEFAULT FALSE,
+        FOREIGN KEY (selection_id) REFERENCES selections(id)
+    )`);
+
+    await conn.execute(`CREATE TABLE IF NOT EXISTS matches (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        group_id INT NULL,
+        home_id INT NOT NULL,
+        away_id INT NOT NULL,
+        stage ENUM('group', 'r32', 'r16', 'qf', 'sf', '3rd', 'final') NOT NULL,
+        home_score INT DEFAULT NULL,
+        away_score INT DEFAULT NULL,
+        home_xg FLOAT DEFAULT 0,
+        away_xg FLOAT DEFAULT 0,
+        round INT NULL,
+        match_number INT NULL,
+        FOREIGN KEY (group_id) REFERENCES \`groups\`(id),
+        FOREIGN KEY (home_id) REFERENCES selections(id),
+        FOREIGN KEY (away_id) REFERENCES selections(id)
+    )`);
+
+    await conn.execute(`CREATE TABLE IF NOT EXISTS groups_standings (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        group_id INT NOT NULL,
+        selection_id INT NOT NULL,
+        matches_id INT NOT NULL,
+        points INT DEFAULT 0,
+        wins INT DEFAULT 0,
+        draws INT DEFAULT 0,
+        losses INT DEFAULT 0,
+        goals_for INT DEFAULT 0,
+        goals_against INT DEFAULT 0,
+        goal_difference INT DEFAULT 0,
+        FOREIGN KEY (group_id) REFERENCES \`groups\`(id),
+        FOREIGN KEY (selection_id) REFERENCES selections(id),
+        FOREIGN KEY (matches_id) REFERENCES matches(id)
+    )`);
+
+    await conn.execute(`CREATE TABLE IF NOT EXISTS player_match_stats (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        player_id INT NOT NULL,
+        match_id INT NOT NULL,
+        goals INT DEFAULT 0,
+        assists INT DEFAULT 0,
+        clean_sheet BOOLEAN DEFAULT FALSE,
+        rating FLOAT DEFAULT 0,
+        goal_minute INT NULL,
+        FOREIGN KEY (player_id) REFERENCES players(id),
+        FOREIGN KEY (match_id) REFERENCES matches(id)
+    )`);
+
+    await conn.execute(`CREATE TABLE IF NOT EXISTS knockouts (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        match_id INT NOT NULL,
+        winner_id INT NOT NULL,
+        FOREIGN KEY (match_id) REFERENCES matches(id),
+        FOREIGN KEY (winner_id) REFERENCES selections(id)
+    )`);
+
+    await conn.execute(`CREATE TABLE IF NOT EXISTS goal_events (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        match_id INT NOT NULL,
+        player_id INT NOT NULL,
+        minute INT NOT NULL,
+        FOREIGN KEY (match_id) REFERENCES matches(id),
+        FOREIGN KEY (player_id) REFERENCES players(id)
+    )`);
+
+    const [countRows] = await conn.execute('SELECT COUNT(*) AS total FROM selections');
+    if (countRows[0].total === 0) {
+        console.log('Populando banco de dados...');
+        const data = JSON.parse(fs.readFileSync(path.join(__dirname, '../seed/selections.json'), 'utf-8'));
+
+        for (const selection of data.selections) {
+            await conn.execute('INSERT IGNORE INTO `groups` (name) VALUES (?)', [selection.group]);
+            const [groupRows] = await conn.execute('SELECT id FROM `groups` WHERE name = ?', [selection.group]);
+            const group_id = groupRows[0].id;
+
+            await conn.execute(
+                'INSERT INTO selections (group_id, name, ranking, formation) VALUES (?, ?, ?, ?)',
+                [group_id, selection.name, selection.ranking, selection.formation]
+            );
+
+            const [selRows] = await conn.execute('SELECT id FROM selections WHERE name = ?', [selection.name]);
+            const selection_id = selRows[0].id;
+
+            for (const player of selection.players) {
+                await conn.execute(
+                    'INSERT INTO players (selection_id, name, age, position, rating, is_starter) VALUES (?, ?, ?, ?, ?, ?)',
+                    [selection_id, player.name, player.age, player.position, player.rating, player.is_starter]
+                );
+            }
+            console.log(`✓ ${selection.name} inserida`);
+        }
+        console.log('Seed concluído!');
+    }
+
+    await conn.end();
+
+    pool = mysql.createPool({
+        host: 'localhost',
+        user: 'root',
+        password: '2516',
+        database: 'wc2026'
+    }).promise();
+}
+
 
 // funções helpers para gerar r16, qf, sf, 3rd, final
 async function getWinnerByMatchNumber(matchNumber){
@@ -201,6 +334,7 @@ app.get('/knockout-matches', async(req, res) => {
 app.post('/simulation', async(req, res) => {
     const mode = req.body.mode;
     if(mode === 'real'){
+        await initializeDatabase();
         const [rows] = await pool.query('SELECT COUNT(*) AS total FROM matches');
         
         if(rows[0].total === 0){
@@ -570,6 +704,8 @@ app.post('/simulate/all-knockouts', async(req, res) => {
         [stage]
     );
 
+    const results = [];
+
     for(const match of matches){
         const result = await fetch("http://localhost:8000/simulate/knockout", {
             method: "POST",
@@ -577,9 +713,10 @@ app.post('/simulate/all-knockouts', async(req, res) => {
             body: JSON.stringify({ matchId: match.id })
         });
         const data = await result.json();
+        results.push({ matchId: match.id, ...data });
     }
 
-    res.json({ message: `${matches.length} partidas simuladas!` });
+    res.json({ message: `${matches.length} partidas simuladas!`, results });
 });
 
 app.post('/simulate-knockout-stage', async(req, res) => {
@@ -620,4 +757,22 @@ app.post('/simulate-knockout-stage', async(req, res) => {
     }
 
     res.json({ message: 'Mata-mata completo simulado!', log });
+});
+
+app.post('/reset', async(req, res) => {
+    // ordem importa por causa das foreign keys
+    await pool.query('DELETE FROM goal_events');
+    await pool.query('DELETE FROM player_match_stats');
+    await pool.query('DELETE FROM knockouts');
+    await pool.query('DELETE FROM groups_standings');
+    await pool.query('DELETE FROM matches');
+
+    // reseta os AUTO_INCREMENT pra match_number voltar a bater com os seus IDs fixos (73-104)
+    await pool.query('ALTER TABLE matches AUTO_INCREMENT = 1');
+    await pool.query('ALTER TABLE groups_standings AUTO_INCREMENT = 1');
+    await pool.query('ALTER TABLE player_match_stats AUTO_INCREMENT = 1');
+    await pool.query('ALTER TABLE goal_events AUTO_INCREMENT = 1');
+    await pool.query('ALTER TABLE knockouts AUTO_INCREMENT = 1');
+
+    res.json({ message: 'simulação resetada' });
 });

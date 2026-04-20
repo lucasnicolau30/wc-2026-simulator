@@ -79,7 +79,7 @@ body {
 
 .sim-subtitle {
   font-size: clamp(1rem, 1.4vw, 1.15rem);
-  color: #B7C3D8;
+  color: #FFFFFF;
   font-weight: 400;
   max-width: 620px;
 }
@@ -214,7 +214,7 @@ body {
 }
 
 /* =========================
-  RESPONSIVO
+  RESPONSIVE
 ========================= */
 
 @media (max-width: 1200px) {

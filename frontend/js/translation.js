@@ -54,7 +54,14 @@ pt: {
     performanceRating: "Média de Nota",
     performanceGoals: "Artilheiros",
     performanceAssists: "Assistências",
-    performanceCleanSheets: "Clean Sheets"
+    performanceCleanSheets: "Clean Sheets",
+
+    // game-real.html - reset button
+    reset: "REINICIAR",
+    resetTitle: "Reiniciar simulação?",
+    resetText: "Isso apagará todos os jogos, pênaltis e estatísticas. As seleções e jogadores serão mantidos.",
+    cancel: "Cancelar",
+    confirm: "Reiniciar",
     },
 
 en: {
@@ -112,7 +119,14 @@ en: {
     performanceRating: "Average Rating",
     performanceGoals: "Top Scorers",
     performanceAssists: "Assists",
-    performanceCleanSheets: "Clean Sheets"
+    performanceCleanSheets: "Clean Sheets",
+
+    // game-real.html - reset button
+    reset: "RESET",
+    resetTitle: "Reset simulation?",
+    resetText: "This will erase all matches, penalties and stats. Teams and players will be kept.",
+    cancel: "Cancel",
+    confirm: "Reset"
     }
 };
 
