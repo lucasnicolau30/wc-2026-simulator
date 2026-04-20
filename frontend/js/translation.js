@@ -62,6 +62,13 @@ pt: {
     resetText: "Isso apagará todos os jogos, pênaltis e estatísticas. As seleções e jogadores serão mantidos.",
     cancel: "Cancelar",
     confirm: "Reiniciar",
+
+    // game-manual.html
+    manualGameHeader: "WC2026 — Manual",
+    manualResetTitle: "Reiniciar simulação?",
+    manualResetText: "Isso apagará todos os jogos e resultados. As seleções e jogadores serão mantidos.",
+    saveMatch: "Salvar",
+    drawNotAllowed: "Empate não permitido no mata-mata. Um time deve vencer.",
     },
 
 en: {
@@ -126,7 +133,14 @@ en: {
     resetTitle: "Reset simulation?",
     resetText: "This will erase all matches, penalties and stats. Teams and players will be kept.",
     cancel: "Cancel",
-    confirm: "Reset"
+    confirm: "Reset",
+
+    // game-manual.html
+    manualGameHeader: "WC2026 — Manual",
+    manualResetTitle: "Reset simulation?",
+    manualResetText: "This will erase all matches and results. Teams and players will be kept.",
+    saveMatch: "Save",
+    drawNotAllowed: "Draws not allowed in knockout. One team must win.",
     }
 };
 

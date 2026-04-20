@@ -5,10 +5,22 @@ const mysqlPromise = require('mysql2/promise');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc = require('swagger-jsdoc');
 const { calculateStrength, calculateWinProbability, calculateSelectionsRatings, calculateXG, poisson, calculateCleanSheet, selectGoalscorer, selectAssist, generateGoalMinutes, calculateGroupStageResult, calculatePlayerRating, simulateMatchGroupStage, simulatePenaltyShootout, assignThirds, calculateKnockoutResult, simulateMatchKnockout } = require('./simulation-logic');
 
 app.use(cors());
 app.use(express.json());
+
+const swaggerSpec = swaggerJsdoc({
+    definition: {
+        openapi: '3.0.0',
+        info: { title: 'WC 2026 API', version: '1.0.0', description: 'API para simulação da Copa do Mundo 2026' },
+        servers: [{ url: 'http://localhost:8000' }],
+    },
+    apis: [__filename],
+});
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get('/', (req, res) => {
     res.send('Hello World!');
@@ -16,8 +28,10 @@ app.get('/', (req, res) => {
 
 let pool = null;
 
-app.listen(8000, () => {
+app.listen(8000, async () => {
     console.log('Server is running on port 8000');
+    await initializeDatabase();
+    console.log('Database initialized');
 });
 
 async function initializeDatabase() {
@@ -182,17 +196,50 @@ async function getLoserByMatchNumber(matchNumber){
     return loserId;
 }
 
+/**
+ * @swagger
+ * /selections:
+ *   get:
+ *     summary: Retorna todas as seleções com seu grupo
+ *     responses:
+ *       200:
+ *         description: Lista de seleções
+ */
 app.get('/selections', async(req, res) => {    
     // join para eu pegar o nome do grupo, seleciono tudo de selections e o nome do grupo, depois faço o join com a tabela de grupos usando o group_id
     const [rows] = await pool.query('SELECT selections.*, `groups`.name AS group_name FROM selections JOIN `groups` ON selections.group_id = `groups`.id');
     res.json(rows);
 });
 
+/**
+ * @swagger
+ * /starters:
+ *   get:
+ *     summary: Retorna todos os titulares de todas as seleções
+ *     responses:
+ *       200:
+ *         description: Lista de jogadores titulares
+ */
 app.get('/starters', async(req, res) => {
     const [rows] = await pool.query('SELECT players.*, selections.name AS selection_name, selections.ranking FROM players JOIN selections ON players.selection_id = selections.id WHERE players.is_starter = true');
     res.json(rows);
 });
 
+/**
+ * @swagger
+ * /standings/{groupId}:
+ *   get:
+ *     summary: Classificação de um grupo
+ *     parameters:
+ *       - in: path
+ *         name: groupId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Classificação do grupo
+ */
 app.get('/standings/:groupId', async(req, res) => {
     const groupId = req.params.groupId;
     
@@ -212,6 +259,21 @@ app.get('/standings/:groupId', async(req, res) => {
     res.json(rows);
 });
 
+/**
+ * @swagger
+ * /player-stats/{playerId}:
+ *   get:
+ *     summary: Estatísticas acumuladas de um jogador
+ *     parameters:
+ *       - in: path
+ *         name: playerId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Estatísticas do jogador
+ */
 app.get('/player-stats/:playerId', async(req, res) => {
     const playerId = req.params.playerId;
 
@@ -222,13 +284,37 @@ app.get('/player-stats/:playerId', async(req, res) => {
     res.json(rows);
 });
 
+/**
+ * @swagger
+ * /matches:
+ *   get:
+ *     summary: Retorna todas as partidas da fase de grupos
+ *     responses:
+ *       200:
+ *         description: Lista de partidas
+ */
 app.get('/matches', async(req, res) => {
-    const [rows] = await pool.query(`SELECT m.id, m.round, m.stage, m.home_score, m.away_score, m.home_xg, m.away_xg,
+    const [rows] = await pool.query(`SELECT m.id, m.home_id, m.away_id, m.round, m.stage, m.home_score, m.away_score, m.home_xg, m.away_xg,
         h.name AS home_name, a.name AS away_name FROM matches m JOIN selections h ON m.home_id = h.id JOIN selections a ON m.away_id = a.id WHERE m.stage = 'group' ORDER BY m.round ASC, m.id ASC`
     );
     res.json(rows);
 });
 
+/**
+ * @swagger
+ * /matches/{id}/events:
+ *   get:
+ *     summary: Gols de uma partida (minuto e jogador)
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Lista de eventos de gol
+ */
 app.get('/matches/:id/events', async(req, res) => {
     const matchId = req.params.id;
 
@@ -238,6 +324,24 @@ app.get('/matches/:id/events', async(req, res) => {
     res.json(rows);
 });
 
+/**
+ * @swagger
+ * /performance/{metric}:
+ *   get:
+ *     summary: Ranking de jogadores por métrica
+ *     parameters:
+ *       - in: path
+ *         name: metric
+ *         required: true
+ *         schema:
+ *           type: string
+ *           enum: [goals, assists, cleanSheets, rating]
+ *     responses:
+ *       200:
+ *         description: Top 25 jogadores pela métrica
+ *       400:
+ *         description: Métrica inválida
+ */
 app.get('/performance/:metric', async(req, res) => {
     const metric = req.params.metric;
 
@@ -264,6 +368,15 @@ app.get('/performance/:metric', async(req, res) => {
     res.json(rows);
 });
 
+/**
+ * @swagger
+ * /qualifiers:
+ *   get:
+ *     summary: Classificados para o mata-mata (1º, 2º e melhores 3ºs)
+ *     responses:
+ *       200:
+ *         description: Qualificados, terceiros e melhores terceiros
+ */
 app.get('/qualifiers', async(req, res) => {
     const [rows] = await pool.query('SELECT s.name, s.id, gs.group_id, g.name AS group_name, ' +
     'SUM(gs.points) AS total_points, ' +
@@ -322,17 +435,186 @@ app.get('/qualifiers', async(req, res) => {
     res.json({ qualifiers, thirds, best8Thirds });
 });
 
+/**
+ * @swagger
+ * /knockout-matches:
+ *   get:
+ *     summary: Todas as partidas do mata-mata
+ *     responses:
+ *       200:
+ *         description: Partidas de r32 até a final
+ */
 app.get('/knockout-matches', async(req, res) => {
     const [rows] = await pool.query(`
-        SELECT m.id, m.stage, m.match_number, m.home_score, m.away_score, m.home_xg, m.away_xg,
+        SELECT m.id, m.home_id, m.away_id, m.stage, m.match_number, m.home_score, m.away_score, m.home_xg, m.away_xg,
         h.name AS home_name, a.name AS away_name
         FROM matches m JOIN selections h ON m.home_id = h.id JOIN selections a ON m.away_id = a.id WHERE m.stage IN ('r32','r16','qf','sf','3rd','final') ORDER BY m.match_number ASC`);
 
     res.json(rows);
 });
 
+async function resetGameData(){
+    await pool.query('DELETE FROM goal_events');
+    await pool.query('DELETE FROM player_match_stats');
+    await pool.query('DELETE FROM knockouts');
+    await pool.query('DELETE FROM groups_standings');
+    await pool.query('DELETE FROM matches');
+    await pool.query('ALTER TABLE matches AUTO_INCREMENT = 1');
+    await pool.query('ALTER TABLE groups_standings AUTO_INCREMENT = 1');
+    await pool.query('ALTER TABLE player_match_stats AUTO_INCREMENT = 1');
+    await pool.query('ALTER TABLE goal_events AUTO_INCREMENT = 1');
+    await pool.query('ALTER TABLE knockouts AUTO_INCREMENT = 1');
+}
+
+async function createGroupMatches(){
+    const [groups] = await pool.query('SELECT * FROM `groups`');
+    const roundMap = { '0-1': 1, '2-3': 1, '0-2': 2, '1-3': 2, '0-3': 3, '1-2': 3 };
+    for(const group of groups){
+        const [selections] = await pool.query('SELECT * FROM selections WHERE group_id = ?', [group.id]);
+        for(let i = 0; i < selections.length; i++){
+            for(let j = i + 1; j < selections.length; j++){
+                const round = roundMap[`${i}-${j}`];
+                await pool.query(
+                    'INSERT INTO matches (home_id, away_id, stage, group_id, round) VALUES (?, ?, ?, ?, ?)',
+                    [selections[i].id, selections[j].id, 'group', group.id, round]
+                );
+            }
+        }
+    }
+}
+
+/**
+ * @swagger
+ * /reset:
+ *   post:
+ *     summary: Reseta todos os dados do jogo (partidas, stats, knockouts)
+ *     responses:
+ *       200:
+ *         description: Dados resetados
+ */
+app.post('/reset', async(req, res) => {
+    await resetGameData();
+    res.json({ ok: true });
+});
+
+/**
+ * @swagger
+ * /manual/match:
+ *   post:
+ *     summary: Inserir resultado manual de partida da fase de grupos
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               matchId: { type: integer }
+ *               homeScore: { type: integer }
+ *               awayScore: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Resultado inserido
+ */
+app.post('/manual/match', async(req, res) => {
+    const { matchId, homeScore, awayScore } = req.body;
+
+    const [matchRows] = await pool.query('SELECT * FROM matches WHERE id = ?', 
+        [matchId]
+    );
+    const match = matchRows[0];
+
+    await pool.query('UPDATE matches SET home_score = ?, away_score = ? WHERE id = ?', 
+        [homeScore, awayScore, matchId]
+    );
+
+    let pointsA, pointsB, winsA = 0, drawsA = 0, lossesA = 0, winsB = 0, drawsB = 0, lossesB = 0;
+
+    if(homeScore > awayScore){ 
+        pointsA = 3; 
+        pointsB = 0; 
+        winsA = 1; 
+        lossesB = 1; 
+    }
+    else if(homeScore < awayScore){ 
+        pointsA = 0; 
+        pointsB = 3; 
+        lossesA = 1; 
+        winsB = 1; 
+    }
+    else{ 
+        pointsA = 1; 
+        pointsB = 1; 
+        drawsA = 1; 
+        drawsB = 1; 
+    }
+
+    await pool.query('INSERT INTO groups_standings (group_id, selection_id, matches_id, points, wins, draws, losses, goals_for, goals_against, goal_difference) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [match.group_id, match.home_id, matchId, pointsA, winsA, drawsA, lossesA, homeScore, awayScore, homeScore - awayScore]
+    );
+    await pool.query('INSERT INTO groups_standings (group_id, selection_id, matches_id, points, wins, draws, losses, goals_for, goals_against, goal_difference) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [match.group_id, match.away_id, matchId, pointsB, winsB, drawsB, lossesB, awayScore, homeScore, awayScore - homeScore]
+    );
+
+    res.json({ ok: true });
+});
+
+/**
+ * @swagger
+ * /manual/knockout:
+ *   post:
+ *     summary: Inserir resultado manual de partida do mata-mata
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               matchId: { type: integer }
+ *               homeScore: { type: integer }
+ *               awayScore: { type: integer }
+ *               winnerId: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Resultado inserido
+ */
+app.post('/manual/knockout', async(req, res) => {
+    const { matchId, homeScore, awayScore, winnerId } = req.body;
+
+    await pool.query('UPDATE matches SET home_score = ?, away_score = ? WHERE id = ?', [homeScore, awayScore, matchId]);
+    await pool.query('INSERT INTO knockouts (match_id, winner_id) VALUES (?, ?)', [matchId, winnerId]);
+
+    res.json({ ok: true });
+});
+
+/**
+ * @swagger
+ * /simulation:
+ *   post:
+ *     summary: Inicializa o banco e cria as partidas (modo manual ou real)
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               mode:
+ *                 type: string
+ *                 enum: [manual, real]
+ *     responses:
+ *       200:
+ *         description: Simulação inicializada
+ */
 app.post('/simulation', async(req, res) => {
     const mode = req.body.mode;
+    if(mode === 'manual'){
+        await initializeDatabase();
+        await resetGameData();
+        await createGroupMatches();
+        return res.json({ ok: true });
+    }
     if(mode === 'real'){
         await initializeDatabase();
         const [rows] = await pool.query('SELECT COUNT(*) AS total FROM matches');
@@ -363,6 +645,23 @@ app.post('/simulation', async(req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /simulate/match:
+ *   post:
+ *     summary: Simula uma partida da fase de grupos
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               matchId: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Resultado da partida simulada
+ */
 app.post('/simulate/match', async(req, res) => {
     const { matchId } = req.body;
 
@@ -474,6 +773,15 @@ app.post('/simulate/match', async(req, res) => {
     res.json(result);
 });
 
+/**
+ * @swagger
+ * /generate-r32:
+ *   post:
+ *     summary: Gera os confrontos dos 16 avos de final (r32)
+ *     responses:
+ *       200:
+ *         description: Confrontos gerados
+ */
 app.post('/generate-r32', async(req, res) => {
     const response = await fetch("http://localhost:8000/qualifiers");
     const { qualifiers, best8Thirds } = await response.json();
@@ -523,6 +831,15 @@ app.post('/generate-r32', async(req, res) => {
     res.json({ matches });
 });
 
+/**
+ * @swagger
+ * /generate-r16:
+ *   post:
+ *     summary: Gera os confrontos das oitavas de final (r16)
+ *     responses:
+ *       200:
+ *         description: Confrontos gerados
+ */
 app.post('/generate-r16', async(req, res) => {
     const matches = [
         { match_number: 89, home: 74, away: 77 },
@@ -549,6 +866,15 @@ app.post('/generate-r16', async(req, res) => {
     res.json({ message: `${matches.length} confrontos do r16 gerados` });
 });
 
+/**
+ * @swagger
+ * /generate-qf:
+ *   post:
+ *     summary: Gera os confrontos das quartas de final (qf)
+ *     responses:
+ *       200:
+ *         description: Confrontos gerados
+ */
 app.post('/generate-qf', async(req, res) => {
     const matches = [
         { match_number: 97,  home: 89, away: 90 },
@@ -571,6 +897,15 @@ app.post('/generate-qf', async(req, res) => {
     res.json({ message: `${matches.length} confrontos do qf gerados` });
 });
 
+/**
+ * @swagger
+ * /generate-sf:
+ *   post:
+ *     summary: Gera os confrontos das semifinais (sf)
+ *     responses:
+ *       200:
+ *         description: Confrontos gerados
+ */
 app.post('/generate-sf', async(req, res) => {
     const matches = [
         { match_number: 101, home: 97, away: 98 },
@@ -591,6 +926,15 @@ app.post('/generate-sf', async(req, res) => {
     res.json({ message: `${matches.length} confrontos do sf gerados` });
 });
 
+/**
+ * @swagger
+ * /generate-final:
+ *   post:
+ *     summary: Gera a final e o jogo do 3º lugar
+ *     responses:
+ *       200:
+ *         description: Partidas 103 e 104 geradas
+ */
 app.post('/generate-final', async(req, res) => {
     const loser101 = await getLoserByMatchNumber(101);
     const loser102 = await getLoserByMatchNumber(102);
@@ -611,6 +955,24 @@ app.post('/generate-final', async(req, res) => {
     res.json({ message: 'jogos 103 (3º lugar) e 104 (final) gerados' });
 });
 
+/**
+ * @swagger
+ * /simulate/knockout:
+ *   post:
+ *     summary: Simula uma partida específica do mata-mata pelo ID
+ *     description: Busca a partida no banco, calcula forças das seleções, simula o confronto (com possível prorrogação/pênaltis), registra o vencedor na tabela knockouts e salva estatísticas individuais dos jogadores (gols, assistências, rating, clean sheet e eventos de gol).
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               matchId: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Resultado detalhado da partida simulada (placar, xG, artilheiros, assistências, ratings e eventos)
+ */
 app.post('/simulate/knockout', async(req, res) => {
     const { matchId } = req.body;
 
@@ -696,6 +1058,26 @@ app.post('/simulate/knockout', async(req, res) => {
     res.json(result);
 });
 
+/**
+ * @swagger
+ * /simulate/all-knockouts:
+ *   post:
+ *     summary: Simula todas as partidas pendentes de uma fase do mata-mata
+ *     description: Busca no banco todas as partidas do stage informado que ainda não foram jogadas (home_score IS NULL) e dispara a simulação individual de cada uma via /simulate/knockout.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               stage:
+ *                 type: string
+ *                 enum: [r32, r16, qf, sf, 3rd, final]
+ *     responses:
+ *       200:
+ *         description: Quantidade de partidas simuladas e array com o resultado de cada uma
+ */
 app.post('/simulate/all-knockouts', async(req, res) => {
     const { stage } = req.body;
 
@@ -719,6 +1101,16 @@ app.post('/simulate/all-knockouts', async(req, res) => {
     res.json({ message: `${matches.length} partidas simuladas!`, results });
 });
 
+/**
+ * @swagger
+ * /simulate-knockout-stage:
+ *   post:
+ *     summary: Gera e simula todo o mata-mata de ponta a ponta
+ *     description: Executa, em sequência, a geração e simulação de todas as fases do mata-mata (r32 → r16 → qf → sf → final + disputa de 3º lugar). Para cada fase chama a rota de geração de chaveamento correspondente e em seguida /simulate/all-knockouts.
+ *     responses:
+ *       200:
+ *         description: Log completo com os dados de geração e simulação de cada fase do mata-mata
+ */
 app.post('/simulate-knockout-stage', async(req, res) => {
     const baseUrl = "http://localhost:8000";
     const stages = ['r32', 'r16', 'qf', 'sf', 'final'];
@@ -757,22 +1149,4 @@ app.post('/simulate-knockout-stage', async(req, res) => {
     }
 
     res.json({ message: 'Mata-mata completo simulado!', log });
-});
-
-app.post('/reset', async(req, res) => {
-    // ordem importa por causa das foreign keys
-    await pool.query('DELETE FROM goal_events');
-    await pool.query('DELETE FROM player_match_stats');
-    await pool.query('DELETE FROM knockouts');
-    await pool.query('DELETE FROM groups_standings');
-    await pool.query('DELETE FROM matches');
-
-    // reseta os AUTO_INCREMENT pra match_number voltar a bater com os seus IDs fixos (73-104)
-    await pool.query('ALTER TABLE matches AUTO_INCREMENT = 1');
-    await pool.query('ALTER TABLE groups_standings AUTO_INCREMENT = 1');
-    await pool.query('ALTER TABLE player_match_stats AUTO_INCREMENT = 1');
-    await pool.query('ALTER TABLE goal_events AUTO_INCREMENT = 1');
-    await pool.query('ALTER TABLE knockouts AUTO_INCREMENT = 1');
-
-    res.json({ message: 'simulação resetada' });
 });

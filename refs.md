@@ -7,3 +7,5 @@ https://inside.fifa.com/fifa-world-ranking/men
 ranking das selecoes do selections.json atualizado dia 12/04/2026https://inside.fifa.com/fifa-world-ranking/men
 
 https://www.behance.net/gallery/234035959/Adidas-Trionda-2026-World-Cup-Ball-first-view/modules/1343733933
+
+https://uiverse.io/JaydipPrajapati1910/dry-frog-0

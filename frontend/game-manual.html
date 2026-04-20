@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title data-i18n="manualGameHeader">WC2026 — Manual</title>
+  <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="css/shared.css" />
+  <link rel="stylesheet" href="css/game-real.css" />
+  <link rel="stylesheet" href="css/game-manual.css" />
+</head>
+
+<div class="modal-overlay" id="resetModal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true">
+    <h3 class="modal-title" data-i18n="manualResetTitle">Reiniciar simulação?</h3>
+    <p class="modal-text" data-i18n="manualResetText">Isso apagará todos os jogos e resultados. As seleções e jogadores serão mantidos.</p>
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-cancel" id="resetCancel" data-i18n="cancel">Cancelar</button>
+      <button class="modal-btn modal-btn-confirm" id="resetConfirm" data-i18n="confirm">Reiniciar</button>
+    </div>
+  </div>
+</div>
+
+<body class="bg-groups">
+  <canvas id="particles"></canvas>
+
+  <div class="top-actions">
+    <button type="button" class="refresh-button" id="btnRefresh">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"></path>
+        <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"></path>
+      </svg>
+      <span data-i18n="reset">Reiniciar</span>
+    </button>
+    <button id="btnLang">EN</button>
+  </div>
+
+  <div class="navbar-logo">
+    <img src="img/wc-logo.avif" alt="WC2026" />
+  </div>
+
+  <nav class="navbar">
+    <div class="navbar-tabs">
+      <button class="tab active" data-tab="groups" data-i18n="groupsTab">Grupos</button>
+      <button class="tab" data-tab="matches" data-i18n="matchesTab">Partidas</button>
+      <button class="tab" data-tab="knockout" data-i18n="knockoutTab">Eliminatórias</button>
+    </div>
+  </nav>
+
+  <main class="page active" id="page-groups">
+    <div class="page-header">
+      <h1 class="page-title" data-i18n="groupStageTitle">Fase de Grupos</h1>
+    </div>
+    <div class="groups-grid" id="groups-grid">
+      <div class="loading" data-i18n="loadingGroups">Carregando grupos...</div>
+    </div>
+  </main>
+
+  <main class="page" id="page-matches">
+    <div class="page-header page-header--with-filter">
+      <h1 class="page-title" data-i18n="matchesTitle">Partidas</h1>
+      <div class="page-filter-wrap">
+        <div class="round-filter" id="matches-round-filter">
+          <button class="round-btn active" data-phase="group" data-round="1" data-i18n="round1">Rodada 1</button>
+          <button class="round-btn" data-phase="group" data-round="2" data-i18n="round2">Rodada 2</button>
+          <button class="round-btn" data-phase="group" data-round="3" data-i18n="round3">Rodada 3</button>
+          <button class="round-btn" data-phase="knockout" data-stage="r32">R32</button>
+          <button class="round-btn" data-phase="knockout" data-stage="r16">R16</button>
+          <button class="round-btn" data-phase="knockout" data-stage="qf">QF</button>
+          <button class="round-btn" data-phase="knockout" data-stage="sf">SF</button>
+          <button class="round-btn" data-phase="knockout" data-stage="3rd">3º</button>
+          <button class="round-btn" data-phase="knockout" data-stage="final">Final</button>
+        </div>
+      </div>
+    </div>
+    <div class="matches-list" id="matches-list">
+      <div class="loading" data-i18n="loadingMatches">Carregando partidas...</div>
+    </div>
+  </main>
+
+  <main class="page" id="page-knockout">
+    <div class="page-header">
+      <h1 class="page-title" data-i18n="knockoutStageTitle">Fase Eliminatória</h1>
+    </div>
+    <div class="knockout-wrap" id="knockout-wrap">
+      <p class="knockout-placeholder" data-i18n="knockoutPlaceholder">Insira os resultados da fase de grupos primeiro.</p>
+    </div>
+  </main>
+
+  <script src="js/translation.js"></script>
+  <script src="js/particles.js"></script>
+  <script src="js/game-manual.js"></script>
+</body>
+</html>
