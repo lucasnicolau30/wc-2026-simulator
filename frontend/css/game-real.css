@@ -2,12 +2,13 @@ body {
   color: #FFFFFF;
   background-color: #05081a;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* container dos botões do topo */
 .top-actions {
   position: fixed;
-  top: 20px;
+  top: 30px; /* vertically centered with 56px logo at top:20px */
   right: 24px;
   display: flex;
   align-items: center;
@@ -19,6 +20,9 @@ body {
   position: static;
   top: unset;
   right: unset;
+  height: 30px;
+  padding: 0 13px;
+  font-size: 12px;
 }
 
 /* botão de reiniciar */
@@ -26,14 +30,14 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  height: 36px;
-  padding: 0 18px;
+  gap: 6px;
+  height: 30px;
+  padding: 0 14px;
   border: none;
   border-radius: 999px;
   background: linear-gradient(135deg, #F4C542, #D4A017);
   color: #0A1F44;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   font-family: 'Inter', sans-serif;
   letter-spacing: 1px;
@@ -231,15 +235,15 @@ body {
 }
 
 @media (max-width: 992px) {
-  .top-actions { top: 16px; right: 16px; }
+  .top-actions { top: 26px; right: 16px; }
 }
 
 @media (max-width: 768px) {
-  .top-actions { top: 14px; right: 14px; }
+  .top-actions { top: 24px; right: 14px; }
 }
 
 @media (max-width: 480px) {
-  .top-actions { top: 12px; right: 12px; }
+  .top-actions { top: 22px; right: 12px; }
 }
 
 /* fundos por aba */
@@ -420,6 +424,13 @@ body.bg-performance {
   width: 100%;
   display: flex;
   justify-content: center;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.page-filter-wrap::-webkit-scrollbar {
+  display: none;
 }
 
 .round-filter {
@@ -1187,7 +1198,10 @@ body.bg-performance {
 
   .navbar {
     top: 14px;
-    width: calc(100% - 28px);
+    left: 80px;
+    right: 220px;
+    width: auto;
+    transform: none;
   }
 
   .navbar-logo {
@@ -1196,9 +1210,15 @@ body.bg-performance {
   }
 
   .tab {
-    min-width: 116px;
+    flex: 1;
+    min-width: 0;
     padding: 10px 16px;
     font-size: 13px;
+  }
+
+  .tab[data-tab="performance"] {
+    font-size: 13px;
+    letter-spacing: 0;
   }
 
   .page {
@@ -1221,6 +1241,10 @@ body.bg-performance {
 
 @media (max-width: 768px) {
   .navbar {
+    left: 76px;
+    right: 216px;
+    width: auto;
+    transform: none;
     justify-content: center;
     padding-top: 0;
   }
@@ -1231,7 +1255,7 @@ body.bg-performance {
   }
 
   .navbar-tabs {
-    width: calc(100% - 74px);
+    width: 100%;
     overflow-x: auto;
     justify-content: flex-start;
     scrollbar-width: none;
@@ -1242,8 +1266,10 @@ body.bg-performance {
   }
 
   .tab {
-    min-width: 128px;
-    flex: 0 0 auto;
+    flex: 1;
+    min-width: 0;
+    font-size: 13px;
+    text-align: center;
   }
 
   .page-title {
@@ -1252,11 +1278,16 @@ body.bg-performance {
   }
 
   .page-filter-wrap {
-    justify-content: center;
+    justify-content: flex-start;
+  }
+
+  .round-btn {
+    padding: 7px 14px;
+    font-size: 12px;
   }
 
   .groups-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .match-main {
@@ -1287,12 +1318,47 @@ body.bg-performance {
 
 @media (max-width: 480px) {
   .navbar {
-    width: calc(100% - 20px);
+    left: 68px;
+    right: 122px;
+    width: auto;
+    transform: none;
+  }
+
+  /* Botão Reiniciar: só ícone no mobile pequeno */
+  .refresh-button span {
+    display: none;
+  }
+
+  .refresh-button {
+    padding: 0 10px;
+    gap: 0;
+    min-width: 30px;
+  }
+
+  .top-actions #btnLang {
+    padding: 0 11px;
+  }
+
+  .round-btn {
+    padding: 6px 12px;
+    font-size: 11.5px;
+  }
+
+  .tab {
+    flex: 0 0 auto;
+    min-width: 0;
+    white-space: nowrap;
+    padding: 7px 10px;
+    font-size: 11px;
   }
 
   .navbar-logo {
     top: 12px;
     left: 12px;
+  }
+
+  .groups-grid {
+    grid-template-columns: 1fr;
   }
 
   .page {

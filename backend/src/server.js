@@ -36,7 +36,7 @@ app.get('/', (req, res) => {
 let pool = null;
 
 app.listen(PORT, async () => {
-    console.log('Server is running on port ${PORT}');
+    console.log(`Server is running on port ${PORT}`);
     await initializeDatabase();
     console.log('Database initialized');
 });
@@ -234,6 +234,82 @@ async function getLoserByMatchNumber(matchNumber){
         loserId = row.home_id;
     }
     return loserId;
+}
+
+// funções helpers para evitar chamadas HTTP dentro de chamdadas HTTP
+async function getStartersFromDB() {
+    const [rows] = await pool.query(
+        'SELECT players.*, selections.name AS selection_name, selections.ranking FROM players JOIN selections ON players.selection_id = selections.id WHERE players.is_starter = true'
+    );
+    return rows;
+}
+
+async function simulateKnockoutMatchById(matchId) {
+    const [matchRows] = await pool.query(
+        'SELECT m.*, h.name AS home_name, a.name AS away_name FROM matches m JOIN selections h ON m.home_id = h.id JOIN selections a ON m.away_id = a.id WHERE m.id = ?',
+        [matchId]
+    );
+    const match = matchRows[0];
+    const selectionA = match.home_name;
+    const selectionB = match.away_name;
+    const idA = match.home_id;
+    const idB = match.away_id;
+
+    const strengths = await calculateStrength();
+    const starterPlayers = await getStartersFromDB(); // ✅ sem fetch
+
+    const teams = {};
+    for(const player of starterPlayers){
+        if(!teams[player.selection_name]) teams[player.selection_name] = [];
+        teams[player.selection_name].push(player);
+    }
+
+    const result = simulateMatchKnockout(
+        selectionA, teams[selectionA], strengths[selectionA],
+        selectionB, teams[selectionB], strengths[selectionB]
+    );
+
+    const winnerId = result.winner === selectionA ? idA : idB;
+
+    await pool.query(
+        'UPDATE matches SET home_score = ?, away_score = ?, home_xg = ?, away_xg = ? WHERE id = ?',
+        [result.goalsA, result.goalsB, result.xgA, result.xgB, matchId]
+    );
+
+    await pool.query('DELETE FROM goal_events WHERE match_id = ?', [matchId]);
+    await pool.query('DELETE FROM player_match_stats WHERE match_id = ?', [matchId]);
+    await pool.query('DELETE FROM knockouts WHERE match_id = ?', [matchId]);
+
+    await pool.query('INSERT INTO knockouts (match_id, winner_id) VALUES (?, ?)', [matchId, winnerId]);
+
+    for(const player of [...teams[selectionA], ...teams[selectionB]]){
+        const isA = player.selection_name === selectionA;
+        const scorers = isA ? result.scorersA : result.scorersB;
+        const assists = isA ? result.assistsA : result.assistsB;
+        const ratings = isA ? result.playerRatingsA : result.playerRatingsB;
+        const goalsAgainst = isA ? result.goalsB : result.goalsA;
+        const team = isA ? selectionA : selectionB;
+
+        const scored = scorers.filter(s => s.name === player.name).length;
+        const assisted = assists.filter(a => a.name === player.name).length;
+        const playerRating = ratings.find(p => p.player === player.name);
+        const cleanSheet = player.position === 'GK' && goalsAgainst === 0;
+
+        await pool.query(
+            'INSERT INTO player_match_stats (player_id, match_id, goals, assists, rating, clean_sheet) VALUES (?, ?, ?, ?, ?, ?)',
+            [player.id, matchId, scored, assisted, playerRating.rating, cleanSheet]
+        );
+
+        const playerEvents = result.events.filter(e => e.player === player.name && e.team === team);
+        for(const event of playerEvents){
+            await pool.query(
+                'INSERT INTO goal_events (match_id, player_id, minute) VALUES (?, ?, ?)',
+                [matchId, player.id, event.minute]
+            );
+        }
+    }
+
+    return result;
 }
 
 /**
@@ -714,9 +790,12 @@ app.post('/simulate/match', async(req, res) => {
     const idA = match.home_id;
     const idB = match.away_id;
 
+    await pool.query('DELETE FROM goal_events WHERE match_id = ?', [matchId]);
+    await pool.query('DELETE FROM player_match_stats WHERE match_id = ?', [matchId]);
+    await pool.query('DELETE FROM groups_standings WHERE matches_id = ?', [matchId]);
+
     const strengths = await calculateStrength();
-    const response = await fetch("http://localhost:8000/starters");
-    const starterPlayers = await response.json();
+    const starterPlayers = await getStartersFromDB();
 
     const teams = {};
     for(const player of starterPlayers){
@@ -1013,86 +1092,7 @@ app.post('/generate-final', async(req, res) => {
  */
 app.post('/simulate/knockout', async(req, res) => {
     const { matchId } = req.body;
-
-    const [matchRows] = await pool.query(
-        'SELECT m.*, h.name AS home_name, a.name AS away_name FROM matches m JOIN selections h ON m.home_id = h.id JOIN selections a ON m.away_id = a.id WHERE m.id = ?',
-        [matchId]
-    );
-    const match = matchRows[0];
-    const selectionA = match.home_name;
-    const selectionB = match.away_name;
-    const idA = match.home_id;
-    const idB = match.away_id;
-
-    const strengths = await calculateStrength();
-    const response = await fetch("http://localhost:8000/starters");
-    const starterPlayers = await response.json();
-
-    const teams = {};
-    for(const player of starterPlayers){
-        if(!teams[player.selection_name]){
-            teams[player.selection_name] = [];
-        } 
-        teams[player.selection_name].push(player);
-    }
-
-    const result = simulateMatchKnockout(
-        selectionA, teams[selectionA], strengths[selectionA],
-        selectionB, teams[selectionB], strengths[selectionB]
-    );
-
-    const winnerId = result.winner === selectionA ? idA : idB;
-
-    await pool.query(
-        'UPDATE matches SET home_score = ?, away_score = ?, home_xg = ?, away_xg = ? WHERE id = ?',
-        [result.goalsA, result.goalsB, result.xgA, result.xgB, matchId]
-    );
-
-    await pool.query(
-        'INSERT INTO knockouts (match_id, winner_id) VALUES (?, ?)',
-        [matchId, winnerId]
-    );
-
-    for(const player of teams[selectionA]){
-        const scored = result.scorersA.filter(s => s.name === player.name).length;
-        const assisted = result.assistsA.filter(a => a.name === player.name).length;
-        const playerRating = result.playerRatingsA.find(p => p.player === player.name);
-        const cleanSheet = player.position === 'GK' && result.goalsB === 0;
-
-        await pool.query(
-            'INSERT INTO player_match_stats (player_id, match_id, goals, assists, rating, clean_sheet) VALUES (?, ?, ?, ?, ?, ?)',
-            [player.id, matchId, scored, assisted, playerRating.rating, cleanSheet]
-        );
-
-        const playerEvents = result.events.filter(e => e.player === player.name && e.team === selectionA);
-        for(const event of playerEvents){
-            await pool.query(
-                'INSERT INTO goal_events (match_id, player_id, minute) VALUES (?, ?, ?)',
-                [matchId, player.id, event.minute]
-            );
-        }
-    }
-
-    for(const player of teams[selectionB]){
-        const scored = result.scorersB.filter(s => s.name === player.name).length;
-        const assisted = result.assistsB.filter(a => a.name === player.name).length;
-        const playerRating = result.playerRatingsB.find(p => p.player === player.name);
-        const cleanSheet = player.position === 'GK' && result.goalsA === 0;
-
-        await pool.query(
-            'INSERT INTO player_match_stats (player_id, match_id, goals, assists, rating, clean_sheet) VALUES (?, ?, ?, ?, ?, ?)',
-            [player.id, matchId, scored, assisted, playerRating.rating, cleanSheet]
-        );
-
-        const playerEvents = result.events.filter(e => e.player === player.name && e.team === selectionB);
-        for(const event of playerEvents){
-            await pool.query(
-                'INSERT INTO goal_events (match_id, player_id, minute) VALUES (?, ?, ?)',
-                [matchId, player.id, event.minute]
-            );
-        }
-    }
-
+    const result = await simulateKnockoutMatchById(matchId);
     res.json(result);
 });
 
@@ -1118,21 +1118,14 @@ app.post('/simulate/knockout', async(req, res) => {
  */
 app.post('/simulate/all-knockouts', async(req, res) => {
     const { stage } = req.body;
-
     const [matches] = await pool.query(
         'SELECT * FROM matches WHERE stage = ? AND home_score IS NULL',
         [stage]
     );
 
     const results = [];
-
     for(const match of matches){
-        const result = await fetch("http://localhost:8000/simulate/knockout", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ matchId: match.id })
-        });
-        const data = await result.json();
+        const data = await simulateKnockoutMatchById(match.id);
         results.push({ matchId: match.id, ...data });
     }
 

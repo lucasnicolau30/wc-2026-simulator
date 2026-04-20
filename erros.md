@@ -1,4 +1,4 @@
-UGS CRÍTICOS (quebram ou corrompem dados)
+BUGS CRÍTICOS (quebram ou corrompem dados)
 1. Credencial do MySQL hardcoded no código (server.js, seed.js)
 jspassword: '2516'
 Está em 3 lugares. Se você subir isso no GitHub (já subiu?), a senha fica pública. Mova pra um .env com dotenv e adicione .env no .gitignore.
@@ -10,13 +10,13 @@ Fix: antes de inserir, DELETE FROM groups_standings WHERE matches_id = ? e DELET
 4. Servidor chama a si mesmo via HTTP (server.js:680, 990, 1092, 1128, 1141)
 jsconst response = await fetch("http://localhost:8000/starters");
 Isso ocorre dentro das rotas Express. Problemas:
-
 Latência desnecessária (ida e volta pelo TCP/HTTP stack)
 Se o processo morrer no meio, handler fica pendurado
 /simulate/all-knockouts chama /simulate/knockout via HTTP em loop → N requisições HTTP self-looped por fase. Para 16 jogos isso é absurdo.
 Se você mover pra produção com porta diferente, quebra.
-
 Fix: extraia a lógica em funções (getStartersFromDB(), simulateKnockoutMatch(matchId)) e chame diretamente. Só mantenha o fetch para chamadas de front → back.
+
+
 5. Race condition ao simular todas as partidas em paralelo
 No game-real.js:429 você parece simular em loop. Se em algum momento virar Promise.all, a inserção em groups_standings não é atômica → classificação sai errada. Também em /simulate/all-knockouts o loop é sequencial (ok), mas se virar paralelo vira caos. Deixe explícito com comentário ou use transação.
 6. /manual/match permite pontuação negativa / letras (server.js:519)

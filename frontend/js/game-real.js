@@ -595,7 +595,7 @@ async function loadKnockout(){
       const thirdSo = shootoutCache.get(thirdMatch.id) || null;
       thirdHtml = `
         <div class="bracket-third">
-          ${renderBracketMatch(thirdMatch, '3º LUGAR', thirdSo)}
+          ${renderBracketMatch(thirdMatch, translations[current].bracket3rd, thirdSo)}
         </div>
       `;
   }
@@ -604,15 +604,15 @@ async function loadKnockout(){
 
   wrap.innerHTML = `
     <div class="knockout-bracket">
-      <div class="bracket-col">${buildCol(BRACKET_LAYOUT.r32Left, 'R32')}</div>
-      <div class="bracket-col">${buildCol(BRACKET_LAYOUT.r16Left, 'R16')}</div>
-      <div class="bracket-col">${buildCol(BRACKET_LAYOUT.qfLeft, 'QF')}</div>
-      <div class="bracket-col">${buildCol(BRACKET_LAYOUT.sfLeft, 'SF')}</div>
-      <div class="bracket-col final-col">${renderBracketMatch(finalMatch, 'FINAL', finalSo)}</div>
-      <div class="bracket-col">${buildCol(BRACKET_LAYOUT.sfRight, 'SF')}</div>
-      <div class="bracket-col">${buildCol(BRACKET_LAYOUT.qfRight, 'QF')}</div>
-      <div class="bracket-col">${buildCol(BRACKET_LAYOUT.r16Right, 'R16')}</div>
-      <div class="bracket-col">${buildCol(BRACKET_LAYOUT.r32Right, 'R32')}</div>
+      <div class="bracket-col">${buildCol(BRACKET_LAYOUT.r32Left, translations[current].bracketR32)}</div>
+      <div class="bracket-col">${buildCol(BRACKET_LAYOUT.r16Left, translations[current].bracketR16)}</div>
+      <div class="bracket-col">${buildCol(BRACKET_LAYOUT.qfLeft, translations[current].bracketQF)}</div>
+      <div class="bracket-col">${buildCol(BRACKET_LAYOUT.sfLeft, translations[current].bracketSF)}</div>
+      <div class="bracket-col final-col">${renderBracketMatch(finalMatch, translations[current].bracketFinal, finalSo)}</div>
+      <div class="bracket-col">${buildCol(BRACKET_LAYOUT.sfRight, translations[current].bracketSF)}</div>
+      <div class="bracket-col">${buildCol(BRACKET_LAYOUT.qfRight, translations[current].bracketQF)}</div>
+      <div class="bracket-col">${buildCol(BRACKET_LAYOUT.r16Right, translations[current].bracketR16)}</div>
+      <div class="bracket-col">${buildCol(BRACKET_LAYOUT.r32Right, translations[current].bracketR32)}</div>
     </div>
     ${thirdHtml}
   `;
@@ -626,6 +626,7 @@ document.querySelector('[data-tab="knockout"]').addEventListener('click', () => 
 document.getElementById("btnLang").addEventListener("click", () => {
   loadGroups();
   loadMatches();
+  loadKnockout();
 });
 
 /* init */
