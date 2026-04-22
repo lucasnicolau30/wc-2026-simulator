@@ -8,6 +8,7 @@ const fs = require('fs');
 const path = require('path');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
+const rateLimit = require('express-rate-limit');
 const { calculateStrength, calculateWinProbability, calculateSelectionsRatings, calculateXG, poisson, calculateCleanSheet, selectGoalscorer, selectAssist, generateGoalMinutes, calculateGroupStageResult, calculatePlayerRating, simulateMatchGroupStage, simulatePenaltyShootout, assignThirds, calculateKnockoutResult, simulateMatchKnockout } = require('./simulation-logic');
 
 const DB_HOST = process.env.DB_HOST || 'localhost';
@@ -15,9 +16,32 @@ const DB_USER = process.env.DB_USER || 'root';
 const DB_PASSWORD = process.env.DB_PASSWORD;
 const DB_NAME = process.env.DB_NAME || 'wc2026';
 const PORT = process.env.PORT || 8000;
+const FRONTEND_URL = process.env.FRONTEND_URL;
 
-app.use(cors());
+const corsOptions = FRONTEND_URL
+    ? { origin: FRONTEND_URL.split(',').map(o => o.trim()), credentials: true }
+    : { origin: true, credentials: true };
+
+app.use(cors(corsOptions));
 app.use(express.json());
+
+const globalLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 300,
+    standardHeaders: 'draft-7',
+    legacyHeaders: false,
+    message: { error: 'Muitas requisições. Tente novamente em alguns minutos.' }
+});
+
+const simulationLimiter = rateLimit({
+    windowMs: 60 * 1000,
+    limit: 10,
+    standardHeaders: 'draft-7',
+    legacyHeaders: false,
+    message: { error: 'Limite de simulações excedido. Aguarde alguns segundos.' }
+});
+
+app.use(globalLimiter);
 
 const swaggerSpec = swaggerJsdoc({
     definition: {
@@ -255,8 +279,8 @@ async function simulateKnockoutMatchById(matchId) {
     const idA = match.home_id;
     const idB = match.away_id;
 
-    const strengths = await calculateStrength();
-    const starterPlayers = await getStartersFromDB(); // ✅ sem fetch
+    const starterPlayers = await getStartersFromDB();
+    const strengths = calculateStrength(starterPlayers);
 
     const teams = {};
     for(const player of starterPlayers){
@@ -484,16 +508,7 @@ app.get('/performance/:metric', async(req, res) => {
     res.json(rows);
 });
 
-/**
- * @swagger
- * /qualifiers:
- *   get:
- *     summary: Classificados para o mata-mata (1º, 2º e melhores 3ºs)
- *     responses:
- *       200:
- *         description: Qualificados, terceiros e melhores terceiros
- */
-app.get('/qualifiers', async(req, res) => {
+async function getQualifiers(){
     const [rows] = await pool.query('SELECT s.name, s.id, gs.group_id, g.name AS group_name, ' +
     'SUM(gs.points) AS total_points, ' +
     'SUM(gs.wins + gs.draws + gs.losses) AS total_played, ' +
@@ -513,42 +528,38 @@ app.get('/qualifiers', async(req, res) => {
 
     for(const groupId of Object.keys(groupedByGroup)){
         const group = groupedByGroup[groupId];
-        qualifiers.push({ ...group[0], position: 1 }); // 1º
-        qualifiers.push({ ...group[1], position: 2 }); // 2º
-        thirds.push({ ...group[2], position: 3 });     // 3º
+        qualifiers.push({ ...group[0], position: 1 });
+        qualifiers.push({ ...group[1], position: 2 });
+        thirds.push({ ...group[2], position: 3 });
     }
-    // a -> -1
-    //b -> 1
 
     thirds.sort((a, b) => {
-    if(a.total_points > b.total_points){
-        return -1; 
-    } 
-    if(b.total_points > a.total_points){
-        return 1; 
-    } 
-
-    if(a.total_goal_difference > b.total_goal_difference){
-        return -1;
-    } 
-    if(b.total_goal_difference > a.total_goal_difference){
-        return 1;
-    } 
-
-    if(a.total_goals_for > b.total_goals_for){
-        return -1;
-    } 
-    if(b.total_goals_for > a.total_goals_for){
-        return 1;
-    } 
-
-    return 0; 
+        if(a.total_points > b.total_points) return -1;
+        if(b.total_points > a.total_points) return 1;
+        if(a.total_goal_difference > b.total_goal_difference) return -1;
+        if(b.total_goal_difference > a.total_goal_difference) return 1;
+        if(a.total_goals_for > b.total_goals_for) return -1;
+        if(b.total_goals_for > a.total_goals_for) return 1;
+        return 0;
     });
 
     const best8Thirds = thirds.slice(0, 8);
     qualifiers.push(...best8Thirds);
 
-    res.json({ qualifiers, thirds, best8Thirds });
+    return { qualifiers, thirds, best8Thirds };
+}
+
+/**
+ * @swagger
+ * /qualifiers:
+ *   get:
+ *     summary: Classificados para o mata-mata (1º, 2º e melhores 3ºs)
+ *     responses:
+ *       200:
+ *         description: Qualificados, terceiros e melhores terceiros
+ */
+app.get('/qualifiers', async(req, res) => {
+    res.json(await getQualifiers());
 });
 
 /**
@@ -608,7 +619,7 @@ async function createGroupMatches(){
  *       200:
  *         description: Dados resetados
  */
-app.post('/reset', async(req, res) => {
+app.post('/reset', simulationLimiter, async(req, res) => {
     await resetGameData();
     res.json({ ok: true });
 });
@@ -632,15 +643,32 @@ app.post('/reset', async(req, res) => {
  *       200:
  *         description: Resultado inserido
  */
-app.post('/manual/match', async(req, res) => {
+app.post('/manual/match', simulationLimiter, async(req, res) => {
     const { matchId, homeScore, awayScore } = req.body;
 
-    const [matchRows] = await pool.query('SELECT * FROM matches WHERE id = ?', 
+    if(!Number.isInteger(matchId) || matchId < 1){
+        return res.status(400).json({ error: 'matchId inválido' });
+    }
+    if(!Number.isInteger(homeScore) || homeScore < 0 || homeScore > 99){
+        return res.status(400).json({ error: 'homeScore deve ser inteiro entre 0 e 99' });
+    }
+    if(!Number.isInteger(awayScore) || awayScore < 0 || awayScore > 99){
+        return res.status(400).json({ error: 'awayScore deve ser inteiro entre 0 e 99' });
+    }
+
+    const [matchRows] = await pool.query('SELECT * FROM matches WHERE id = ?',
         [matchId]
     );
+    if(matchRows.length === 0){
+        return res.status(404).json({ error: 'partida não encontrada' });
+    }
     const match = matchRows[0];
+    if(match.stage !== 'group'){
+        return res.status(400).json({ error: 'rota apenas para partidas da fase de grupos' });
+    }
 
-    await pool.query('UPDATE matches SET home_score = ?, away_score = ? WHERE id = ?', 
+    await pool.query('DELETE FROM groups_standings WHERE matches_id = ?', [matchId]);
+    await pool.query('UPDATE matches SET home_score = ?, away_score = ? WHERE id = ?',
         [homeScore, awayScore, matchId]
     );
 
@@ -695,9 +723,35 @@ app.post('/manual/match', async(req, res) => {
  *       200:
  *         description: Resultado inserido
  */
-app.post('/manual/knockout', async(req, res) => {
+app.post('/manual/knockout', simulationLimiter, async(req, res) => {
     const { matchId, homeScore, awayScore, winnerId } = req.body;
 
+    if(!Number.isInteger(matchId) || matchId < 1){
+        return res.status(400).json({ error: 'matchId inválido' });
+    }
+    if(!Number.isInteger(homeScore) || homeScore < 0 || homeScore > 99){
+        return res.status(400).json({ error: 'homeScore deve ser inteiro entre 0 e 99' });
+    }
+    if(!Number.isInteger(awayScore) || awayScore < 0 || awayScore > 99){
+        return res.status(400).json({ error: 'awayScore deve ser inteiro entre 0 e 99' });
+    }
+    if(!Number.isInteger(winnerId) || winnerId < 1){
+        return res.status(400).json({ error: 'winnerId inválido' });
+    }
+
+    const [matchRows] = await pool.query('SELECT * FROM matches WHERE id = ?', [matchId]);
+    if(matchRows.length === 0){
+        return res.status(404).json({ error: 'partida não encontrada' });
+    }
+    const match = matchRows[0];
+    if(match.stage === 'group'){
+        return res.status(400).json({ error: 'rota apenas para partidas do mata-mata' });
+    }
+    if(winnerId !== match.home_id && winnerId !== match.away_id){
+        return res.status(400).json({ error: 'winnerId deve ser home_id ou away_id da partida' });
+    }
+
+    await pool.query('DELETE FROM knockouts WHERE match_id = ?', [matchId]);
     await pool.query('UPDATE matches SET home_score = ?, away_score = ? WHERE id = ?', [homeScore, awayScore, matchId]);
     await pool.query('INSERT INTO knockouts (match_id, winner_id) VALUES (?, ?)', [matchId, winnerId]);
 
@@ -723,7 +777,7 @@ app.post('/manual/knockout', async(req, res) => {
  *       200:
  *         description: Simulação inicializada
  */
-app.post('/simulation', async(req, res) => {
+app.post('/simulation', simulationLimiter, async(req, res) => {
     const mode = req.body.mode;
     if(mode === 'manual'){
         await resetGameData();
@@ -754,7 +808,8 @@ app.post('/simulation', async(req, res) => {
             }
         }
 
-        const strength = await calculateStrength();
+        const starterPlayers = await getStartersFromDB();
+        const strength = calculateStrength(starterPlayers);
         res.json({ strength });
     }
 });
@@ -776,7 +831,7 @@ app.post('/simulation', async(req, res) => {
  *       200:
  *         description: Resultado da partida simulada
  */
-app.post('/simulate/match', async(req, res) => {
+app.post('/simulate/match', simulationLimiter, async(req, res) => {
     const { matchId } = req.body;
 
     const [matchRows] = await pool.query(
@@ -784,6 +839,10 @@ app.post('/simulate/match', async(req, res) => {
         [matchId]
     );
     const match = matchRows[0];
+    // guard: se já foi simulada, retorna o resultado salvo sem re-simular
+    if(match.home_score !== null){
+        return res.status(200).json({ alreadySimulated: true, home_score: match.home_score, away_score: match.away_score });
+    }
     const selectionA = match.home_name;
     const selectionB = match.away_name;
     const groupId = match.group_id;
@@ -794,14 +853,14 @@ app.post('/simulate/match', async(req, res) => {
     await pool.query('DELETE FROM player_match_stats WHERE match_id = ?', [matchId]);
     await pool.query('DELETE FROM groups_standings WHERE matches_id = ?', [matchId]);
 
-    const strengths = await calculateStrength();
     const starterPlayers = await getStartersFromDB();
+    const strengths = calculateStrength(starterPlayers);
 
     const teams = {};
     for(const player of starterPlayers){
         if(!teams[player.selection_name]){
             teams[player.selection_name] = [];
-        } 
+        }
         teams[player.selection_name].push(player);
     }
 
@@ -890,20 +949,18 @@ app.post('/simulate/match', async(req, res) => {
     res.json(result);
 });
 
-/**
- * @swagger
- * /generate-r32:
- *   post:
- *     summary: Gera os confrontos dos 16 avos de final (r32)
- *     responses:
- *       200:
- *         description: Confrontos gerados
- */
-app.post('/generate-r32', async(req, res) => {
-    const response = await fetch("http://localhost:8000/qualifiers");
-    const { qualifiers, best8Thirds } = await response.json();
+async function stageAlreadyGenerated(stage){
+    const [rows] = await pool.query('SELECT COUNT(*) AS total FROM matches WHERE stage = ?', [stage]);
+    return rows[0].total > 0;
+}
 
-    const first = {}; 
+async function generateR32(){
+    if(await stageAlreadyGenerated('r32')){
+        return { alreadyGenerated: true, stage: 'r32' };
+    }
+    const { qualifiers, best8Thirds } = await getQualifiers();
+
+    const first = {};
     const second = {};
 
     for(const team of qualifiers){
@@ -915,7 +972,6 @@ app.post('/generate-r32', async(req, res) => {
     const assigned = assignThirds(firsts, best8Thirds);
 
     const matches = [
-        // confrontos fixos
         { match_number: 73, home: second['A'], away: second['B'] },
         { match_number: 75, home: first['F'],  away: second['C'] },
         { match_number: 76, home: first['C'],  away: second['F'] },
@@ -924,8 +980,6 @@ app.post('/generate-r32', async(req, res) => {
         { match_number: 84, home: first['H'],  away: second['J'] },
         { match_number: 86, home: first['J'],  away: second['H'] },
         { match_number: 88, home: second['D'], away: second['G'] },
-
-        // confrontos com terceiros sorteados
         { match_number: 74, home: assigned[0].first, away: assigned[0].third },
         { match_number: 77, home: assigned[1].first, away: assigned[1].third },
         { match_number: 79, home: assigned[2].first, away: assigned[2].third },
@@ -937,7 +991,7 @@ app.post('/generate-r32', async(req, res) => {
     ];
 
     const stage = 'r32';
-    
+
     for(const match of matches){
         await pool.query(
             'INSERT INTO matches (home_id, away_id, stage, match_number) VALUES (?, ?, ?, ?)',
@@ -945,19 +999,30 @@ app.post('/generate-r32', async(req, res) => {
         );
     }
 
-    res.json({ matches });
-});
+    return { matches };
+}
 
 /**
  * @swagger
- * /generate-r16:
+ * /generate-r32:
  *   post:
- *     summary: Gera os confrontos das oitavas de final (r16)
+ *     summary: Gera os confrontos dos 16 avos de final (r32)
  *     responses:
  *       200:
  *         description: Confrontos gerados
  */
-app.post('/generate-r16', async(req, res) => {
+app.post('/generate-r32', simulationLimiter, async(req, res) => {
+    const result = await generateR32();
+    if(result.alreadyGenerated){
+        return res.status(409).json({ error: `Fase ${result.stage} já foi gerada` });
+    }
+    res.json(result);
+});
+
+async function generateR16(){
+    if(await stageAlreadyGenerated('r16')){
+        return { alreadyGenerated: true, stage: 'r16' };
+    }
     const matches = [
         { match_number: 89, home: 74, away: 77 },
         { match_number: 90, home: 73, away: 75 },
@@ -968,9 +1033,7 @@ app.post('/generate-r16', async(req, res) => {
         { match_number: 95, home: 86, away: 88 },
         { match_number: 96, home: 85, away: 87 },
     ];
-
     const stage = 'r16';
-
     for(const match of matches){
         const homeId = await getWinnerByMatchNumber(match.home);
         const awayId = await getWinnerByMatchNumber(match.away);
@@ -979,9 +1042,47 @@ app.post('/generate-r16', async(req, res) => {
             [homeId, awayId, stage, match.match_number]
         );
     }
+    return { message: `${matches.length} confrontos do r16 gerados` };
+}
 
-    res.json({ message: `${matches.length} confrontos do r16 gerados` });
+/**
+ * @swagger
+ * /generate-r16:
+ *   post:
+ *     summary: Gera os confrontos das oitavas de final (r16)
+ *     responses:
+ *       200:
+ *         description: Confrontos gerados
+ */
+app.post('/generate-r16', simulationLimiter, async(req, res) => {
+    const result = await generateR16();
+    if(result.alreadyGenerated){
+        return res.status(409).json({ error: `Fase ${result.stage} já foi gerada` });
+    }
+    res.json(result);
 });
+
+async function generateQF(){
+    if(await stageAlreadyGenerated('qf')){
+        return { alreadyGenerated: true, stage: 'qf' };
+    }
+    const matches = [
+        { match_number: 97,  home: 89, away: 90 },
+        { match_number: 98,  home: 93, away: 94 },
+        { match_number: 99,  home: 91, away: 92 },
+        { match_number: 100, home: 95, away: 96 },
+    ];
+    const stage = 'qf';
+    for(const match of matches){
+        const homeId = await getWinnerByMatchNumber(match.home);
+        const awayId = await getWinnerByMatchNumber(match.away);
+        await pool.query(
+            'INSERT INTO matches (home_id, away_id, stage, match_number) VALUES (?, ?, ?, ?)',
+            [homeId, awayId, stage, match.match_number]
+        );
+    }
+    return { message: `${matches.length} confrontos do qf gerados` };
+}
 
 /**
  * @swagger
@@ -992,16 +1093,23 @@ app.post('/generate-r16', async(req, res) => {
  *       200:
  *         description: Confrontos gerados
  */
-app.post('/generate-qf', async(req, res) => {
+app.post('/generate-qf', simulationLimiter, async(req, res) => {
+    const result = await generateQF();
+    if(result.alreadyGenerated){
+        return res.status(409).json({ error: `Fase ${result.stage} já foi gerada` });
+    }
+    res.json(result);
+});
+
+async function generateSF(){
+    if(await stageAlreadyGenerated('sf')){
+        return { alreadyGenerated: true, stage: 'sf' };
+    }
     const matches = [
-        { match_number: 97,  home: 89, away: 90 },
-        { match_number: 98,  home: 93, away: 94 },
-        { match_number: 99,  home: 91, away: 92 },
-        { match_number: 100, home: 95, away: 96 },
+        { match_number: 101, home: 97, away: 98 },
+        { match_number: 102, home: 99, away: 100 },
     ];
-
-    const stage = 'qf';
-
+    const stage = 'sf';
     for(const match of matches){
         const homeId = await getWinnerByMatchNumber(match.home);
         const awayId = await getWinnerByMatchNumber(match.away);
@@ -1010,9 +1118,8 @@ app.post('/generate-qf', async(req, res) => {
             [homeId, awayId, stage, match.match_number]
         );
     }
-
-    res.json({ message: `${matches.length} confrontos do qf gerados` });
-});
+    return { message: `${matches.length} confrontos do sf gerados` };
+}
 
 /**
  * @swagger
@@ -1023,25 +1130,32 @@ app.post('/generate-qf', async(req, res) => {
  *       200:
  *         description: Confrontos gerados
  */
-app.post('/generate-sf', async(req, res) => {
-    const matches = [
-        { match_number: 101, home: 97, away: 98 },
-        { match_number: 102, home: 99, away: 100 },
-    ];
-
-    const stage = 'sf';
-
-    for(const match of matches){
-        const homeId = await getWinnerByMatchNumber(match.home);
-        const awayId = await getWinnerByMatchNumber(match.away);
-        await pool.query(
-            'INSERT INTO matches (home_id, away_id, stage, match_number) VALUES (?, ?, ?, ?)',
-            [homeId, awayId, stage, match.match_number]
-        );
+app.post('/generate-sf', simulationLimiter, async(req, res) => {
+    const result = await generateSF();
+    if(result.alreadyGenerated){
+        return res.status(409).json({ error: `Fase ${result.stage} já foi gerada` });
     }
-
-    res.json({ message: `${matches.length} confrontos do sf gerados` });
+    res.json(result);
 });
+
+async function generateFinal(){
+    if(await stageAlreadyGenerated('final')){
+        return { alreadyGenerated: true, stage: 'final' };
+    }
+    const loser101 = await getLoserByMatchNumber(101);
+    const loser102 = await getLoserByMatchNumber(102);
+    await pool.query(
+        'INSERT INTO matches (home_id, away_id, stage, match_number) VALUES (?, ?, ?, ?)',
+        [loser101, loser102, '3rd', 103]
+    );
+    const winner101 = await getWinnerByMatchNumber(101);
+    const winner102 = await getWinnerByMatchNumber(102);
+    await pool.query(
+        'INSERT INTO matches (home_id, away_id, stage, match_number) VALUES (?, ?, ?, ?)',
+        [winner101, winner102, 'final', 104]
+    );
+    return { message: 'jogos 103 (3º lugar) e 104 (final) gerados' };
+}
 
 /**
  * @swagger
@@ -1052,24 +1166,12 @@ app.post('/generate-sf', async(req, res) => {
  *       200:
  *         description: Partidas 103 e 104 geradas
  */
-app.post('/generate-final', async(req, res) => {
-    const loser101 = await getLoserByMatchNumber(101);
-    const loser102 = await getLoserByMatchNumber(102);
-
-    await pool.query(
-        'INSERT INTO matches (home_id, away_id, stage, match_number) VALUES (?, ?, ?, ?)',
-        [loser101, loser102, '3rd', 103]
-    );
-
-    const winner101 = await getWinnerByMatchNumber(101);
-    const winner102 = await getWinnerByMatchNumber(102);
-
-    await pool.query(
-        'INSERT INTO matches (home_id, away_id, stage, match_number) VALUES (?, ?, ?, ?)',
-        [winner101, winner102, 'final', 104]
-    );
-
-    res.json({ message: 'jogos 103 (3º lugar) e 104 (final) gerados' });
+app.post('/generate-final', simulationLimiter, async(req, res) => {
+    const result = await generateFinal();
+    if(result.alreadyGenerated){
+        return res.status(409).json({ error: `Fase ${result.stage} já foi gerada` });
+    }
+    res.json(result);
 });
 
 /**
@@ -1090,11 +1192,26 @@ app.post('/generate-final', async(req, res) => {
  *       200:
  *         description: Resultado detalhado da partida simulada (placar, xG, artilheiros, assistências, ratings e eventos)
  */
-app.post('/simulate/knockout', async(req, res) => {
+app.post('/simulate/knockout', simulationLimiter, async(req, res) => {
     const { matchId } = req.body;
     const result = await simulateKnockoutMatchById(matchId);
     res.json(result);
 });
+
+async function simulateAllKnockouts(stage){
+    const [matches] = await pool.query(
+        'SELECT * FROM matches WHERE stage = ? AND home_score IS NULL',
+        [stage]
+    );
+
+    const results = [];
+    for(const match of matches){
+        const data = await simulateKnockoutMatchById(match.id);
+        results.push({ matchId: match.id, ...data });
+    }
+
+    return { message: `${matches.length} partidas simuladas!`, results };
+}
 
 /**
  * @swagger
@@ -1116,20 +1233,9 @@ app.post('/simulate/knockout', async(req, res) => {
  *       200:
  *         description: Quantidade de partidas simuladas e array com o resultado de cada uma
  */
-app.post('/simulate/all-knockouts', async(req, res) => {
+app.post('/simulate/all-knockouts', simulationLimiter, async(req, res) => {
     const { stage } = req.body;
-    const [matches] = await pool.query(
-        'SELECT * FROM matches WHERE stage = ? AND home_score IS NULL',
-        [stage]
-    );
-
-    const results = [];
-    for(const match of matches){
-        const data = await simulateKnockoutMatchById(match.id);
-        results.push({ matchId: match.id, ...data });
-    }
-
-    res.json({ message: `${matches.length} partidas simuladas!`, results });
+    res.json(await simulateAllKnockouts(stage));
 });
 
 /**
@@ -1142,42 +1248,40 @@ app.post('/simulate/all-knockouts', async(req, res) => {
  *       200:
  *         description: Log completo com os dados de geração e simulação de cada fase do mata-mata
  */
-app.post('/simulate-knockout-stage', async(req, res) => {
-    const baseUrl = "http://localhost:8000";
+app.post('/simulate-knockout-stage', simulationLimiter, async(req, res) => {
+    const generators = {
+        r32: generateR32,
+        r16: generateR16,
+        qf:  generateQF,
+        sf:  generateSF,
+        final: generateFinal,
+    };
     const stages = ['r32', 'r16', 'qf', 'sf', 'final'];
     const log = [];
 
     for(const stage of stages){
-        let generateRoute;
-        if(stage === 'final'){
-            generateRoute = 'generate-final';
-        }
-        else{
-            generateRoute = `generate-${stage}`;
-        }
-
-        const genRes = await fetch(`${baseUrl}/${generateRoute}`, { method: 'POST' });
-        const genData = await genRes.json();
+        const genData = await generators[stage]();
         log.push({ step: `generate-${stage}`, data: genData });
 
-        let stagesToSimulate;
-        if(stage === 'final'){
-            stagesToSimulate = ['3rd', 'final'];
-        }
-        else{
-            stagesToSimulate = [stage];
-        }
+        const stagesToSimulate = stage === 'final' ? ['3rd', 'final'] : [stage];
 
         for(const s of stagesToSimulate){
-            const simRes = await fetch(`${baseUrl}/simulate/all-knockouts`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ stage: s })
-            });
-            const simData = await simRes.json();
+            const simData = await simulateAllKnockouts(s);
             log.push({ step: `simulate-${s}`, data: simData });
         }
     }
 
     res.json({ message: 'Mata-mata completo simulado!', log });
+});
+
+app.use((req, res) => {
+    res.status(404).json({ error: 'Rota não encontrada' });
+});
+
+app.use((err, req, res, next) => {
+    console.error('[ERRO]', req.method, req.originalUrl, '-', err.stack || err);
+    if(res.headersSent){
+        return next(err);
+    }
+    res.status(err.status || 500).json({ error: 'Erro interno do servidor' });
 });

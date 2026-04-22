@@ -6,7 +6,7 @@ document.querySelectorAll(".sim-btn").forEach(btn => {
 
     loader.classList.add("active");
 
-    await fetch("http://localhost:8000/simulation", {
+    await fetch(`${API_BASE_URL}/simulation`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ mode })

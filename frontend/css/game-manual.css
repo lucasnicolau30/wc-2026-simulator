@@ -102,3 +102,49 @@
   color: #e05555;
   text-align: center;
 }
+
+@media (max-width: 768px) {
+  .score-input {
+    width: 44px;
+    height: 40px;
+    font-size: 18px;
+  }
+
+  .score-sep {
+    font-size: 16px;
+  }
+
+  .match-score-form {
+    gap: 6px;
+  }
+
+  .match-team-name {
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: normal;
+    overflow: visible;
+    text-overflow: unset;
+    font-size: 0.88rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .score-input {
+    width: 38px;
+    height: 36px;
+    font-size: 16px;
+    border-radius: 8px;
+  }
+
+  .score-sep {
+    font-size: 14px;
+  }
+
+  .match-score-form {
+    gap: 4px;
+  }
+
+  .match-team-name {
+    font-size: 0.82rem;
+  }
+}

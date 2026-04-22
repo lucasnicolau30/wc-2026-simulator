@@ -20,7 +20,6 @@ pt: {
     continue: "Continuar",
 
     // game-real.html — navbar
-    gameHeader: "WC2026 — Fase de Grupos",
     groupsTab: "Grupos",
     matchesTab: "Partidas",
     knockoutTab: "Eliminatórias",
@@ -48,6 +47,7 @@ pt: {
     semiFinals: "Semifinais",
     finalTab: "Final",
     knockoutPlaceholder: "Simule a fase de grupos primeiro.",
+    manualKnockoutPlaceholder: "Insira os resultados da fase de grupos primeiro.",
     stageR32: "16 Avos",
     stageR16: "Oitavas",
     stageQF: "Quartas",
@@ -67,6 +67,8 @@ pt: {
     performanceGoals: "Artilheiros",
     performanceAssists: "Assistências",
     performanceCleanSheets: "Clean Sheets",
+    performanceEmpty: "Os dados de desempenho são gerados a partir da primeira partida simulada.",
+    matchesEmpty: "Simule a primeira partida para ver os resultados aqui.",
 
     // game-real.html - reset button
     reset: "REINICIAR",
@@ -104,7 +106,6 @@ en: {
     continue: "Continue",
 
     // game-real.html — navbar
-    gameHeader: "WC2026 — Group Stage",
     groupsTab: "Groups",
     matchesTab: "Matches",
     knockoutTab: "Knockout",
@@ -132,6 +133,7 @@ en: {
     semiFinals: "Semi-finals",
     finalTab: "Final",
     knockoutPlaceholder: "Simulate the group stage first.",
+    manualKnockoutPlaceholder: "Enter the group stage results first.",
     stageR32: "R32",
     stageR16: "R16",
     stageQF: "QF",
@@ -151,6 +153,8 @@ en: {
     performanceGoals: "Top Scorers",
     performanceAssists: "Assists",
     performanceCleanSheets: "Clean Sheets",
+    performanceEmpty: "Performance data is generated from the first simulated match.",
+    matchesEmpty: "Simulate the first match to see results here.",
 
     // game-real.html - reset button
     reset: "RESET",

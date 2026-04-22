@@ -1,11 +1,6 @@
 const MAX_RANKING_POINTS = 91;
 
-async function calculateStrength(){
-     // fetch retorna o envelope HTTP, com (status, headers, body cru)
-    const response = await fetch("http://localhost:8000/starters");
-    // transforma em objeto JS a partir do JSON retornado pelo backend
-    const starterPlayers = await response.json();
-
+function calculateStrength(starterPlayers){
     const teams = {};
     for(const player of starterPlayers){
         if(!teams[player.selection_name]){
