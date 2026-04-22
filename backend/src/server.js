@@ -27,7 +27,7 @@ app.use(express.json());
 
 const globalLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    limit: 300,
+    limit: 9000,
     standardHeaders: 'draft-7',
     legacyHeaders: false,
     message: { error: 'Muitas requisições. Tente novamente em alguns minutos.' }
@@ -35,7 +35,7 @@ const globalLimiter = rateLimit({
 
 const simulationLimiter = rateLimit({
     windowMs: 60 * 1000,
-    limit: 10,
+    limit: 300,
     standardHeaders: 'draft-7',
     legacyHeaders: false,
     message: { error: 'Limite de simulações excedido. Aguarde alguns segundos.' }
@@ -53,9 +53,7 @@ const swaggerSpec = swaggerJsdoc({
 });
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
+app.use(express.static(path.join(__dirname, '..', '..', 'frontend'), { index: 'home.html' }));
 
 let pool = null;
 

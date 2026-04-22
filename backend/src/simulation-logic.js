@@ -24,9 +24,9 @@ function calculateStrength(starterPlayers){
 }
 
 function calculateWinProbability(selectionA, strengthA, selectionB, strengthB){
-    const totalStrength = strengthA + strengthB;
-    const probabilityA = parseFloat((strengthA / totalStrength).toFixed(5));
-    const probabilityB = parseFloat((strengthB / totalStrength).toFixed(5));
+    const ELO_DIVISOR = 40;
+    const probabilityA = parseFloat((1 / (1 + Math.pow(10, (strengthB - strengthA) / ELO_DIVISOR))).toFixed(5));
+    const probabilityB = parseFloat((1 - probabilityA).toFixed(5));
 
     return { probabilityA, probabilityB };
 }
