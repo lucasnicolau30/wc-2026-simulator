@@ -64,14 +64,17 @@ app.listen(PORT, async () => {
 });
 
 async function initializeDatabase() {
-    const initConn = await mysqlPromise.createConnection({
-        host: DB_HOST,
-        user: DB_USER,
-        password: DB_PASSWORD
-    });
-
-    await initConn.query(`CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\``);
-    await initConn.end();
+    try {
+        const initConn = await mysqlPromise.createConnection({
+            host: DB_HOST,
+            user: DB_USER,
+            password: DB_PASSWORD
+        });
+        await initConn.query(`CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\``);
+        await initConn.end();
+    } catch (err) {
+        console.log(`[init] pulando CREATE DATABASE (${err.code || err.message}) — assumindo que o banco já existe`);
+    }
 
     const conn = await mysqlPromise.createConnection({
         host: DB_HOST,
