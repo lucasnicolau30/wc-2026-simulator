@@ -8,3 +8,9 @@ btn.addEventListener("click", () => {
         window.location.href = "simulation.html";
     }, 750);
 });
+
+window.addEventListener("pageshow", (e) => {
+    if (e.persisted) {
+        loader.classList.remove("active");
+    }
+});

@@ -504,4 +504,4 @@ document.getElementById("matches-list").addEventListener("input", e => {
 setBodyBackground("groups");
 loadGroups();
 loadMatches();
-loadKnockout();;
+loadKnockout();

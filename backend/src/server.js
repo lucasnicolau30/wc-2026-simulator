@@ -57,11 +57,17 @@ app.use(express.static(path.join(__dirname, '..', '..', 'frontend'), { index: 'h
 
 let pool = null;
 
-app.listen(PORT, async () => {
-    console.log(`Server is running on port ${PORT}`);
-    await initializeDatabase();
-    console.log('Database initialized');
-});
+initializeDatabase()
+    .then(() => {
+        app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+            console.log('Database initialized');
+        });
+    })
+    .catch(err => {
+        console.error('Falha ao inicializar o banco:', err);
+        process.exit(1);
+    });
 
 async function initializeDatabase() {
     try {
