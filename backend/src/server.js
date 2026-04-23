@@ -1176,9 +1176,9 @@ async function generateQF(){
     }
     const matches = [
         { match_number: 97,  home: 89, away: 90 },
-        { match_number: 98,  home: 93, away: 94 },
+        { match_number: 98,  home: 93, away: 95 },
         { match_number: 99,  home: 91, away: 92 },
-        { match_number: 100, home: 95, away: 96 },
+        { match_number: 100, home: 94, away: 96 },
     ];
     const stage = 'qf';
     for(const match of matches){
@@ -1214,7 +1214,7 @@ async function generateSF(){
         return { alreadyGenerated: true, stage: 'sf' };
     }
     const matches = [
-        { match_number: 101, home: 97, away: 90 },
+        { match_number: 101, home: 97, away: 99 },
         { match_number: 102, home: 98, away: 100 },
     ];
     const stage = 'sf';
