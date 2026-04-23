@@ -99,3 +99,13 @@ CREATE TABLE goal_events(
     FOREIGN KEY (match_id) REFERENCES matches(id),
     FOREIGN KEY (player_id) REFERENCES players(id)
 );
+
+CREATE TABLE shootout_events (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    match_id INT NOT NULL,
+	team ENUM('home', 'away') NOT NULL,
+    kick_order INT NOT NULL,
+    player_name VARCHAR(100) NOT NULL,
+    scored BOOLEAN NOT NULL,
+    FOREIGN KEY (match_id) REFERENCES matches(id)
+);
