@@ -274,9 +274,50 @@ document.querySelectorAll("#performance-filter .round-btn").forEach(btn => {
 
 /* ===== matches (grupos + mata-mata) ===== */
 
+let matchesLoadToken = 0;
+
+async function hydrateShootoutsFromDb(matches){
+    const toFetch = [];
+    for(const match of matches){
+        if(match.shootout_home_score === null || match.shootout_home_score === undefined) continue;
+        if(shootoutCache.has(match.id)) continue;
+        toFetch.push(match);
+    }
+
+    if(toFetch.length === 0) return;
+
+    const shootouts = await Promise.all(
+        toFetch.map(async (match) => {
+            const response = await fetch(`${API_BASE_URL}/matches/${match.id}/shootout`);
+            if(!response.ok) return null;
+            return response.json();
+        })
+    );
+
+    for(let i = 0; i < toFetch.length; i++){
+        const match = toFetch[i];
+        const data = shootouts[i];
+        if(!data) continue;
+        shootoutCache.set(match.id, {
+            winner: data.winner,
+            goalsA: data.goalsA,
+            goalsB: data.goalsB,
+            eventsA: data.eventsA,
+            eventsB: data.eventsB,
+            homeTeam: match.home_name,
+            awayTeam: match.away_name
+        });
+    }
+}
+
 async function loadMatches(){
+    const token = ++matchesLoadToken;
+
     const activeBtn = document.querySelector("#matches-round-filter .round-btn.active");
-    const phase = activeBtn?.dataset.phase ?? "group";
+    let phase = "group";
+    if(activeBtn){
+        phase = activeBtn.dataset.phase;
+    }
     const container = document.getElementById("matches-list");
 
     container.innerHTML = "";
@@ -285,21 +326,48 @@ async function loadMatches(){
     if(phase === "group"){
         const round = activeBtn.dataset.round;
         const response = await fetch(`${API_BASE_URL}/matches`);
+        if(token !== matchesLoadToken) return;
         const matches = await response.json();
+        if(token !== matchesLoadToken) return;
         const filtered = matches.filter(m => m.round == round);
         if(filtered.length === 0){
+            if(token !== matchesLoadToken) return;
             container.innerHTML = `<p class="knockout-placeholder">${translations[current].matchesEmpty}</p>`;
             return;
         }
-        await renderMatchCards(filtered, container);
+        await renderMatchCards(filtered, container, token);
         return;
     }
 
     const stage = activeBtn.dataset.stage;
 
     const response = await fetch(`${API_BASE_URL}/knockout-matches`);
+    if(token !== matchesLoadToken) return;
     const allKnockout = await response.json();
-    const filtered = allKnockout.filter(m => m.stage === stage);
+    if(token !== matchesLoadToken) return;
+    let filtered = allKnockout.filter(m => m.stage === stage);
+
+    if(filtered.length === 0){
+        const generated = await tryGenerateStage(stage);
+        if(token !== matchesLoadToken) return;
+        if(!generated){
+            let placeholder;
+            if(current === "pt"){
+                placeholder = "Simule a fase anterior primeiro.";
+            }
+            else{
+                placeholder = "Simulate the previous stage first.";
+            }
+            container.innerHTML = `<p class="knockout-placeholder">${placeholder}</p>`;
+            return;
+        }
+
+        const response2 = await fetch(`${API_BASE_URL}/knockout-matches`);
+        if(token !== matchesLoadToken) return;
+        const allKnockout2 = await response2.json();
+        if(token !== matchesLoadToken) return;
+        filtered = allKnockout2.filter(m => m.stage === stage);
+    }
 
     if(stage === "final" || stage === "3rd"){
         if(filtered.length === 1){
@@ -307,28 +375,10 @@ async function loadMatches(){
         }
     }
 
-    if(filtered.length === 0){
-        const generated = await tryGenerateStage(stage);
-        if(!generated){
-            container.innerHTML = `<p class="knockout-placeholder">${current === "pt" ? "Simule a fase anterior primeiro." : "Simulate the previous stage first."}</p>`;
-            return;
-        }
+    await hydrateShootoutsFromDb(filtered);
+    if(token !== matchesLoadToken) return;
 
-        const response2 = await fetch(`${API_BASE_URL}/knockout-matches`);
-        const allKnockout2 = await response2.json();
-        const filtered2 = allKnockout2.filter(m => m.stage === stage);
-
-        if(stage === "final" || stage === "3rd"){
-            if(filtered2.length === 1){
-                container.classList.add("single-match");
-            }
-        }
-
-        await renderMatchCards(filtered2, container);
-        return;
-    }
-
-    await renderMatchCards(filtered, container);
+    await renderMatchCards(filtered, container, token);
 }
 
 function buildShootoutHtml(shootout){
@@ -361,11 +411,18 @@ function buildShootoutHtml(shootout){
     `;
 }
 
-async function renderMatchCards(matches, container){
-    for(const match of matches){
-        const eventsResponse = await fetch(`${API_BASE_URL}/matches/${match.id}/events`);
-        const events = await eventsResponse.json();
+async function renderMatchCards(matches, container, token){
+    const eventsPerMatch = await Promise.all(
+        matches.map(async (match) => {
+            const eventsResponse = await fetch(`${API_BASE_URL}/matches/${match.id}/events`);
+            return eventsResponse.json();
+        })
+    );
 
+    if(token !== undefined && token !== matchesLoadToken) return;
+
+    const cards = matches.map((match, idx) => {
+        const events = eventsPerMatch[idx];
         const homeGoals = events.filter(e => e.team_name === match.home_name);
         const awayGoals = events.filter(e => e.team_name === match.away_name);
 
@@ -378,14 +435,22 @@ async function renderMatchCards(matches, container){
         }
         const shootoutHtml = buildShootoutHtml(shootout);
 
-        container.innerHTML += `
+        let scoreText;
+        if(match.home_score !== null){
+            scoreText = `${match.home_score} — ${match.away_score}`;
+        }
+        else{
+            scoreText = 'vs';
+        }
+
+        return `
             <article class="match-card">
                 <div class="match-main">
                     <div class="match-team">
                         <img class="match-flag" src="${getFlagSrc(match.home_name)}" alt="${match.home_name}" />
                         <span class="match-team-name">${getDisplayName(match.home_name)}</span>
                     </div>
-                    <div class="match-score">${match.home_score !== null ? `${match.home_score} — ${match.away_score}` : 'vs'}</div>
+                    <div class="match-score">${scoreText}</div>
                     <div class="match-team away">
                         <img class="match-flag" src="${getFlagSrc(match.away_name)}" alt="${match.away_name}" />
                         <span class="match-team-name">${getDisplayName(match.away_name)}</span>
@@ -399,7 +464,9 @@ async function renderMatchCards(matches, container){
                 ${shootoutHtml}
             </article>
         `;
-    }
+    });
+
+    container.innerHTML = cards.join("");
 }
 
 /* tenta gerar os confrontos de uma fase do mata-mata */
@@ -591,6 +658,8 @@ async function loadKnockout(){
     wrap.innerHTML = `<p class="knockout-placeholder">${translations[current].knockoutPlaceholder}</p>`;
     return;
   }
+
+  await hydrateShootoutsFromDb(matches);
 
   const byNum = {};
   for(const m of matches){

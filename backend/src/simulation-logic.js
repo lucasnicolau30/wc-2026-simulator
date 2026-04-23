@@ -266,86 +266,86 @@ function simulatePenaltyShootout(playersA, selectionA, playersB, selectionB){
     const gkA = playersA.find(p => p.position === 'GK');
     const gkB = playersB.find(p => p.position === 'GK');
 
-    const sortedA = [...playersA].sort((a, b) => {
+    const byRatingDesc = (a, b) => {
         if(b.rating > a.rating){
             return 1;
-        } 
+        }
         if(a.rating > b.rating){
             return -1;
-        } 
+        }
         return 0;
-    });
+    };
 
-    const sortedB = [...playersB].sort((a, b) => {
-        if(b.rating > a.rating){
-            return 1;
-        } 
-        if(a.rating > b.rating){
-            return -1;
-        } 
-        return 0;
-    });
+    const outfieldA = playersA.filter(p => p.position !== 'GK');
+    const outfieldB = playersB.filter(p => p.position !== 'GK');
 
-    const kickersA = sortedA.slice(0, 5);
-    const kickersB = sortedB.slice(0, 5);
+    const sortedOutA = [...outfieldA].sort(byRatingDesc);
+    const sortedOutB = [...outfieldB].sort(byRatingDesc);
+    const sortedAllA = [...playersA].sort(byRatingDesc);
+    const sortedAllB = [...playersB].sort(byRatingDesc);
+
+    const kickersA = sortedOutA.slice(0, 5);
+    const kickersB = sortedOutB.slice(0, 5);
 
     let goalsA = 0;
     let goalsB = 0;
-    let eventsA = [];
-    let eventsB = [];
+    const eventsA = [];
+    const eventsB = [];
 
-    for(let i = 0; i < 5; i++){
-        const chanceA = (kickersA[i].rating - gkB.rating + 150) / 200;
-        if(Math.random() < chanceA){
+    const kickForA = (kicker) => {
+        const chance = (kicker.rating - gkB.rating + 150) / 200;
+        const scored = Math.random() < chance;
+        if(scored){
             goalsA++;
-            eventsA.push({ player: kickersA[i].name, scored: true });
-        } 
-        else{
-            eventsA.push({ player: kickersA[i].name, scored: false });
+        }
+        eventsA.push({ player: kicker.name, scored });
+    };
+
+    const kickForB = (kicker) => {
+        const chance = (kicker.rating - gkA.rating + 150) / 200;
+        const scored = Math.random() < chance;
+        if(scored){
+            goalsB++;
+        }
+        eventsB.push({ player: kicker.name, scored });
+    };
+
+    let decided = false;
+
+    // fase regular: alternando A e B, encerra assim que o resultado não pode mais ser alterado
+    for(let i = 0; i < 5 && !decided; i++){
+        kickForA(kickersA[i]);
+
+        // depois da cobrança de A: A bateu i+1, B bateu i
+        const remainingAfterA_forA = 5 - (i + 1);
+        const remainingAfterA_forB = 5 - i;
+        if(goalsB + remainingAfterA_forB < goalsA || goalsA + remainingAfterA_forA < goalsB){
+            decided = true;
+            break;
         }
 
-        const chanceB = (kickersB[i].rating - gkA.rating + 150) / 200;
-        if(Math.random() < chanceB){
-            goalsB++;
-            eventsB.push({ player: kickersB[i].name, scored: true });
-        } 
-        else{
-            eventsB.push({ player: kickersB[i].name, scored: false });
+        kickForB(kickersB[i]);
+
+        // depois da cobrança de B: ambas bateram i+1
+        const remainingAfterB = 5 - (i + 1);
+        if(goalsB + remainingAfterB < goalsA || goalsA + remainingAfterB < goalsB){
+            decided = true;
+            break;
         }
     }
 
-    // morte súbita — começa do 6º jogador
+    // morte súbita — começa do 6º jogador (pode incluir goleiro se faltarem jogadores)
     let kickerIndex = 5;
     while(goalsA === goalsB){
-        const kA = sortedA[kickerIndex % sortedA.length];
-        const chanceA = (kA.rating - gkB.rating + 150) / 200;
-        const scoredA = Math.random() < chanceA;
-        if(scoredA){
-            goalsA++;
-            eventsA.push({ player: kA.name, scored: scoredA });
-        } 
-        else{
-            eventsA.push({ player: kA.name, scored: false });
-        }
-
-        const kB = sortedB[kickerIndex % sortedB.length];
-        const chanceB = (kB.rating - gkA.rating + 150) / 200;
-        const scoredB = Math.random() < chanceB;
-        if(scoredB){
-            goalsB++;
-            eventsB.push({ player: kB.name, scored: scoredB });
-        }
-        else{
-            eventsB.push({ player: kB.name, scored: false });            
-        }
-
+        kickForA(sortedAllA[kickerIndex % sortedAllA.length]);
+        kickForB(sortedAllB[kickerIndex % sortedAllB.length]);
         kickerIndex++;
     }
 
     let winner;
     if(goalsA > goalsB){
         winner = selectionA;
-    } 
+    }
     else{
         winner = selectionB;
     }

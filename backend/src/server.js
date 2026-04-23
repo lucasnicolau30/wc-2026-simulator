@@ -172,6 +172,28 @@ async function initializeDatabase() {
         FOREIGN KEY (player_id) REFERENCES players(id)
     )`);
 
+    await conn.execute(`CREATE TABLE IF NOT EXISTS shootout_events (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        match_id INT NOT NULL,
+        team ENUM('home', 'away') NOT NULL,
+        kick_order INT NOT NULL,
+        player_name VARCHAR(100) NOT NULL,
+        scored BOOLEAN NOT NULL,
+        FOREIGN KEY (match_id) REFERENCES matches(id)
+    )`);
+
+    const [matchCols] = await conn.execute(
+        "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = ? AND TABLE_NAME = 'matches'",
+        [DB_NAME]
+    );
+    const matchColNames = matchCols.map(c => c.COLUMN_NAME);
+    if(!matchColNames.includes('shootout_home_score')){
+        await conn.execute('ALTER TABLE matches ADD COLUMN shootout_home_score INT NULL');
+    }
+    if(!matchColNames.includes('shootout_away_score')){
+        await conn.execute('ALTER TABLE matches ADD COLUMN shootout_away_score INT NULL');
+    }
+
     const [countRows] = await conn.execute('SELECT COUNT(*) AS total FROM selections');
 
     if (countRows[0].total === 0) {
@@ -294,18 +316,49 @@ async function simulateKnockoutMatchById(matchId) {
         selectionB, teams[selectionB], strengths[selectionB]
     );
 
-    const winnerId = result.winner === selectionA ? idA : idB;
+    let winnerId;
+    if(result.winner === selectionA){
+        winnerId = idA;
+    }
+    else{
+        winnerId = idB;
+    }
+
+    let shootoutHomeScore = null;
+    let shootoutAwayScore = null;
+    if(result.shootout){
+        shootoutHomeScore = result.shootout.goalsA;
+        shootoutAwayScore = result.shootout.goalsB;
+    }
 
     await pool.query(
-        'UPDATE matches SET home_score = ?, away_score = ?, home_xg = ?, away_xg = ? WHERE id = ?',
-        [result.goalsA, result.goalsB, result.xgA, result.xgB, matchId]
+        'UPDATE matches SET home_score = ?, away_score = ?, home_xg = ?, away_xg = ?, shootout_home_score = ?, shootout_away_score = ? WHERE id = ?',
+        [result.goalsA, result.goalsB, result.xgA, result.xgB, shootoutHomeScore, shootoutAwayScore, matchId]
     );
 
+    await pool.query('DELETE FROM shootout_events WHERE match_id = ?', [matchId]);
     await pool.query('DELETE FROM goal_events WHERE match_id = ?', [matchId]);
     await pool.query('DELETE FROM player_match_stats WHERE match_id = ?', [matchId]);
     await pool.query('DELETE FROM knockouts WHERE match_id = ?', [matchId]);
 
     await pool.query('INSERT INTO knockouts (match_id, winner_id) VALUES (?, ?)', [matchId, winnerId]);
+
+    if(result.shootout){
+        for(let i = 0; i < result.shootout.eventsA.length; i++){
+            const kick = result.shootout.eventsA[i];
+            await pool.query(
+                'INSERT INTO shootout_events (match_id, team, kick_order, player_name, scored) VALUES (?, ?, ?, ?, ?)',
+                [matchId, 'home', i, kick.player, kick.scored]
+            );
+        }
+        for(let i = 0; i < result.shootout.eventsB.length; i++){
+            const kick = result.shootout.eventsB[i];
+            await pool.query(
+                'INSERT INTO shootout_events (match_id, team, kick_order, player_name, scored) VALUES (?, ?, ?, ?, ?)',
+                [matchId, 'away', i, kick.player, kick.scored]
+            );
+        }
+    }
 
     for(const player of [...teams[selectionA], ...teams[selectionB]]){
         const isA = player.selection_name === selectionA;
@@ -575,13 +628,85 @@ app.get('/qualifiers', async(req, res) => {
 app.get('/knockout-matches', async(req, res) => {
     const [rows] = await pool.query(`
         SELECT m.id, m.home_id, m.away_id, m.stage, m.match_number, m.home_score, m.away_score, m.home_xg, m.away_xg,
+        m.shootout_home_score, m.shootout_away_score,
         h.name AS home_name, a.name AS away_name
         FROM matches m JOIN selections h ON m.home_id = h.id JOIN selections a ON m.away_id = a.id WHERE m.stage IN ('r32','r16','qf','sf','3rd','final') ORDER BY m.match_number ASC`);
 
     res.json(rows);
 });
 
+/**
+ * @swagger
+ * /matches/{id}/shootout:
+ *   get:
+ *     summary: Cobranças de pênaltis de uma partida
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Dados da disputa de pênaltis (ou null se não houve)
+ */
+app.get('/matches/:id/shootout', async(req, res) => {
+    const matchId = req.params.id;
+
+    const [matchRows] = await pool.query(
+        `SELECT m.shootout_home_score, m.shootout_away_score,
+        h.name AS home_name, a.name AS away_name
+        FROM matches m
+        JOIN selections h ON m.home_id = h.id
+        JOIN selections a ON m.away_id = a.id
+        WHERE m.id = ?`,
+        [matchId]
+    );
+
+    if(matchRows.length === 0){
+        return res.status(404).json({ error: 'partida não encontrada' });
+    }
+
+    const match = matchRows[0];
+
+    if(match.shootout_home_score === null){
+        return res.json(null);
+    }
+
+    const [events] = await pool.query(
+        'SELECT team, kick_order, player_name, scored FROM shootout_events WHERE match_id = ? ORDER BY kick_order ASC, team ASC',
+        [matchId]
+    );
+
+    const eventsA = events
+        .filter(e => e.team === 'home')
+        .sort((a, b) => a.kick_order - b.kick_order)
+        .map(e => ({ player: e.player_name, scored: !!e.scored }));
+
+    const eventsB = events
+        .filter(e => e.team === 'away')
+        .sort((a, b) => a.kick_order - b.kick_order)
+        .map(e => ({ player: e.player_name, scored: !!e.scored }));
+
+    let winner;
+    if(match.shootout_home_score > match.shootout_away_score){
+        winner = match.home_name;
+    }
+    else{
+        winner = match.away_name;
+    }
+
+    res.json({
+        winner,
+        goalsA: match.shootout_home_score,
+        goalsB: match.shootout_away_score,
+        eventsA,
+        eventsB
+    });
+});
+
 async function resetGameData(){
+    await pool.query('DELETE FROM shootout_events');
     await pool.query('DELETE FROM goal_events');
     await pool.query('DELETE FROM player_match_stats');
     await pool.query('DELETE FROM knockouts');
@@ -592,6 +717,7 @@ async function resetGameData(){
     await pool.query('ALTER TABLE player_match_stats AUTO_INCREMENT = 1');
     await pool.query('ALTER TABLE goal_events AUTO_INCREMENT = 1');
     await pool.query('ALTER TABLE knockouts AUTO_INCREMENT = 1');
+    await pool.query('ALTER TABLE shootout_events AUTO_INCREMENT = 1');
 }
 
 async function createGroupMatches(){
@@ -752,8 +878,9 @@ app.post('/manual/knockout', simulationLimiter, async(req, res) => {
         return res.status(400).json({ error: 'winnerId deve ser home_id ou away_id da partida' });
     }
 
+    await pool.query('DELETE FROM shootout_events WHERE match_id = ?', [matchId]);
     await pool.query('DELETE FROM knockouts WHERE match_id = ?', [matchId]);
-    await pool.query('UPDATE matches SET home_score = ?, away_score = ? WHERE id = ?', [homeScore, awayScore, matchId]);
+    await pool.query('UPDATE matches SET home_score = ?, away_score = ?, shootout_home_score = NULL, shootout_away_score = NULL WHERE id = ?', [homeScore, awayScore, matchId]);
     await pool.query('INSERT INTO knockouts (match_id, winner_id) VALUES (?, ?)', [matchId, winnerId]);
 
     res.json({ ok: true });
@@ -786,28 +913,8 @@ app.post('/simulation', simulationLimiter, async(req, res) => {
         return res.json({ ok: true });
     }
     if(mode === 'real'){
-        const [rows] = await pool.query('SELECT COUNT(*) AS total FROM matches');
-        
-        if(rows[0].total === 0){
-            const [groups] = await pool.query('SELECT * FROM `groups`');
-            const roundMap = {
-                '0-1': 1, '2-3': 1,
-                '0-2': 2, '1-3': 2,
-                '0-3': 3, '1-2': 3
-            };
-            for(const group of groups){
-                const [selections] = await pool.query('SELECT * FROM selections WHERE group_id = ?', [group.id]);
-                for(let i = 0; i < selections.length; i++){
-                    for(let j = i + 1; j < selections.length; j++){
-                        const round = roundMap[`${i}-${j}`];
-                        await pool.query(
-                            'INSERT INTO matches (home_id, away_id, stage, group_id, round) VALUES (?, ?, ?, ?, ?)',
-                            [selections[i].id, selections[j].id, 'group', group.id, round]
-                        );
-                    }
-                }
-            }
-        }
+        await resetGameData();
+        await createGroupMatches();
 
         const starterPlayers = await getStartersFromDB();
         const strength = calculateStrength(starterPlayers);

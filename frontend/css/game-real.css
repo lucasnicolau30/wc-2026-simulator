@@ -1259,6 +1259,24 @@ body.bg-performance {
   }
 }
 
+@media (max-width: 1100px) {
+  .match-team-name {
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: break-word;
+    overflow: visible;
+    text-overflow: unset;
+    font-size: 0.91rem;
+    line-height: 1.2;
+  }
+
+  .match-team,
+  .match-team.away {
+    min-height: 40px;
+    align-items: center;
+  }
+}
+
 @media (max-width: 992px) {
   body {
     align-items: flex-start;
@@ -1390,6 +1408,7 @@ body.bg-performance {
     overflow: visible;
     text-overflow: unset;
     font-size: 0.88rem;
+    line-height: 1.2;
   }
 
   .match-main {
@@ -1400,6 +1419,8 @@ body.bg-performance {
   .match-team,
   .match-team.away {
     justify-content: center;
+    min-height: 38px;
+    align-items: center;
   }
 
   .match-score {
@@ -1503,6 +1524,13 @@ body.bg-performance {
     overflow: visible;
     text-overflow: unset;
     font-size: 0.82rem;
+    line-height: 1.2;
+  }
+
+  .match-team,
+  .match-team.away {
+    min-height: 36px;
+    align-items: center;
   }
 
   .match-score {

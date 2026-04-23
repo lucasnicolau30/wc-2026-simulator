@@ -157,9 +157,16 @@ async function loadGroups(){
 }
 
 /* ===== partidas ===== */
+let matchesLoadToken = 0;
+
 async function loadMatches(){
+  const token = ++matchesLoadToken;
+
   const activeBtn = document.querySelector("#matches-round-filter .round-btn.active");
-  const phase = activeBtn?.dataset.phase ?? "group";
+  let phase = "group";
+  if(activeBtn){
+    phase = activeBtn.dataset.phase;
+  }
   const container = document.getElementById("matches-list");
   container.innerHTML = "";
   container.classList.remove("single-match");
@@ -167,24 +174,38 @@ async function loadMatches(){
   if(phase === "group"){
     const round = activeBtn.dataset.round;
     const res = await fetch(`${API_BASE_URL}/matches`);
+    if(token !== matchesLoadToken) return;
     const matches = await res.json();
+    if(token !== matchesLoadToken) return;
     renderGroupMatches(matches.filter(m => m.round == round), container);
     return;
   }
 
   const stage = activeBtn.dataset.stage;
   const res = await fetch(`${API_BASE_URL}/knockout-matches`);
+  if(token !== matchesLoadToken) return;
   const all = await res.json();
+  if(token !== matchesLoadToken) return;
   let filtered = all.filter(m => m.stage === stage);
 
   if(filtered.length === 0){
     const generated = await tryGenerateStage(stage);
+    if(token !== matchesLoadToken) return;
     if(!generated){
-      container.innerHTML = `<p class="knockout-placeholder">${current === "pt" ? "Insira os resultados da fase anterior primeiro." : "Enter the previous stage results first."}</p>`;
+      let placeholder;
+      if(current === "pt"){
+        placeholder = "Insira os resultados da fase anterior primeiro.";
+      }
+      else{
+        placeholder = "Enter the previous stage results first.";
+      }
+      container.innerHTML = `<p class="knockout-placeholder">${placeholder}</p>`;
       return;
     }
     const res2 = await fetch(`${API_BASE_URL}/knockout-matches`);
+    if(token !== matchesLoadToken) return;
     const all2 = await res2.json();
+    if(token !== matchesLoadToken) return;
     filtered = all2.filter(m => m.stage === stage);
   }
 
