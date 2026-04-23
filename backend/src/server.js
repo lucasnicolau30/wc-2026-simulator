@@ -1214,8 +1214,8 @@ async function generateSF(){
         return { alreadyGenerated: true, stage: 'sf' };
     }
     const matches = [
-        { match_number: 101, home: 97, away: 98 },
-        { match_number: 102, home: 99, away: 100 },
+        { match_number: 101, home: 97, away: 90 },
+        { match_number: 102, home: 98, away: 100 },
     ];
     const stage = 'sf';
     for(const match of matches){
