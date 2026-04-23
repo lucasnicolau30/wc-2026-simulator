@@ -1,4 +1,4 @@
-CREATE DATABASE  wc2026;
+CREATE DATABASE IF NOT EXISTS wc2026;
 USE wc2026;
 
 /* VARCHAR != CHAR:  	
@@ -46,6 +46,8 @@ CREATE TABLE matches(
 	away_score INT DEFAULT NULL,
 	home_xg FLOAT DEFAULT 0,
 	away_xg FLOAT DEFAULT 0,
+    shootout_home_score INT NULL,
+    shootout_away_score INT NULL,
 	round INT NULL,
     match_number INT NULL,
 	FOREIGN KEY (group_id) REFERENCES `groups`(id),
