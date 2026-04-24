@@ -131,6 +131,7 @@ function getDisplayName(ptName) {
 /* groups */
 async function loadGroups(){
     const response = await fetch(`${API_BASE_URL}/selections`);
+    if(!response.ok) return;
     const selectionsRes = await response.json();
 
     const groups = {};
@@ -148,6 +149,7 @@ async function loadGroups(){
     const grid = document.getElementById("groups-grid");
     await Promise.all(Object.entries(groupIds).map(async ([groupName, groupId]) => {
           const response = await fetch(`${API_BASE_URL}/standings/${groupId}`);
+          if(!response.ok) return;
           const data = await response.json();
 
           standingsMap[groupName] = {};
@@ -238,6 +240,7 @@ async function renderPerformance(){
     const metric = document.querySelector("#performance-filter .round-btn.active")?.dataset.metric ?? "rating";
 
     const response = await fetch(`${API_BASE_URL}/performance/${metric}`);
+    if(!response.ok) return;
     const players = await response.json();
 
     const list = document.getElementById("performance-list");
@@ -326,7 +329,7 @@ async function loadMatches(){
     if(phase === "group"){
         const round = activeBtn.dataset.round;
         const response = await fetch(`${API_BASE_URL}/matches`);
-        if(token !== matchesLoadToken) return;
+        if(!response.ok || token !== matchesLoadToken) return;
         const matches = await response.json();
         if(token !== matchesLoadToken) return;
         const filtered = matches.filter(m => m.round == round);
@@ -342,7 +345,7 @@ async function loadMatches(){
     const stage = activeBtn.dataset.stage;
 
     const response = await fetch(`${API_BASE_URL}/knockout-matches`);
-    if(token !== matchesLoadToken) return;
+    if(!response.ok || token !== matchesLoadToken) return;
     const allKnockout = await response.json();
     if(token !== matchesLoadToken) return;
     let filtered = allKnockout.filter(m => m.stage === stage);
@@ -363,7 +366,7 @@ async function loadMatches(){
         }
 
         const response2 = await fetch(`${API_BASE_URL}/knockout-matches`);
-        if(token !== matchesLoadToken) return;
+        if(!response2.ok || token !== matchesLoadToken) return;
         const allKnockout2 = await response2.json();
         if(token !== matchesLoadToken) return;
         filtered = allKnockout2.filter(m => m.stage === stage);
@@ -384,8 +387,8 @@ async function loadMatches(){
 function buildShootoutHtml(shootout){
     if(!shootout) return '';
 
-    const homeEvents = shootout.eventsA;
-    const awayEvents = shootout.eventsB;
+    const homeEvents = shootout.eventsA ?? [];
+    const awayEvents = shootout.eventsB ?? [];
 
     const homeBalls = homeEvents.map(h => {
         const cls = h.scored ? 'pk-scored' : 'pk-missed';
@@ -415,6 +418,7 @@ async function renderMatchCards(matches, container, token){
     const eventsPerMatch = await Promise.all(
         matches.map(async (match) => {
             const eventsResponse = await fetch(`${API_BASE_URL}/matches/${match.id}/events`);
+            if(!eventsResponse.ok) return [];
             return eventsResponse.json();
         })
     );
@@ -422,7 +426,7 @@ async function renderMatchCards(matches, container, token){
     if(token !== undefined && token !== matchesLoadToken) return;
 
     const cards = matches.map((match, idx) => {
-        const events = eventsPerMatch[idx];
+        const events = eventsPerMatch[idx] ?? [];
         const homeGoals = events.filter(e => e.team_name === match.home_name);
         const awayGoals = events.filter(e => e.team_name === match.away_name);
 
@@ -505,6 +509,7 @@ document.getElementById("simulate-all-matches").addEventListener("click", async 
     if(phase === "group"){
         const round = activeBtn.dataset.round;
         const response = await fetch(`${API_BASE_URL}/matches`);
+        if(!response.ok) return;
         const matches = await response.json();
         const filtered = matches.filter(m => m.round == round && m.home_score === null);
 
@@ -525,6 +530,7 @@ document.getElementById("simulate-all-matches").addEventListener("click", async 
     const stage = activeBtn.dataset.stage;
 
     const kResponse = await fetch(`${API_BASE_URL}/knockout-matches`);
+    if(!kResponse.ok) return;
     const allKnockout = await kResponse.json();
     const existing = allKnockout.filter(m => m.stage === stage);
 
@@ -537,10 +543,12 @@ document.getElementById("simulate-all-matches").addEventListener("click", async 
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ stage: stage })
     });
+    if(!simResponse.ok) return;
     const simData = await simResponse.json();
 
     if(simData.results){
         const refreshRes = await fetch(`${API_BASE_URL}/knockout-matches`);
+        if(!refreshRes.ok) return;
         const refreshed = await refreshRes.json();
 
         const matchMap = {};
@@ -577,6 +585,7 @@ document.getElementById("simulate-all-matches").addEventListener("click", async 
 
     loadMatches();
     loadKnockout();
+    renderPerformance();
 });
 
 /* ===== knockout bracket (só visualização) ===== */
@@ -652,6 +661,7 @@ async function loadKnockout(){
   const wrap = document.getElementById('knockout-wrap');
 
   const response = await fetch(`${API_BASE_URL}/knockout-matches`);
+  if(!response.ok) return;
   const matches = await response.json();
 
   if(matches.length === 0){
@@ -705,6 +715,10 @@ async function loadKnockout(){
 
 document.querySelector('[data-tab="knockout"]').addEventListener('click', () => {
   loadKnockout();
+});
+
+document.querySelector('[data-tab="performance"]').addEventListener('click', () => {
+  renderPerformance();
 });
 
 /* re-render ao trocar idioma */
@@ -761,5 +775,6 @@ resetConfirm.addEventListener("click", async () => {
 
   loadGroups();
   loadMatches();
+  loadKnockout();
   renderPerformance();
 });

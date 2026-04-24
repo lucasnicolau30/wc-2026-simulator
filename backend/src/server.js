@@ -302,6 +302,9 @@ async function simulateKnockoutMatchById(matchId) {
         'SELECT m.*, h.name AS home_name, a.name AS away_name FROM matches m JOIN selections h ON m.home_id = h.id JOIN selections a ON m.away_id = a.id WHERE m.id = ?',
         [matchId]
     );
+    if(matchRows.length === 0){
+        throw Object.assign(new Error('partida não encontrada'), { status: 404 });
+    }
     const match = matchRows[0];
     const selectionA = match.home_name;
     const selectionB = match.away_name;
@@ -952,6 +955,9 @@ app.post('/simulate/match', simulationLimiter, async(req, res) => {
         'SELECT m.*, h.name AS home_name, a.name AS away_name FROM matches m JOIN selections h ON m.home_id = h.id JOIN selections a ON m.away_id = a.id WHERE m.id = ?',
         [matchId]
     );
+    if(matchRows.length === 0){
+        return res.status(404).json({ error: 'partida não encontrada' });
+    }
     const match = matchRows[0];
     // guard: se já foi simulada, retorna o resultado salvo sem re-simular
     if(match.home_score !== null){

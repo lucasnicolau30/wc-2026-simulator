@@ -363,33 +363,33 @@
                     { "name": "Ederson", "age": 31, "position": "GK", "rating": 88, "is_starter": false },
                     { "name": "Bento", "age": 25, "position": "GK", "rating": 80, "is_starter": false },
 
-                    { "name": "Danilo", "age": 33, "position": "DEF", "rating": 83, "is_starter": true },
+                    { "name": "Danilo", "age": 33, "position": "DEF", "rating": 83, "is_starter": false },
                     { "name": "Marquinhos", "age": 30, "position": "DEF", "rating": 87, "is_starter": true },
-                    { "name": "Gabriel Magalhães", "age": 27, "position": "DEF", "rating": 85, "is_starter": true },
+                    { "name": "Gabriel Magalhães", "age": 27, "position": "DEF", "rating": 88, "is_starter": true },
                     { "name": "Wendell", "age": 31, "position": "DEF", "rating": 82, "is_starter": true },
 
-                    { "name": "Éder Militão", "age": 27, "position": "DEF", "rating": 86, "is_starter": false },
+                    { "name": "Éder Militão", "age": 27, "position": "DEF", "rating": 86, "is_starter": true },
                     { "name": "Bremer", "age": 27, "position": "DEF", "rating": 85, "is_starter": false },
                     { "name": "Yan Couto", "age": 22, "position": "DEF", "rating": 81, "is_starter": false },
                     { "name": "Renan Lodi", "age": 26, "position": "DEF", "rating": 81, "is_starter": false },
 
                     { "name": "Bruno Guimarães", "age": 27, "position": "MID", "rating": 86, "is_starter": true },
-                    { "name": "Lucas Paquetá", "age": 27, "position": "MID", "rating": 85, "is_starter": true },
+                    { "name": "Lucas Paquetá", "age": 27, "position": "MID", "rating": 85, "is_starter": false },
                     { "name": "Neymar", "age": 33, "position": "MID", "rating": 90, "is_starter": true },
 
-                    { "name": "Douglas Luiz", "age": 26, "position": "MID", "rating": 84, "is_starter": false },
+                    { "name": "Casemiro", "age": 26, "position": "MID", "rating": 85, "is_starter": false },
                     { "name": "João Gomes", "age": 23, "position": "MID", "rating": 82, "is_starter": false },
                     { "name": "Andreas Pereira", "age": 29, "position": "MID", "rating": 81, "is_starter": false },
 
                     { "name": "Vinicius Jr", "age": 24, "position": "FWD", "rating": 92, "is_starter": true },
-                    { "name": "Rodrygo", "age": 24, "position": "FWD", "rating": 88, "is_starter": true },
-                    { "name": "Richarlison", "age": 28, "position": "FWD", "rating": 85, "is_starter": true },
+                    { "name": "Rodrygo", "age": 24, "position": "FWD", "rating": 88, "is_starter": false },
+                    { "name": "Richarlison", "age": 28, "position": "FWD", "rating": 85, "is_starter": false },
 
                     { "name": "Gabriel Jesus", "age": 28, "position": "FWD", "rating": 84, "is_starter": false },
-                    { "name": "Raphinha", "age": 28, "position": "FWD", "rating": 87, "is_starter": false },
+                    { "name": "Raphinha", "age": 28, "position": "FWD", "rating": 90, "is_starter": true },
                     { "name": "Savinho", "age": 21, "position": "FWD", "rating": 83, "is_starter": false },
 
-                    { "name": "Martinelli", "age": 23, "position": "FWD", "rating": 86, "is_starter": false },
+                    { "name": "Martinelli", "age": 23, "position": "FWD", "rating": 86, "is_starter": true },
                     { "name": "Endrick", "age": 19, "position": "FWD", "rating": 84, "is_starter": false },
                     { "name": "Pedro", "age": 27, "position": "FWD", "rating": 83, "is_starter": false }
 

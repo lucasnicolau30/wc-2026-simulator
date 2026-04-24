@@ -120,32 +120,36 @@ function selectGoalscorer(players, goals){
     return goalscorers;
 }
 
-function selectAssist(players, goals){
-    const attackers = players.filter(player => player.position === 'FWD');
-    const middfielders = players.filter(player => player.position === 'MID');
-    const defenders = players.filter(player => player.position === 'DEF');
-    const gks = players.filter(player => player.position === 'GK');
+function selectAssist(players, goals, scorers){
     const assists = [];
 
     for(let i = 0; i < goals; i++){
+        const scorer = scorers[i];
+        const eligible = players.filter(p => p.id !== scorer?.id);
+
+        const attackers = eligible.filter(p => p.position === 'FWD');
+        const middfielders = eligible.filter(p => p.position === 'MID');
+        const defenders = eligible.filter(p => p.position === 'DEF');
+        const gks = eligible.filter(p => p.position === 'GK');
+
         const random = Math.random();
         let assister;
 
         if(random < 0.3 && attackers.length > 0){
             assister = attackers[Math.floor(Math.random() * attackers.length)];
-        } 
+        }
         else if(random < 0.8 && middfielders.length > 0){
             assister = middfielders[Math.floor(Math.random() * middfielders.length)];
-        } 
+        }
         else if(random < 0.95 && defenders.length > 0){
             assister = defenders[Math.floor(Math.random() * defenders.length)];
-        } 
+        }
         else if(gks.length > 0){
             assister = gks[Math.floor(Math.random() * gks.length)];
         }
 
         if(!assister){
-            assister = players[Math.floor(Math.random() * players.length)];
+            assister = eligible[Math.floor(Math.random() * eligible.length)];
         }
 
         assists.push(assister);
@@ -231,8 +235,8 @@ function simulateMatchGroupStage(selectionA, playersA, strengthA, selectionB, pl
     const { cleanSheetA, cleanSheetB } = calculateCleanSheet(goalsA, goalsB);
     const scorersA = selectGoalscorer(playersA, goalsA);
     const scorersB = selectGoalscorer(playersB, goalsB);
-    const assistsA = selectAssist(playersA, goalsA);
-    const assistsB = selectAssist(playersB, goalsB);
+    const assistsA = selectAssist(playersA, goalsA, scorersA);
+    const assistsB = selectAssist(playersB, goalsB, scorersB);
     const events = generateGoalMinutes(scorersA, selectionA, scorersB, selectionB);
     const { winner, loser, pointsA, pointsB } = calculateGroupStageResult(selectionA, goalsA, selectionB, goalsB);
     const playerRatingsA = [];
@@ -281,9 +285,6 @@ function simulatePenaltyShootout(playersA, selectionA, playersB, selectionB){
 
     const sortedOutA = [...outfieldA].sort(byRatingDesc);
     const sortedOutB = [...outfieldB].sort(byRatingDesc);
-    const sortedAllA = [...playersA].sort(byRatingDesc);
-    const sortedAllB = [...playersB].sort(byRatingDesc);
-
     const kickersA = sortedOutA.slice(0, 5);
     const kickersB = sortedOutB.slice(0, 5);
 
@@ -334,11 +335,14 @@ function simulatePenaltyShootout(playersA, selectionA, playersB, selectionB){
         }
     }
 
-    // morte súbita — começa do 6º jogador (pode incluir goleiro se faltarem jogadores)
+    // morte súbita — continua do 6º ao 10º (jogadores de campo), 11º é o goleiro, depois reinicia do 1º
+    const fullListA = [...sortedOutA, gkA];
+    const fullListB = [...sortedOutB, gkB];
+
     let kickerIndex = 5;
     while(goalsA === goalsB){
-        kickForA(sortedAllA[kickerIndex % sortedAllA.length]);
-        kickForB(sortedAllB[kickerIndex % sortedAllB.length]);
+        kickForA(fullListA[kickerIndex % fullListA.length]);
+        kickForB(fullListB[kickerIndex % fullListB.length]);
         kickerIndex++;
     }
 
@@ -400,8 +404,8 @@ function simulateMatchKnockout(selectionA, playersA, strengthA, selectionB, play
     const { cleanSheetA, cleanSheetB } = calculateCleanSheet(goalsA, goalsB);
     const scorersA = selectGoalscorer(playersA, goalsA);
     const scorersB = selectGoalscorer(playersB, goalsB);
-    const assistsA = selectAssist(playersA, goalsA);
-    const assistsB = selectAssist(playersB, goalsB);
+    const assistsA = selectAssist(playersA, goalsA, scorersA);
+    const assistsB = selectAssist(playersB, goalsB, scorersB);
     const events = generateGoalMinutes(scorersA, selectionA, scorersB, selectionB);
     let shootout = null;
     let { winner, loser } = calculateKnockoutResult(selectionA, goalsA, selectionB, goalsB);
