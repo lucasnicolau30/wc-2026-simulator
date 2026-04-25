@@ -168,8 +168,10 @@ Swagger documentation is available at: - [Swagger](http://localhost:8000/docs)
 - [FIFA Ranking Data](https://inside.fifa.com/fifa-world-ranking/men) -> Last update: 12/04/2026
 - [MySQL Documentation](https://dev.mysql.com/)
 - [Simulator Reference](https://interativos.ge.globo.com/futebol/copa-do-mundo/especial/simulador-da-copa-do-mundo-2026)
+- [Players Reference](https://www.sofascore.com/pt) -> Last update: 24/04/2026
 - [UI Components Inspiration](https://uiverse.io/SamiBouchareb/warm-catfish-72)
 - [UI Components Inspiration](https://uiverse.io/JaydipPrajapati1910/dry-frog-0)
+- [UI Components Inspiration](https://uiverse.io/alexruix/slippery-frog-10)
 
 ## 👨‍💻 Author
 

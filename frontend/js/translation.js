@@ -67,6 +67,7 @@ pt: {
     performanceGoals: "Artilheiros",
     performanceAssists: "Assistências",
     performanceCleanSheets: "Clean Sheets",
+    performanceSearch: "Pesquisar atleta...",
     performanceEmpty: "Os dados de desempenho são gerados a partir da primeira partida simulada.",
     matchesEmpty: "Simule a primeira partida para ver os resultados aqui.",
 
@@ -153,6 +154,7 @@ en: {
     performanceGoals: "Top Scorers",
     performanceAssists: "Assists",
     performanceCleanSheets: "Clean Sheets",
+    performanceSearch: "Search athlete...",
     performanceEmpty: "Performance data is generated from the first simulated match.",
     matchesEmpty: "Simulate the first match to see results here.",
 
@@ -198,6 +200,12 @@ function applyTranslation() {
         const key = el.getAttribute("data-i18n");
         if(t[key]){
             el.textContent = t[key];
+        }
+    });
+    document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+        const key = el.getAttribute("data-i18n-placeholder");
+        if(t[key]){
+            el.placeholder = t[key];
         }
     });
     btnLang.textContent = t.lang;

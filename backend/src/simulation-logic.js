@@ -357,19 +357,63 @@ function simulatePenaltyShootout(playersA, selectionA, playersB, selectionB){
     return { winner, goalsA, goalsB, eventsA, eventsB };
 }
 
-function assignThirds(firsts, thirds){
-    const shuffled = [...thirds].sort(() => Math.random() - 0.5);
-    const assignments = [];
-    const used = new Set();
+const r32ThirdPlaceRules = {
+    E: ['A', 'B', 'C', 'D', 'F'],
+    I: ['C', 'D', 'F', 'G', 'H'],
+    A: ['C', 'E', 'F', 'H', 'I'],
+    L: ['E', 'H', 'I', 'J', 'K'],
+    D: ['B', 'E', 'F', 'I', 'J'],
+    G: ['A', 'E', 'H', 'I', 'J'],
+    B: ['E', 'F', 'G', 'I', 'J'],
+    K: ['D', 'E', 'I', 'J', 'L'],
+};
 
-    for(const first of firsts){
-        const validThird = shuffled.find(t => t.group_id !== first.group_id && !used.has(t.id));
-        
-        // if apenas por precaução, mas não deve acontecer de não encontrar um terceiro válido
-        if(validThird){
-            used.add(validThird.id);
-            assignments.push({ first, third: validThird });
+function assignThirds(firsts, thirds){
+    const thirdsByGroup = {};
+    for(const third of thirds){
+        thirdsByGroup[third.group_name] = third;
+    }
+
+    const slots = firsts.map((first, index) => ({
+        first,
+        index,
+        allowedGroups: r32ThirdPlaceRules[first.group_name].filter(groupName => thirdsByGroup[groupName]),
+    }));
+
+    const orderedSlots = [...slots].sort((a, b) => a.allowedGroups.length - b.allowedGroups.length);
+    const assignments = new Array(firsts.length);
+    const usedGroups = new Set();
+
+    function assignSlot(slotIndex){
+        if(slotIndex === orderedSlots.length){
+            return true;
         }
+
+        const slot = orderedSlots[slotIndex];
+        for(const groupName of slot.allowedGroups){
+            if(usedGroups.has(groupName)){
+                continue;
+            }
+
+            usedGroups.add(groupName);
+            assignments[slot.index] = {
+                first: slot.first,
+                third: thirdsByGroup[groupName],
+            };
+
+            if(assignSlot(slotIndex + 1)){
+                return true;
+            }
+
+            usedGroups.delete(groupName);
+            assignments[slot.index] = null;
+        }
+
+        return false;
+    }
+
+    if(!assignSlot(0)){
+        throw new Error('Nao foi possivel gerar o chaveamento dos terceiros colocados do R32');
     }
 
     return assignments;

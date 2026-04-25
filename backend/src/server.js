@@ -547,6 +547,7 @@ app.get('/matches/:id/events', async(req, res) => {
  */
 app.get('/performance/:metric', async(req, res) => {
     const metric = req.params.metric;
+    const search = req.query.search ? req.query.search.trim() : '';
 
     const metricMap = {
         'goals': 'SUM(pms.goals)',
@@ -558,16 +559,34 @@ app.get('/performance/:metric', async(req, res) => {
     const orderBy = metricMap[metric];
     if(!orderBy){
         return res.status(400).json({ error: 'metric inválido' });
-    } 
+    }
 
-    const [rows] = await pool.query(`SELECT p.name AS player_name, sel.name AS selection_name, p.position,
+    const conditions = [];
+    const params = [];
+
+    if(metric === 'cleanSheets'){
+        conditions.push("p.position = 'GK'");
+    }
+
+    if(search){
+        conditions.push('p.name LIKE ?');
+        params.push(`%${search}%`);
+    }
+
+    const where = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
+
+    const [rows] = await pool.query(
+        `SELECT p.name AS player_name, sel.name AS selection_name, p.position,
         SUM(pms.goals) AS total_goals,
         SUM(pms.assists) AS total_assists,
         SUM(pms.clean_sheet) AS total_clean_sheets,
         AVG(pms.rating) AS average_rating
-        FROM player_match_stats pms JOIN players p ON pms.player_id = p.id JOIN selections sel ON p.selection_id = sel.id GROUP BY pms.player_id, p.name, sel.name, p.position ORDER BY ${orderBy} DESC LIMIT 25`
-    )
-    
+        FROM player_match_stats pms JOIN players p ON pms.player_id = p.id JOIN selections sel ON p.selection_id = sel.id
+        ${where}
+        GROUP BY pms.player_id, p.name, sel.name, p.position ORDER BY ${orderBy} DESC LIMIT 25`,
+        params
+    );
+
     res.json(rows);
 });
 

@@ -238,8 +238,14 @@ async function renderPerformance(){
     }
 
     const metric = document.querySelector("#performance-filter .round-btn.active")?.dataset.metric ?? "rating";
+    const searchTerm = document.getElementById("performance-search")?.value.trim() ?? "";
 
-    const response = await fetch(`${API_BASE_URL}/performance/${metric}`);
+    const url = new URL(`${API_BASE_URL}/performance/${metric}`);
+    if(searchTerm){
+        url.searchParams.set("search", searchTerm);
+    }
+
+    const response = await fetch(url.toString());
     if(!response.ok) return;
     const players = await response.json();
 
@@ -267,12 +273,21 @@ async function renderPerformance(){
     `).join("");
 }
 
+let performanceSearchDebounce = null;
+
 document.querySelectorAll("#performance-filter .round-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll("#performance-filter .round-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
     renderPerformance();
   });
+});
+
+document.getElementById("performance-search")?.addEventListener("input", () => {
+  clearTimeout(performanceSearchDebounce);
+  performanceSearchDebounce = setTimeout(() => {
+    renderPerformance();
+  }, 300);
 });
 
 /* ===== matches (grupos + mata-mata) ===== */

@@ -911,6 +911,70 @@ body.bg-performance {
 }
 
 /* performance */
+.performance-filter-wrap {
+  display: grid !important;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 16px;
+  overflow: visible;
+}
+
+.performance-filter-spacer {
+  /* mirror da largura do search para manter o filtro centrado */
+}
+
+.performance-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-self: end;
+  width: 100%;
+  max-width: 260px;
+}
+
+.performance-search-icon {
+  position: absolute;
+  left: 11px;
+  fill: #F4C542;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+  flex-shrink: 0;
+  z-index: 2;
+}
+
+.performance-search-input {
+  width: 100%;
+  height: 36px;
+  line-height: 36px;
+  padding: 0 12px 0 34px;
+  border: 1px solid rgba(255,196,70,0.22);
+  border-radius: 8px;
+  background: rgba(0,0,0,0.42);
+  color: #fff;
+  font-size: 0.82rem;
+  outline: none;
+  position: relative;
+  z-index: 1;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.performance-search-input::placeholder {
+  color: rgba(255,255,255,0.3);
+}
+
+.performance-search-input:focus,
+.performance-search-input:hover {
+  border-color: rgba(244, 197, 66, 0.55);
+  background: rgba(0,0,0,0.55);
+  box-shadow: 0 0 0 3px rgba(244,197,66,0.1);
+}
+
+.performance-search-input::-webkit-search-cancel-button {
+  filter: invert(1) opacity(0.4);
+  cursor: pointer;
+}
+
 .performance-list {
   width: 100%;
   max-width: 1360px;
@@ -1346,6 +1410,10 @@ body.bg-performance {
   .performance-value {
     justify-self: start;
   }
+
+  .performance-search-wrap {
+    max-width: 210px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -1384,6 +1452,22 @@ body.bg-performance {
   .page-title {
     font-size: clamp(1.55rem, 7vw, 2.2rem);
     line-height: 1.08;
+  }
+
+  .performance-filter-wrap {
+    grid-template-columns: 1fr !important;
+    justify-items: center;
+    gap: 12px;
+  }
+
+  .performance-filter-spacer {
+    display: none;
+  }
+
+  .performance-search-wrap {
+    justify-self: center;
+    max-width: 260px;
+    width: 100%;
   }
 
   .round-btn {

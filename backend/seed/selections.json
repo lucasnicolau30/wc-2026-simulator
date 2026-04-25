@@ -7,7 +7,7 @@
                 "formation": "4-3-3",
                 "players": [
 
-                    { "name": "Guillermo Ochoa", "age": 39, "position": "GK", "rating": 82, "is_starter": true },
+                    { "name": "José Rangel", "age": 26, "position": "GK", "rating": 78, "is_starter": true },
                     { "name": "Luis Malagón", "age": 28, "position": "GK", "rating": 79, "is_starter": false },
                     { "name": "Julio González", "age": 33, "position": "GK", "rating": 76, "is_starter": false },
 
@@ -21,24 +21,24 @@
                     { "name": "Gerardo Arteaga", "age": 26, "position": "DEF", "rating": 79, "is_starter": false },
                     { "name": "Víctor Guzmán", "age": 22, "position": "DEF", "rating": 75, "is_starter": false },
 
-                    { "name": "Edson Álvarez", "age": 27, "position": "MID", "rating": 84, "is_starter": true },
-                    { "name": "Luis Chávez", "age": 29, "position": "MID", "rating": 81, "is_starter": true },
-                    { "name": "Orbelín Pineda", "age": 28, "position": "MID", "rating": 80, "is_starter": true },
+                    { "name": "Erik Lira", "age": 25, "position": "MID", "rating": 77, "is_starter": true },
+                    { "name": "Álvaro Fidalgo", "age": 29, "position": "MID", "rating": 80, "is_starter": true },
+                    { "name": "Orbelín Pineda", "age": 28, "position": "MID", "rating": 81, "is_starter": true },
 
                     { "name": "Carlos Rodríguez", "age": 28, "position": "MID", "rating": 79, "is_starter": false },
                     { "name": "Érick Sánchez", "age": 25, "position": "MID", "rating": 78, "is_starter": false },
                     { "name": "Luis Romo", "age": 29, "position": "MID", "rating": 79, "is_starter": false },
                     { "name": "Fernando Beltrán", "age": 27, "position": "MID", "rating": 77, "is_starter": false },
 
-                    { "name": "Hirving Lozano", "age": 29, "position": "FWD", "rating": 84, "is_starter": true },
+                    { "name": "Hirving Lozano", "age": 29, "position": "FWD", "rating": 84, "is_starter": false },
                     { "name": "Santiago Giménez", "age": 24, "position": "FWD", "rating": 85, "is_starter": true },
-                    { "name": "Jesús Corona", "age": 31, "position": "FWD", "rating": 81, "is_starter": true },
+                    { "name": "Jesús Corona", "age": 31, "position": "FWD", "rating": 81, "is_starter": false },
 
                     { "name": "Alexis Vega", "age": 27, "position": "FWD", "rating": 79, "is_starter": false },
-                    { "name": "Raúl Jiménez", "age": 33, "position": "FWD", "rating": 80, "is_starter": false },
+                    { "name": "Raúl Jiménez", "age": 33, "position": "FWD", "rating": 80, "is_starter": true },
                     { "name": "Uriel Antuna", "age": 27, "position": "FWD", "rating": 78, "is_starter": false },
 
-                    { "name": "Julián Quiñones", "age": 27, "position": "FWD", "rating": 82, "is_starter": false },
+                    { "name": "Julián Quiñones", "age": 27, "position": "FWD", "rating": 82, "is_starter": true },
                     { "name": "Roberto Alvarado", "age": 26, "position": "FWD", "rating": 78, "is_starter": false }
 
                 ]
@@ -77,9 +77,9 @@
                     { "name": "Sipho Mbule", "age": 26, "position": "MID", "rating": 76, "is_starter": false },
 
                     { "name": "Zakhele Lepasa", "age": 27, "position": "FWD", "rating": 77, "is_starter": false },
-                    { "name": "Lyle Foster", "age": 24, "position": "FWD", "rating": 79, "is_starter": false },
+                    { "name": "Lyle Foster", "age": 24, "position": "FWD", "rating": 79, "is_starter": true },
                     { "name": "Bongokuhle Hlongwane", "age": 24, "position": "FWD", "rating": 76, "is_starter": false },
-                    { "name": "Bradley Grobler", "age": 35, "position": "FWD", "rating": 76, "is_starter": true },
+                    { "name": "Bradley Grobler", "age": 35, "position": "FWD", "rating": 76, "is_starter": false },
 
                     { "name": "Cassius Mailula", "age": 23, "position": "FWD", "rating": 75, "is_starter": false },
                     { "name": "Elias Mokwana", "age": 25, "position": "FWD", "rating": 75, "is_starter": false },
@@ -109,16 +109,16 @@
                     { "name": "Hong Chul", "age": 34, "position": "DEF", "rating": 76, "is_starter": false },
                     { "name": "Park Ji-su", "age": 30, "position": "DEF", "rating": 77, "is_starter": false },
 
-                    { "name": "Hwang In-beom", "age": 28, "position": "MID", "rating": 83, "is_starter": true },
-                    { "name": "Lee Kang-in", "age": 24, "position": "MID", "rating": 85, "is_starter": true },
-                    { "name": "Jung Woo-young", "age": 34, "position": "MID", "rating": 79, "is_starter": true },
+                    { "name": "Kim Jin-gyu", "age": 29, "position": "MID", "rating": 78, "is_starter": true },
+                    { "name": "Lee Tae-seok", "age": 23, "position": "MID", "rating": 77, "is_starter": true },
+                    { "name": "Jung Woo-young", "age": 34, "position": "MID", "rating": 79, "is_starter": false },
+                    { "name": "Paik Seung-ho", "age": 29, "position": "MID", "rating": 79, "is_starter": false },
 
-                    { "name": "Paik Seung-ho", "age": 27, "position": "MID", "rating": 79, "is_starter": false },
-                    { "name": "Lee Jae-sung", "age": 32, "position": "MID", "rating": 82, "is_starter": false },
-                    { "name": "Son Jun-ho", "age": 31, "position": "MID", "rating": 79, "is_starter": false },
 
+                    { "name": "Lee Kang-in", "age": 24, "position": "FWD", "rating": 85, "is_starter": true },
+                    { "name": "Lee Jae-sung", "age": 32, "position": "FWD", "rating": 82, "is_starter": true },
                     { "name": "Son Heung-min", "age": 32, "position": "FWD", "rating": 89, "is_starter": true },
-                    { "name": "Hwang Hee-chan", "age": 28, "position": "FWD", "rating": 83, "is_starter": true },
+                    { "name": "Hwang Hee-chan", "age": 28, "position": "FWD", "rating": 83, "is_starter": false },
                     { "name": "Cho Gue-sung", "age": 26, "position": "FWD", "rating": 81, "is_starter": true },
 
                     { "name": "Hwang Ui-jo", "age": 32, "position": "FWD", "rating": 79, "is_starter": false },
@@ -139,14 +139,14 @@
                 "formation": "4-2-3-1",
                 "players": [
 
-                    { "name": "Jiri Pavlenka", "age": 32, "position": "GK", "rating": 80, "is_starter": true },
+                    { "name": "Jiri Pavlenka", "age": 32, "position": "GK", "rating": 80, "is_starter": false },
                     { "name": "Tomas Vaclik", "age": 35, "position": "GK", "rating": 79, "is_starter": false },
-                    { "name": "Matej Kovar", "age": 25, "position": "GK", "rating": 78, "is_starter": false },
+                    { "name": "Matej Kovar", "age": 25, "position": "GK", "rating": 81, "is_starter": true },
 
                     { "name": "Vladimir Coufal", "age": 32, "position": "DEF", "rating": 81, "is_starter": true },
-                    { "name": "Tomas Holes", "age": 31, "position": "DEF", "rating": 80, "is_starter": true },
-                    { "name": "Jakub Brabec", "age": 32, "position": "DEF", "rating": 79, "is_starter": true },
-                    { "name": "David Jurasek", "age": 24, "position": "DEF", "rating": 78, "is_starter": true },
+                    { "name": "Tomas Holes", "age": 31, "position": "DEF", "rating": 79, "is_starter": true },
+                    { "name": "Jakub Brabec", "age": 32, "position": "DEF", "rating": 78, "is_starter": true },
+                    { "name": "David Jurasek", "age": 24, "position": "DEF", "rating": 77, "is_starter": true },
 
                     { "name": "Ladislav Krejci", "age": 25, "position": "DEF", "rating": 80, "is_starter": false },
                     { "name": "Ales Mateju", "age": 28, "position": "DEF", "rating": 78, "is_starter": false },
@@ -154,12 +154,12 @@
                     { "name": "Jaroslav Zeleny", "age": 32, "position": "DEF", "rating": 77, "is_starter": false },
 
                     { "name": "Tomas Soucek", "age": 29, "position": "MID", "rating": 84, "is_starter": true },
-                    { "name": "Antonin Barak", "age": 30, "position": "MID", "rating": 82, "is_starter": true },
+                    { "name": "Antonin Barak", "age": 30, "position": "MID", "rating": 80, "is_starter": true },
                     { "name": "Lukas Provod", "age": 27, "position": "MID", "rating": 78, "is_starter": false },
 
                     { "name": "Vladimir Darida", "age": 33, "position": "MID", "rating": 80, "is_starter": true },
-                    { "name": "Vaclav Cerny", "age": 27, "position": "MID", "rating": 81, "is_starter": true },
-                    { "name": "Adam Hlozek", "age": 22, "position": "MID", "rating": 83, "is_starter": true },
+                    { "name": "Vaclav Cerny", "age": 27, "position": "MID", "rating": 79, "is_starter": true },
+                    { "name": "Adam Hlozek", "age": 22, "position": "MID", "rating": 80, "is_starter": true },
 
                     { "name": "Alex Kral", "age": 26, "position": "MID", "rating": 79, "is_starter": false },
                     { "name": "Petr Sevcik", "age": 30, "position": "MID", "rating": 78, "is_starter": false },
@@ -359,28 +359,28 @@
                 "formation": "4-3-3",
                 "players": [
 
-                    { "name": "Alisson", "age": 32, "position": "GK", "rating": 89, "is_starter": true },
+                    { "name": "Alisson", "age": 32, "position": "GK", "rating": 90, "is_starter": true },
                     { "name": "Ederson", "age": 31, "position": "GK", "rating": 88, "is_starter": false },
                     { "name": "Bento", "age": 25, "position": "GK", "rating": 80, "is_starter": false },
 
                     { "name": "Danilo", "age": 33, "position": "DEF", "rating": 83, "is_starter": false },
                     { "name": "Marquinhos", "age": 30, "position": "DEF", "rating": 87, "is_starter": true },
-                    { "name": "Gabriel Magalhães", "age": 27, "position": "DEF", "rating": 88, "is_starter": true },
-                    { "name": "Wendell", "age": 31, "position": "DEF", "rating": 82, "is_starter": true },
+                    { "name": "Gabriel Magalhães", "age": 27, "position": "DEF", "rating": 89, "is_starter": true },
+                    { "name": "Wesley", "age": 22, "position": "DEF", "rating": 85, "is_starter": true },
 
-                    { "name": "Éder Militão", "age": 27, "position": "DEF", "rating": 86, "is_starter": true },
+                    { "name": "Éder Militão", "age": 27, "position": "DEF", "rating": 86, "is_starter": false },
                     { "name": "Bremer", "age": 27, "position": "DEF", "rating": 85, "is_starter": false },
-                    { "name": "Yan Couto", "age": 22, "position": "DEF", "rating": 81, "is_starter": false },
+                    { "name": "Douglas Santos", "age": 22, "position": "DEF", "rating": 84, "is_starter": true },
                     { "name": "Renan Lodi", "age": 26, "position": "DEF", "rating": 81, "is_starter": false },
 
-                    { "name": "Bruno Guimarães", "age": 27, "position": "MID", "rating": 86, "is_starter": true },
+                    { "name": "Bruno Guimarães", "age": 27, "position": "MID", "rating": 87, "is_starter": true },
                     { "name": "Lucas Paquetá", "age": 27, "position": "MID", "rating": 85, "is_starter": false },
-                    { "name": "Neymar", "age": 33, "position": "MID", "rating": 90, "is_starter": true },
+                    { "name": "Casemiro", "age": 26, "position": "MID", "rating": 85, "is_starter": true },
 
-                    { "name": "Casemiro", "age": 26, "position": "MID", "rating": 85, "is_starter": false },
                     { "name": "João Gomes", "age": 23, "position": "MID", "rating": 82, "is_starter": false },
                     { "name": "Andreas Pereira", "age": 29, "position": "MID", "rating": 81, "is_starter": false },
-
+                    
+                    { "name": "Neymar", "age": 33, "position": "FWD", "rating": 90, "is_starter": true },
                     { "name": "Vinicius Jr", "age": 24, "position": "FWD", "rating": 92, "is_starter": true },
                     { "name": "Rodrygo", "age": 24, "position": "FWD", "rating": 88, "is_starter": false },
                     { "name": "Richarlison", "age": 28, "position": "FWD", "rating": 85, "is_starter": false },
@@ -403,20 +403,20 @@
                 "formation": "4-3-3",
                 "players": [
 
-                    { "name": "Yassine Bounou", "age": 33, "position": "GK", "rating": 86, "is_starter": true },
+                    { "name": "Yassine Bounou", "age": 33, "position": "GK", "rating": 87, "is_starter": true },
                     { "name": "Munir Mohamedi", "age": 35, "position": "GK", "rating": 80, "is_starter": false },
                     { "name": "Ahmed Reda Tagnaouti", "age": 28, "position": "GK", "rating": 77, "is_starter": false },
 
-                    { "name": "Achraf Hakimi", "age": 26, "position": "DEF", "rating": 88, "is_starter": true },
+                    { "name": "Achraf Hakimi", "age": 26, "position": "DEF", "rating": 90, "is_starter": true },
                     { "name": "Romain Saïss", "age": 35, "position": "DEF", "rating": 83, "is_starter": true },
                     { "name": "Nayef Aguerd", "age": 28, "position": "DEF", "rating": 84, "is_starter": true },
-                    { "name": "Noussair Mazraoui", "age": 27, "position": "DEF", "rating": 85, "is_starter": true },
+                    { "name": "Noussair Mazraoui", "age": 27, "position": "DEF", "rating": 83, "is_starter": true },
                     { "name": "Adam Masina", "age": 30, "position": "DEF", "rating": 81, "is_starter": false },
                     { "name": "Badr Benoun", "age": 30, "position": "DEF", "rating": 80, "is_starter": false },
                     { "name": "Yahia Attiyat Allah", "age": 28, "position": "DEF", "rating": 80, "is_starter": false },
                     { "name": "Jawad El Yamiq", "age": 32, "position": "DEF", "rating": 81, "is_starter": false },
 
-                    { "name": "Sofyan Amrabat", "age": 28, "position": "MID", "rating": 85, "is_starter": true },
+                    { "name": "Sofyan Amrabat", "age": 28, "position": "MID", "rating": 83, "is_starter": true },
                     { "name": "Azzedine Ounahi", "age": 25, "position": "MID", "rating": 83, "is_starter": true },
                     { "name": "Selim Amallah", "age": 28, "position": "MID", "rating": 82, "is_starter": true },
                     { "name": "Bilal El Khannouss", "age": 21, "position": "MID", "rating": 81, "is_starter": false },
@@ -425,13 +425,13 @@
                     { "name": "Yahya Jabrane", "age": 34, "position": "MID", "rating": 79, "is_starter": false },
 
                     { "name": "Zakaria Aboukhlal", "age": 24, "position": "FWD", "rating": 80, "is_starter": false },
-                    { "name": "Hakim Ziyech", "age": 32, "position": "FWD", "rating": 85, "is_starter": true },
+                    { "name": "Hakim Ziyech", "age": 32, "position": "FWD", "rating": 84, "is_starter": true },
                     { "name": "Youssef En-Nesyri", "age": 28, "position": "FWD", "rating": 84, "is_starter": true },
                     { "name": "Sofiane Boufal", "age": 31, "position": "FWD", "rating": 83, "is_starter": false },
                     { "name": "Anass Zaroury", "age": 24, "position": "FWD", "rating": 81, "is_starter": false },
                     { "name": "Ryan Mmaee", "age": 27, "position": "FWD", "rating": 80, "is_starter": false },
                     { "name": "Walid Cheddira", "age": 27, "position": "FWD", "rating": 81, "is_starter": false },
-                    { "name": "Ibrahim Diaz", "age": 23, "position": "FWD", "rating": 84, "is_starter": true }
+                    { "name": "Brahim Diaz", "age": 23, "position": "FWD", "rating": 86, "is_starter": true }
 
                 ]
         },
@@ -442,17 +442,17 @@
                 "ranking": 83,
                 "formation": "4-2-3-1",
                 "players": [
-                    { "name": "Alexandre Pierre", "age": 24, "position": "GK", "rating": 72, "is_starter": true },
+                    { "name": "Alexandre Pierre", "age": 24, "position": "GK", "rating": 74, "is_starter": true },
                     { "name": "Johny Placide", "age": 37, "position": "GK", "rating": 73, "is_starter": false },
                     { "name": "Garissone Innocent", "age": 25, "position": "GK", "rating": 71, "is_starter": false },
 
-                    { "name": "Carlens Arcus", "age": 28, "position": "DEF", "rating": 74, "is_starter": true },
-                    { "name": "Ricardo Adé", "age": 34, "position": "DEF", "rating": 75, "is_starter": true },
+                    { "name": "Carlens Arcus", "age": 28, "position": "DEF", "rating": 77, "is_starter": true },
+                    { "name": "Ricardo Adé", "age": 34, "position": "DEF", "rating": 78, "is_starter": true },
                     { "name": "Jean-Kévin Duverne", "age": 27, "position": "DEF", "rating": 76, "is_starter": true },
-                    { "name": "Leverton Pierre", "age": 26, "position": "DEF", "rating": 72, "is_starter": true },
+                    { "name": "Leverton Pierre", "age": 26, "position": "DEF", "rating": 72, "is_starter": false },
 
                     { "name": "Jeppe Simonsen", "age": 29, "position": "DEF", "rating": 72, "is_starter": false },
-                    { "name": "Alex Christian Jr", "age": 31, "position": "DEF", "rating": 72, "is_starter": false },
+                    { "name": "Alex Christian Jr", "age": 31, "position": "DEF", "rating": 76, "is_starter": true },
                     { "name": "Frantzdy Pierrot", "age": 29, "position": "DEF", "rating": 70, "is_starter": false },
                     { "name": "Mechack Jérôme", "age": 35, "position": "DEF", "rating": 71, "is_starter": false },
 
@@ -461,8 +461,8 @@
                     { "name": "Derrick Etienne Jr", "age": 28, "position": "MID", "rating": 74, "is_starter": true },
 
                     { "name": "Louicius Don Deedson", "age": 24, "position": "MID", "rating": 74, "is_starter": true },
-                    { "name": "Fafà Picault", "age": 34, "position": "MID", "rating": 75, "is_starter": true },
-                    { "name": "Duckens Nazon", "age": 31, "position": "MID", "rating": 76, "is_starter": true },
+                    { "name": "Fafà Picault", "age": 34, "position": "MID", "rating": 75, "is_starter": false },
+                    { "name": "Duckens Nazon", "age": 31, "position": "MID", "rating": 79, "is_starter": true },
 
                     { "name": "Steeven Saba", "age": 27, "position": "MID", "rating": 72, "is_starter": false },
                     { "name": "Wilson Isidor", "age": 24, "position": "MID", "rating": 71, "is_starter": false },
@@ -473,7 +473,7 @@
                     { "name": "Bicou Bissainthe", "age": 25, "position": "FWD", "rating": 70, "is_starter": false },
 
                     { "name": "Ronaldo Damus", "age": 25, "position": "FWD", "rating": 72, "is_starter": false },
-                    { "name": "Carnejy Antoine", "age": 34, "position": "FWD", "rating": 71, "is_starter": false },
+                    { "name": "Carnejy Antoine", "age": 34, "position": "FWD", "rating": 77, "is_starter": true },
                     { "name": "Jayro Jean", "age": 26, "position": "FWD", "rating": 70, "is_starter": false }
 
                 ]
@@ -485,13 +485,13 @@
                 "ranking": 43,
                 "formation": "3-4-2-1",
                 "players": [
-                    { "name": "Angus Gunn", "age": 29, "position": "GK", "rating": 81, "is_starter": true },
+                    { "name": "Angus Gunn", "age": 29, "position": "GK", "rating": 80, "is_starter": true },
                     { "name": "Zander Clark", "age": 32, "position": "GK", "rating": 77, "is_starter": false },
                     { "name": "Liam Kelly", "age": 29, "position": "GK", "rating": 76, "is_starter": false },
 
                     { "name": "Jack Hendry", "age": 29, "position": "DEF", "rating": 80, "is_starter": true },
-                    { "name": "Scott McKenna", "age": 28, "position": "DEF", "rating": 79, "is_starter": true },
-                    { "name": "Kieran Tierney", "age": 27, "position": "DEF", "rating": 83, "is_starter": true },
+                    { "name": "Scott McKenna", "age": 28, "position": "DEF", "rating": 80, "is_starter": true },
+                    { "name": "Kieran Tierney", "age": 27, "position": "DEF", "rating": 84, "is_starter": true },
 
                     { "name": "Ryan Porteous", "age": 26, "position": "DEF", "rating": 77, "is_starter": false },
                     { "name": "Grant Hanley", "age": 33, "position": "DEF", "rating": 77, "is_starter": false },
@@ -499,9 +499,9 @@
                     { "name": "John Souttar", "age": 28, "position": "DEF", "rating": 77, "is_starter": false },
 
                     { "name": "Andy Robertson", "age": 31, "position": "MID", "rating": 85, "is_starter": true },
-                    { "name": "Aaron Hickey", "age": 22, "position": "MID", "rating": 80, "is_starter": true },
+                    { "name": "Aaron Hickey", "age": 22, "position": "MID", "rating": 83, "is_starter": true },
                     { "name": "Billy Gilmour", "age": 23, "position": "MID", "rating": 82, "is_starter": true },
-                    { "name": "Scott McTominay", "age": 28, "position": "MID", "rating": 84, "is_starter": true },
+                    { "name": "Scott McTominay", "age": 28, "position": "MID", "rating": 87, "is_starter": true },
 
                     { "name": "Callum McGregor", "age": 31, "position": "MID", "rating": 82, "is_starter": true },
                     { "name": "Kenny McLean", "age": 33, "position": "MID", "rating": 79, "is_starter": false },
@@ -512,7 +512,7 @@
                     { "name": "Lewis Ferguson", "age": 25, "position": "MID", "rating": 81, "is_starter": false },
                     { "name": "Ryan Gauld", "age": 29, "position": "MID", "rating": 79, "is_starter": false },
 
-                    { "name": "Che Adams", "age": 28, "position": "FWD", "rating": 80, "is_starter": true },
+                    { "name": "Che Adams", "age": 28, "position": "FWD", "rating": 81, "is_starter": true },
                     { "name": "Lyndon Dykes", "age": 29, "position": "FWD", "rating": 78, "is_starter": false },
                     { "name": "Lawrence Shankland", "age": 29, "position": "FWD", "rating": 79, "is_starter": false },
                     { "name": "Ben Doak", "age": 19, "position": "FWD", "rating": 76, "is_starter": false },
@@ -532,9 +532,9 @@
                     { "name": "Ethan Horvath", "age": 29, "position": "GK", "rating": 79, "is_starter": false },
                     { "name": "Drake Callender", "age": 27, "position": "GK", "rating": 78, "is_starter": false },
 
-                    { "name": "Sergiño Dest", "age": 24, "position": "DEF", "rating": 82, "is_starter": true },
-                    { "name": "Chris Richards", "age": 24, "position": "DEF", "rating": 81, "is_starter": true },
-                    { "name": "Tim Ream", "age": 37, "position": "DEF", "rating": 80, "is_starter": true },
+                    { "name": "Sergiño Dest", "age": 24, "position": "DEF", "rating": 83, "is_starter": true },
+                    { "name": "Chris Richards", "age": 24, "position": "DEF", "rating": 82, "is_starter": true },
+                    { "name": "Tim Ream", "age": 37, "position": "DEF", "rating": 81, "is_starter": true },
                     { "name": "Antonee Robinson", "age": 27, "position": "DEF", "rating": 84, "is_starter": true },
 
                     { "name": "Walker Zimmerman", "age": 31, "position": "DEF", "rating": 80, "is_starter": false },
@@ -542,7 +542,7 @@
                     { "name": "Miles Robinson", "age": 27, "position": "DEF", "rating": 80, "is_starter": false },
                     { "name": "Mark McKenzie", "age": 25, "position": "DEF", "rating": 79, "is_starter": false },
 
-                    { "name": "Tyler Adams", "age": 26, "position": "MID", "rating": 84, "is_starter": true },
+                    { "name": "Tyler Adams", "age": 26, "position": "MID", "rating": 85, "is_starter": true },
                     { "name": "Weston McKennie", "age": 26, "position": "MID", "rating": 84, "is_starter": true },
                     { "name": "Yunus Musah", "age": 22, "position": "MID", "rating": 83, "is_starter": true },
 
@@ -551,8 +551,8 @@
                     { "name": "Brenden Aaronson", "age": 24, "position": "MID", "rating": 81, "is_starter": false },
 
                     { "name": "Christian Pulisic", "age": 26, "position": "FWD", "rating": 86, "is_starter": true },
-                    { "name": "Timothy Weah", "age": 25, "position": "FWD", "rating": 82, "is_starter": true },
-                    { "name": "Folarin Balogun", "age": 24, "position": "FWD", "rating": 84, "is_starter": true },
+                    { "name": "Timothy Weah", "age": 25, "position": "FWD", "rating": 83, "is_starter": true },
+                    { "name": "Folarin Balogun", "age": 24, "position": "FWD", "rating": 83, "is_starter": true },
 
                     { "name": "Josh Sargent", "age": 25, "position": "FWD", "rating": 82, "is_starter": false },
                     { "name": "Ricardo Pepi", "age": 22, "position": "FWD", "rating": 83, "is_starter": false },
@@ -572,30 +572,30 @@
                 "ranking": 40,
                 "formation": "4-3-3",
                 "players": [
-                    { "name": "Antony Silva", "age": 38, "position": "GK", "rating": 78, "is_starter": true },
+                    { "name": "Carlos Coronel", "age": 29, "position": "GK", "rating": 81, "is_starter": true },
                     { "name": "Rodrigo Muñoz", "age": 29, "position": "GK", "rating": 77, "is_starter": false },
                     { "name": "Alfredo Aguilar", "age": 27, "position": "GK", "rating": 74, "is_starter": false },
 
                     { "name": "Fabián Balbuena", "age": 33, "position": "DEF", "rating": 81, "is_starter": true },
-                    { "name": "Gustavo Gómez", "age": 31, "position": "DEF", "rating": 82, "is_starter": true },
-                    { "name": "Omar Alderete", "age": 27, "position": "DEF", "rating": 80, "is_starter": true },
-                    { "name": "Júnior Alonso", "age": 31, "position": "DEF", "rating": 80, "is_starter": true },
+                    { "name": "Gustavo Gómez", "age": 31, "position": "DEF", "rating": 83, "is_starter": true },
+                    { "name": "Omar Alderete", "age": 27, "position": "DEF", "rating": 82, "is_starter": true },
+                    { "name": "Júnior Alonso", "age": 31, "position": "DEF", "rating": 81, "is_starter": true },
                     { "name": "Santiago Arzamendia", "age": 27, "position": "DEF", "rating": 79, "is_starter": false },
                     { "name": "Robert Rojas", "age": 28, "position": "DEF", "rating": 79, "is_starter": false },
                     { "name": "Blas Riveros", "age": 27, "position": "DEF", "rating": 78, "is_starter": false },
                     { "name": "Alberto Espínola", "age": 26, "position": "DEF", "rating": 77, "is_starter": false },
 
                     { "name": "Miguel Almirón", "age": 31, "position": "MID", "rating": 84, "is_starter": true },
-                    { "name": "Mathías Villasanti", "age": 27, "position": "MID", "rating": 81, "is_starter": true },
-                    { "name": "Andrés Cubas", "age": 28, "position": "MID", "rating": 80, "is_starter": true },
+                    { "name": "Mathías Villasanti", "age": 27, "position": "MID", "rating": 83, "is_starter": true },
+                    { "name": "Andrés Cubas", "age": 28, "position": "MID", "rating": 81, "is_starter": true },
                     { "name": "Richard Sánchez", "age": 29, "position": "MID", "rating": 80, "is_starter": false },
                     { "name": "Ángel Cardozo", "age": 26, "position": "MID", "rating": 78, "is_starter": false },
                     { "name": "Braian Samudio", "age": 24, "position": "MID", "rating": 77, "is_starter": false },
                     { "name": "Damián Bobadilla", "age": 25, "position": "MID", "rating": 78, "is_starter": false },
 
-                    { "name": "Antonio Sanabria", "age": 29, "position": "FWD", "rating": 82, "is_starter": true },
+                    { "name": "Ramon Sosa", "age": 26, "position": "FWD", "rating": 82, "is_starter": true },   
                     { "name": "Alejandro Romero Gamarra", "age": 24, "position": "FWD", "rating": 81, "is_starter": true },
-                    { "name": "Julio Enciso", "age": 21, "position": "FWD", "rating": 82, "is_starter": true },
+                    { "name": "Julio Enciso", "age": 21, "position": "FWD", "rating": 84, "is_starter": true },
                     { "name": "Óscar Romero", "age": 32, "position": "FWD", "rating": 80, "is_starter": false },
                     { "name": "Adam Bareiro", "age": 27, "position": "FWD", "rating": 79, "is_starter": false },
                     { "name": "Derlis González", "age": 30, "position": "FWD", "rating": 79, "is_starter": false },
@@ -611,13 +611,13 @@
                 "formation": "4-2-3-1",
                 "players": [
 
-                    { "name": "Mathew Ryan", "age": 33, "position": "GK", "rating": 83, "is_starter": true },
+                    { "name": "Mathew Ryan", "age": 33, "position": "GK", "rating": 82, "is_starter": true },
                     { "name": "Joe Gauci", "age": 24, "position": "GK", "rating": 78, "is_starter": false },
                     { "name": "Andrew Redmayne", "age": 36, "position": "GK", "rating": 77, "is_starter": false },
 
-                    { "name": "Nathaniel Atkinson", "age": 25, "position": "DEF", "rating": 79, "is_starter": true },
-                    { "name": "Harry Souttar", "age": 26, "position": "DEF", "rating": 82, "is_starter": true },
-                    { "name": "Kye Rowles", "age": 26, "position": "DEF", "rating": 80, "is_starter": true },
+                    { "name": "Nathaniel Atkinson", "age": 25, "position": "DEF", "rating": 80, "is_starter": true },
+                    { "name": "Harry Souttar", "age": 26, "position": "DEF", "rating": 83, "is_starter": true },
+                    { "name": "Kye Rowles", "age": 26, "position": "DEF", "rating": 81, "is_starter": true },
                     { "name": "Aziz Behich", "age": 34, "position": "DEF", "rating": 80, "is_starter": true },
 
                     { "name": "Milos Degenek", "age": 30, "position": "DEF", "rating": 79, "is_starter": false },
@@ -625,14 +625,14 @@
                     { "name": "Jordan Bos", "age": 22, "position": "DEF", "rating": 80, "is_starter": false },
                     { "name": "Thomas Deng", "age": 28, "position": "DEF", "rating": 78, "is_starter": false },
 
-                    { "name": "Jackson Irvine", "age": 32, "position": "MID", "rating": 81, "is_starter": true },
+                    { "name": "Jackson Irvine", "age": 32, "position": "MID", "rating": 82, "is_starter": true },
                     { "name": "Ajdin Hrustic", "age": 28, "position": "MID", "rating": 82, "is_starter": true },
 
-                    { "name": "Keanu Baccus", "age": 26, "position": "MID", "rating": 79, "is_starter": true },
+                    { "name": "Keanu Baccus", "age": 26, "position": "MID", "rating": 80, "is_starter": true },
                     { "name": "Aiden O'Neill", "age": 26, "position": "MID", "rating": 80, "is_starter": true },
-                    { "name": "Riley McGree", "age": 26, "position": "MID", "rating": 81, "is_starter": true },
+                    { "name": "Riley McGree", "age": 26, "position": "MID", "rating": 81, "is_starter": false },
 
-                    { "name": "Craig Goodwin", "age": 33, "position": "MID", "rating": 80, "is_starter": false },
+                    { "name": "Craig Goodwin", "age": 33, "position": "MID", "rating": 81, "is_starter": true },
                     { "name": "Marco Tilio", "age": 23, "position": "MID", "rating": 78, "is_starter": false },
                     { "name": "Nestory Irankunda", "age": 19, "position": "MID", "rating": 80, "is_starter": false },
                     { "name": "Connor Metcalfe", "age": 24, "position": "MID", "rating": 78, "is_starter": false },
@@ -655,14 +655,14 @@
                 "formation": "4-2-3-1",
                 "players": [
 
-                    { "name": "Altay Bayindir", "age": 27, "position": "GK", "rating": 82, "is_starter": true },
-                    { "name": "Uğurcan Çakir", "age": 28, "position": "GK", "rating": 83, "is_starter": false },
+                    { "name": "Altay Bayindir", "age": 27, "position": "GK", "rating": 82, "is_starter": false },
+                    { "name": "Uğurcan Çakir", "age": 28, "position": "GK", "rating": 83, "is_starter": true },
                     { "name": "Doğan Alemdar", "age": 22, "position": "GK", "rating": 77, "is_starter": false },
 
-                    { "name": "Zeki Çelik", "age": 28, "position": "DEF", "rating": 81, "is_starter": true },
+                    { "name": "Zeki Çelik", "age": 28, "position": "DEF", "rating": 82, "is_starter": true },
                     { "name": "Merih Demiral", "age": 27, "position": "DEF", "rating": 83, "is_starter": true },
-                    { "name": "Abdülkerim Bardakci", "age": 30, "position": "DEF", "rating": 81, "is_starter": true },
-                    { "name": "Ferdi Kadioğlu", "age": 25, "position": "DEF", "rating": 84, "is_starter": true },
+                    { "name": "Abdülkerim Bardakci", "age": 30, "position": "DEF", "rating": 82, "is_starter": true },
+                    { "name": "Ferdi Kadioğlu", "age": 25, "position": "DEF", "rating": 85, "is_starter": true },
 
                     { "name": "Çağlar Söyüncü", "age": 28, "position": "DEF", "rating": 83, "is_starter": false },
                     { "name": "Ozan Kabak", "age": 25, "position": "DEF", "rating": 81, "is_starter": false },
@@ -670,23 +670,23 @@
                     { "name": "Mert Müldür", "age": 26, "position": "DEF", "rating": 80, "is_starter": false },
 
                     { "name": "Hakan Çalhanoğlu", "age": 31, "position": "MID", "rating": 86, "is_starter": true },
-                    { "name": "Orkun Kökçü", "age": 24, "position": "MID", "rating": 84, "is_starter": true },
+                    { "name": "Orkun Kökçü", "age": 24, "position": "MID", "rating": 85, "is_starter": true },
 
-                    { "name": "Salih Özcan", "age": 27, "position": "MID", "rating": 82, "is_starter": true },
-                    { "name": "İsmail Yüksek", "age": 26, "position": "MID", "rating": 81, "is_starter": true },
-                    { "name": "Arda Güler", "age": 20, "position": "MID", "rating": 85, "is_starter": true },
+                    { "name": "Salih Özcan", "age": 27, "position": "MID", "rating": 82, "is_starter": false },
+                    { "name": "İsmail Yüksek", "age": 26, "position": "MID", "rating": 81, "is_starter": false },
+                    { "name": "Arda Güler", "age": 20, "position": "MID", "rating": 87, "is_starter": true },
 
                     { "name": "Yusuf Yazici", "age": 28, "position": "MID", "rating": 82, "is_starter": false },
-                    { "name": "Kerem Aktürkoğlu", "age": 26, "position": "MID", "rating": 83, "is_starter": false },
-                    { "name": "Bariş Alper Yilmaz", "age": 24, "position": "MID", "rating": 81, "is_starter": false },
+                    { "name": "Kerem Aktürkoğlu", "age": 26, "position": "MID", "rating": 83, "is_starter": true },
+                    { "name": "Bariş Alper Yilmaz", "age": 24, "position": "MID", "rating": 82, "is_starter": true },
                     { "name": "Okay Yokuşlu", "age": 30, "position": "MID", "rating": 81, "is_starter": false },
 
                     { "name": "Cenk Tosun", "age": 34, "position": "FWD", "rating": 80, "is_starter": false },
-                    { "name": "Enes Ünal", "age": 28, "position": "FWD", "rating": 83, "is_starter": true },
+                    { "name": "Enes Ünal", "age": 28, "position": "FWD", "rating": 83, "is_starter": false },
                     { "name": "Bertug Yildirim", "age": 22, "position": "FWD", "rating": 79, "is_starter": false },
 
                     { "name": "Semih Kiliçsoy", "age": 19, "position": "FWD", "rating": 80, "is_starter": false },
-                    { "name": "Kenan Yildiz", "age": 20, "position": "FWD", "rating": 83, "is_starter": false },
+                    { "name": "Kenan Yildiz", "age": 20, "position": "FWD", "rating": 83, "is_starter": true },
                     { "name": "Halil Dervişoğlu", "age": 25, "position": "FWD", "rating": 79, "is_starter": false }
 
                 ]
@@ -702,22 +702,22 @@
                     { "name": "Oliver Baumann", "age": 34, "position": "GK", "rating": 82, "is_starter": false },
                     { "name": "Alexander Nübel", "age": 28, "position": "GK", "rating": 81, "is_starter": false },
 
-                    { "name": "Joshua Kimmich", "age": 31, "position": "DEF", "rating": 87, "is_starter": true },
-                    { "name": "Antonio Rüdiger", "age": 33, "position": "DEF", "rating": 88, "is_starter": true },
-                    { "name": "Jonathan Tah", "age": 30, "position": "DEF", "rating": 85, "is_starter": true },
-                    { "name": "Maximilian Mittelstädt", "age": 29, "position": "DEF", "rating": 82, "is_starter": true },
+                    { "name": "Joshua Kimmich", "age": 31, "position": "DEF", "rating": 88, "is_starter": true },
+                    { "name": "Antonio Rüdiger", "age": 33, "position": "DEF", "rating": 86, "is_starter": true },
+                    { "name": "Jonathan Tah", "age": 30, "position": "DEF", "rating": 87, "is_starter": true },
+                    { "name": "Maximilian Mittelstädt", "age": 29, "position": "DEF", "rating": 82, "is_starter": false },
 
                     { "name": "Nico Schlotterbeck", "age": 27, "position": "DEF", "rating": 84, "is_starter": false },
-                    { "name": "David Raum", "age": 28, "position": "DEF", "rating": 82, "is_starter": false },
+                    { "name": "David Raum", "age": 28, "position": "DEF", "rating": 83, "is_starter": true },
                     { "name": "Benjamin Henrichs", "age": 29, "position": "DEF", "rating": 81, "is_starter": false },
                     { "name": "Waldemar Anton", "age": 29, "position": "DEF", "rating": 81, "is_starter": false },
 
                     { "name": "Robert Andrich", "age": 31, "position": "MID", "rating": 83, "is_starter": true },
-                    { "name": "Pascal Groß", "age": 34, "position": "MID", "rating": 84, "is_starter": true },
+                    { "name": "Pascal Groß", "age": 34, "position": "MID", "rating": 84, "is_starter": false },
 
                     { "name": "Jamal Musiala", "age": 23, "position": "MID", "rating": 90, "is_starter": true },
-                    { "name": "Florian Wirtz", "age": 22, "position": "MID", "rating": 90, "is_starter": true },
-                    { "name": "Leroy Sané", "age": 30, "position": "MID", "rating": 86, "is_starter": true },
+                    { "name": "Florian Wirtz", "age": 22, "position": "MID", "rating": 88, "is_starter": true },
+                    { "name": "Leroy Sané", "age": 30, "position": "MID", "rating": 85, "is_starter": true },
 
                     { "name": "Emre Can", "age": 32, "position": "MID", "rating": 81, "is_starter": false },
                     { "name": "Aleksandar Pavlović", "age": 21, "position": "MID", "rating": 82, "is_starter": false },
@@ -725,7 +725,7 @@
 
                     { "name": "Kai Havertz", "age": 27, "position": "FWD", "rating": 86, "is_starter": true },
                     { "name": "Niclas Füllkrug", "age": 33, "position": "FWD", "rating": 83, "is_starter": false },
-                    { "name": "Deniz Undav", "age": 29, "position": "FWD", "rating": 83, "is_starter": false },
+                    { "name": "Deniz Undav", "age": 29, "position": "FWD", "rating": 83, "is_starter": true },
 
                     { "name": "Karim Adeyemi", "age": 24, "position": "FWD", "rating": 82, "is_starter": false },
                     { "name": "Maximilian Beier", "age": 23, "position": "FWD", "rating": 80, "is_starter": false },
@@ -784,31 +784,31 @@
                 "ranking": 34,
                 "formation": "4-3-3",
                 "players": [
-                    { "name": "Yahia Fofana", "age": 25, "position": "GK", "rating": 80, "is_starter": true },
+                    { "name": "Yahia Fofana", "age": 25, "position": "GK", "rating": 82, "is_starter": true },
                     { "name": "Badra Ali Sangaré", "age": 39, "position": "GK", "rating": 76, "is_starter": false },
                     { "name": "Mory Diaw", "age": 32, "position": "GK", "rating": 77, "is_starter": false },
 
-                    { "name": "Wilfried Singo", "age": 25, "position": "DEF", "rating": 82, "is_starter": true },
-                    { "name": "Evan Ndicka", "age": 27, "position": "DEF", "rating": 84, "is_starter": true },
-                    { "name": "Odilon Kossounou", "age": 25, "position": "DEF", "rating": 83, "is_starter": true },
-                    { "name": "Ghislain Konan", "age": 30, "position": "DEF", "rating": 79, "is_starter": true },
+                    { "name": "Wilfried Singo", "age": 25, "position": "DEF", "rating": 82, "is_starter": false },
+                    { "name": "Evan Ndicka", "age": 27, "position": "DEF", "rating": 85, "is_starter": true },
+                    { "name": "Odilon Kossounou", "age": 25, "position": "DEF", "rating": 84, "is_starter": true },
+                    { "name": "Ghislain Konan", "age": 30, "position": "DEF", "rating": 81, "is_starter": true },
 
-                    { "name": "Serge Aurier", "age": 33, "position": "DEF", "rating": 79, "is_starter": false },
+                    { "name": "Serge Aurier", "age": 33, "position": "DEF", "rating": 82, "is_starter": true },
                     { "name": "Willy Boly", "age": 35, "position": "DEF", "rating": 79, "is_starter": false },
                     { "name": "Ousmane Diomande", "age": 22, "position": "DEF", "rating": 84, "is_starter": false },
                     { "name": "Hassane Kamara", "age": 31, "position": "DEF", "rating": 78, "is_starter": false },
 
-                    { "name": "Franck Kessié", "age": 29, "position": "MID", "rating": 84, "is_starter": true },
-                    { "name": "Seko Fofana", "age": 30, "position": "MID", "rating": 84, "is_starter": true },
-                    { "name": "Jean Michaël Seri", "age": 34, "position": "MID", "rating": 79, "is_starter": true },
+                    { "name": "Franck Kessié", "age": 29, "position": "MID", "rating": 85, "is_starter": true },
+                    { "name": "Seko Fofana", "age": 30, "position": "MID", "rating": 85, "is_starter": true },
+                    { "name": "Jean Michaël Seri", "age": 34, "position": "MID", "rating": 79, "is_starter": false },
 
-                    { "name": "Ibrahim Sangaré", "age": 28, "position": "MID", "rating": 82, "is_starter": false },
+                    { "name": "Ibrahim Sangaré", "age": 28, "position": "MID", "rating": 84, "is_starter": true },
                     { "name": "Hamed Traorè", "age": 25, "position": "MID", "rating": 81, "is_starter": false },
                     { "name": "Lazare Amani", "age": 27, "position": "MID", "rating": 78, "is_starter": false },
 
                     { "name": "Simon Adingra", "age": 24, "position": "FWD", "rating": 83, "is_starter": true },
-                    { "name": "Sébastien Haller", "age": 32, "position": "FWD", "rating": 82, "is_starter": true },
-                    { "name": "Nicolas Pépé", "age": 31, "position": "FWD", "rating": 80, "is_starter": true },
+                    { "name": "Sébastien Haller", "age": 32, "position": "FWD", "rating": 83, "is_starter": true },
+                    { "name": "Nicolas Pépé", "age": 31, "position": "FWD", "rating": 82, "is_starter": true },
 
                     { "name": "Jonathan Bamba", "age": 30, "position": "FWD", "rating": 81, "is_starter": false },
                     { "name": "Christian Kouamé", "age": 28, "position": "FWD", "rating": 79, "is_starter": false },
@@ -827,35 +827,35 @@
                 "ranking": 23,
                 "formation": "4-3-3",
                 "players": [
-                    { "name": "Hernán Galíndez", "age": 39, "position": "GK", "rating": 80, "is_starter": true },
+                    { "name": "Hernán Galíndez", "age": 39, "position": "GK", "rating": 81, "is_starter": true },
                     { "name": "Alexander Domínguez", "age": 38, "position": "GK", "rating": 78, "is_starter": false },
                     { "name": "Moisés Ramírez", "age": 24, "position": "GK", "rating": 76, "is_starter": false },
 
-                    { "name": "Ángelo Preciado", "age": 27, "position": "DEF", "rating": 81, "is_starter": true },
-                    { "name": "Piero Hincapié", "age": 24, "position": "DEF", "rating": 85, "is_starter": true },
-                    { "name": "Félix Torres", "age": 28, "position": "DEF", "rating": 81, "is_starter": true },
-                    { "name": "Pervis Estupiñán", "age": 28, "position": "DEF", "rating": 84, "is_starter": true },
+                    { "name": "Ángelo Preciado", "age": 27, "position": "DEF", "rating": 82, "is_starter": true },
+                    { "name": "Piero Hincapié", "age": 24, "position": "DEF", "rating": 86, "is_starter": true },
+                    { "name": "Félix Torres", "age": 28, "position": "DEF", "rating": 82, "is_starter": true },
+                    { "name": "Pervis Estupiñán", "age": 28, "position": "DEF", "rating": 85, "is_starter": true },
 
                     { "name": "Willian Pacho", "age": 24, "position": "DEF", "rating": 85, "is_starter": false },
                     { "name": "Joel Ordóñez", "age": 21, "position": "DEF", "rating": 80, "is_starter": false },
                     { "name": "José Hurtado", "age": 24, "position": "DEF", "rating": 77, "is_starter": false },
                     { "name": "Cristian Ramírez", "age": 31, "position": "DEF", "rating": 77, "is_starter": false },
 
-                    { "name": "Moisés Caicedo", "age": 24, "position": "MID", "rating": 87, "is_starter": true },
-                    { "name": "Alan Franco", "age": 27, "position": "MID", "rating": 80, "is_starter": true },
-                    { "name": "Kendry Páez", "age": 19, "position": "MID", "rating": 82, "is_starter": true },
+                    { "name": "Moisés Caicedo", "age": 24, "position": "MID", "rating": 88, "is_starter": true },
+                    { "name": "Alan Franco", "age": 27, "position": "MID", "rating": 82, "is_starter": true },
+                    { "name": "Kendry Páez", "age": 19, "position": "MID", "rating": 84, "is_starter": true },
 
                     { "name": "Carlos Gruezo", "age": 30, "position": "MID", "rating": 79, "is_starter": false },
                     { "name": "José Cifuentes", "age": 26, "position": "MID", "rating": 79, "is_starter": false },
                     { "name": "Jhegson Méndez", "age": 28, "position": "MID", "rating": 79, "is_starter": false },
 
-                    { "name": "Gonzalo Plata", "age": 25, "position": "FWD", "rating": 81, "is_starter": true },
-                    { "name": "Enner Valencia", "age": 36, "position": "FWD", "rating": 82, "is_starter": true },
-                    { "name": "John Yeboah", "age": 25, "position": "FWD", "rating": 79, "is_starter": true },
+                    { "name": "Gonzalo Plata", "age": 25, "position": "FWD", "rating": 83, "is_starter": true },
+                    { "name": "Enner Valencia", "age": 36, "position": "FWD", "rating": 83, "is_starter": true },
+                    { "name": "John Yeboah", "age": 25, "position": "FWD", "rating": 79, "is_starter": false },
 
                     { "name": "Kevin Rodríguez", "age": 25, "position": "FWD", "rating": 78, "is_starter": false },
                     { "name": "Allen Obando", "age": 19, "position": "FWD", "rating": 77, "is_starter": false },
-                    { "name": "Jeremy Sarmiento", "age": 24, "position": "FWD", "rating": 80, "is_starter": false },
+                    { "name": "Jeremy Sarmiento", "age": 24, "position": "FWD", "rating": 83, "is_starter": true },
 
                     { "name": "Jhoanner Chávez", "age": 23, "position": "FWD", "rating": 76, "is_starter": false },
                     { "name": "Nilson Angulo", "age": 22, "position": "FWD", "rating": 76, "is_starter": false },
@@ -870,14 +870,14 @@
                 "ranking": 7,
                 "formation": "4-3-3",
                 "players": [
-                    { "name": "Bart Verbruggen", "age": 23, "position": "GK", "rating": 83, "is_starter": true },
+                    { "name": "Bart Verbruggen", "age": 23, "position": "GK", "rating": 84, "is_starter": true },
                     { "name": "Mark Flekken", "age": 32, "position": "GK", "rating": 81, "is_starter": false },
                     { "name": "Justin Bijlow", "age": 27, "position": "GK", "rating": 80, "is_starter": false },
 
-                    { "name": "Denzel Dumfries", "age": 29, "position": "DEF", "rating": 84, "is_starter": true },
+                    { "name": "Denzel Dumfries", "age": 29, "position": "DEF", "rating": 85, "is_starter": true },
                     { "name": "Virgil van Dijk", "age": 34, "position": "DEF", "rating": 88, "is_starter": true },
                     { "name": "Nathan Aké", "age": 30, "position": "DEF", "rating": 85, "is_starter": true },
-                    { "name": "Micky van de Ven", "age": 24, "position": "DEF", "rating": 84, "is_starter": true },
+                    { "name": "Micky van de Ven", "age": 24, "position": "DEF", "rating": 83, "is_starter": true },
 
                     { "name": "Stefan de Vrij", "age": 33, "position": "DEF", "rating": 83, "is_starter": false },
                     { "name": "Jeremie Frimpong", "age": 24, "position": "DEF", "rating": 85, "is_starter": false },
@@ -886,7 +886,7 @@
 
                     { "name": "Frenkie de Jong", "age": 29, "position": "MID", "rating": 88, "is_starter": true },
                     { "name": "Tijjani Reijnders", "age": 27, "position": "MID", "rating": 85, "is_starter": true },
-                    { "name": "Teun Koopmeiners", "age": 28, "position": "MID", "rating": 85, "is_starter": true },
+                    { "name": "Teun Koopmeiners", "age": 28, "position": "MID", "rating": 85, "is_starter": false },
 
                     { "name": "Ryan Gravenberch", "age": 24, "position": "MID", "rating": 83, "is_starter": false },
                     { "name": "Mats Wieffer", "age": 26, "position": "MID", "rating": 81, "is_starter": false },
@@ -896,7 +896,7 @@
                     { "name": "Memphis Depay", "age": 32, "position": "FWD", "rating": 84, "is_starter": true },
                     { "name": "Xavi Simons", "age": 23, "position": "FWD", "rating": 86, "is_starter": true },
 
-                    { "name": "Donyell Malen", "age": 27, "position": "FWD", "rating": 83, "is_starter": false },
+                    { "name": "Donyell Malen", "age": 27, "position": "FWD", "rating": 84, "is_starter": true },
                     { "name": "Noa Lang", "age": 27, "position": "FWD", "rating": 82, "is_starter": false },
                     { "name": "Brian Brobbey", "age": 24, "position": "FWD", "rating": 81, "is_starter": false },
 
@@ -913,16 +913,16 @@
                     "ranking": 18,
                     "formation": "4-2-3-1",
                     "players": [
-                        { "name": "Zion Suzuki", "age": 23, "position": "GK", "rating": 80, "is_starter": true },
+                        { "name": "Zion Suzuki", "age": 23, "position": "GK", "rating": 82, "is_starter": true },
                         { "name": "Keisuke Osako", "age": 26, "position": "GK", "rating": 77, "is_starter": false },
                         { "name": "Kosei Tani", "age": 25, "position": "GK", "rating": 76, "is_starter": false },
 
-                        { "name": "Takehiro Tomiyasu", "age": 27, "position": "DEF", "rating": 84, "is_starter": true },
-                        { "name": "Ko Itakura", "age": 29, "position": "DEF", "rating": 82, "is_starter": true },
-                        { "name": "Hiroki Ito", "age": 27, "position": "DEF", "rating": 82, "is_starter": true },
-                        { "name": "Yuto Nagatomo", "age": 39, "position": "DEF", "rating": 77, "is_starter": true },
+                        { "name": "Takehiro Tomiyasu", "age": 27, "position": "DEF", "rating": 85, "is_starter": true },
+                        { "name": "Ko Itakura", "age": 29, "position": "DEF", "rating": 83, "is_starter": true },
+                        { "name": "Hiroki Ito", "age": 27, "position": "DEF", "rating": 83, "is_starter": true },
+                        { "name": "Yuto Nagatomo", "age": 39, "position": "DEF", "rating": 77, "is_starter": false },
 
-                        { "name": "Yukinari Sugawara", "age": 25, "position": "DEF", "rating": 81, "is_starter": false },
+                        { "name": "Yukinari Sugawara", "age": 25, "position": "DEF", "rating": 82, "is_starter": true },
                         { "name": "Koki Machida", "age": 28, "position": "DEF", "rating": 80, "is_starter": false },
                         { "name": "Daiki Hashioka", "age": 26, "position": "DEF", "rating": 78, "is_starter": false },
                         { "name": "Ayumu Seko", "age": 25, "position": "DEF", "rating": 77, "is_starter": false },
@@ -956,14 +956,14 @@
                     "ranking": 38,
                     "formation": "4-4-2",
                     "players": [
-                        { "name": "Robin Olsen", "age": 36, "position": "GK", "rating": 80, "is_starter": true },
+                        { "name": "Robin Olsen", "age": 36, "position": "GK", "rating": 81, "is_starter": true },
                         { "name": "Viktor Johansson", "age": 28, "position": "GK", "rating": 78, "is_starter": false },
                         { "name": "Kristoffer Nordfeldt", "age": 37, "position": "GK", "rating": 76, "is_starter": false },
 
-                        { "name": "Emil Krafth", "age": 32, "position": "DEF", "rating": 78, "is_starter": true },
-                        { "name": "Victor Lindelöf", "age": 32, "position": "DEF", "rating": 82, "is_starter": true },
-                        { "name": "Isak Hien", "age": 27, "position": "DEF", "rating": 81, "is_starter": true },
-                        { "name": "Ludwig Augustinsson", "age": 31, "position": "DEF", "rating": 79, "is_starter": true },
+                        { "name": "Emil Krafth", "age": 32, "position": "DEF", "rating": 80, "is_starter": true },
+                        { "name": "Victor Lindelöf", "age": 32, "position": "DEF", "rating": 84, "is_starter": true },
+                        { "name": "Isak Hien", "age": 27, "position": "DEF", "rating": 83, "is_starter": true },
+                        { "name": "Ludwig Augustinsson", "age": 31, "position": "DEF", "rating": 81, "is_starter": true },
 
                         { "name": "Gabriel Gudmundsson", "age": 27, "position": "DEF", "rating": 78, "is_starter": false },
                         { "name": "Carl Starfelt", "age": 31, "position": "DEF", "rating": 79, "is_starter": false },
@@ -973,16 +973,16 @@
                         { "name": "Dejan Kulusevski", "age": 26, "position": "MID", "rating": 85, "is_starter": true },
                         { "name": "Emil Forsberg", "age": 35, "position": "MID", "rating": 81, "is_starter": true },
                         { "name": "Jesper Karlström", "age": 31, "position": "MID", "rating": 78, "is_starter": true },
-                        { "name": "Yasin Ayari", "age": 23, "position": "MID", "rating": 79, "is_starter": true },
+                        { "name": "Yasin Ayari", "age": 23, "position": "MID", "rating": 79, "is_starter": false },
 
                         { "name": "Hugo Larsson", "age": 22, "position": "MID", "rating": 82, "is_starter": false },
                         { "name": "Albin Ekdal", "age": 37, "position": "MID", "rating": 76, "is_starter": false },
                         { "name": "Mattias Svanberg", "age": 27, "position": "MID", "rating": 80, "is_starter": false },
 
-                        { "name": "Alexander Isak", "age": 27, "position": "FWD", "rating": 88, "is_starter": true },
-                        { "name": "Viktor Gyökeres", "age": 28, "position": "FWD", "rating": 86, "is_starter": true },
+                        { "name": "Alexander Isak", "age": 27, "position": "FWD", "rating": 87, "is_starter": true },
+                        { "name": "Viktor Gyökeres", "age": 28, "position": "FWD", "rating": 88, "is_starter": true },
 
-                        { "name": "Anthony Elanga", "age": 24, "position": "FWD", "rating": 82, "is_starter": false },
+                        { "name": "Anthony Elanga", "age": 24, "position": "FWD", "rating": 83, "is_starter": true },
                         { "name": "Robin Quaison", "age": 33, "position": "FWD", "rating": 78, "is_starter": false },
                         { "name": "Benjamin Nygren", "age": 25, "position": "FWD", "rating": 77, "is_starter": false },
 
@@ -999,29 +999,29 @@
                     "ranking": 44,
                     "formation": "4-3-3",
                     "players": [
-                        { "name": "Aymen Dahmen", "age": 29, "position": "GK", "rating": 79, "is_starter": true },
+                        { "name": "Aymen Dahmen", "age": 29, "position": "GK", "rating": 80, "is_starter": true },
                         { "name": "Bechir Ben Said", "age": 33, "position": "GK", "rating": 76, "is_starter": false },
                         { "name": "Moez Ben Cherifia", "age": 35, "position": "GK", "rating": 75, "is_starter": false },
 
                         { "name": "Wajdi Kechrida", "age": 30, "position": "DEF", "rating": 78, "is_starter": true },
-                        { "name": "Yassine Meriah", "age": 33, "position": "DEF", "rating": 79, "is_starter": true },
-                        { "name": "Montassar Talbi", "age": 28, "position": "DEF", "rating": 80, "is_starter": true },
-                        { "name": "Ali Abdi", "age": 31, "position": "DEF", "rating": 78, "is_starter": true },
+                        { "name": "Yassine Meriah", "age": 33, "position": "DEF", "rating": 81, "is_starter": true },
+                        { "name": "Montassar Talbi", "age": 28, "position": "DEF", "rating": 82, "is_starter": true },
+                        { "name": "Ali Abdi", "age": 31, "position": "DEF", "rating": 80, "is_starter": true },
 
                         { "name": "Hamza Mathlouthi", "age": 33, "position": "DEF", "rating": 77, "is_starter": false },
                         { "name": "Dylan Bronn", "age": 31, "position": "DEF", "rating": 77, "is_starter": false },
                         { "name": "Alaa Ghram", "age": 24, "position": "DEF", "rating": 76, "is_starter": false },
                         { "name": "Bilel Ifa", "age": 35, "position": "DEF", "rating": 75, "is_starter": false },
 
-                        { "name": "Ellyes Skhiri", "age": 31, "position": "MID", "rating": 82, "is_starter": true },
+                        { "name": "Ellyes Skhiri", "age": 31, "position": "MID", "rating": 84, "is_starter": true },
                         { "name": "Aïssa Laïdouni", "age": 29, "position": "MID", "rating": 81, "is_starter": true },
                         { "name": "Hannibal Mejbri", "age": 23, "position": "MID", "rating": 80, "is_starter": true },
 
-                        { "name": "Mohamed Ali Ben Romdhane", "age": 26, "position": "MID", "rating": 79, "is_starter": false },
+                        { "name": "Mohamed Ali Ben Romdhane", "age": 26, "position": "MID", "rating": 82, "is_starter": false },
                         { "name": "Anis Ben Slimane", "age": 25, "position": "MID", "rating": 78, "is_starter": false },
                         { "name": "Ferjani Sassi", "age": 34, "position": "MID", "rating": 78, "is_starter": false },
 
-                        { "name": "Youssef Msakni", "age": 35, "position": "FWD", "rating": 80, "is_starter": true },
+                        { "name": "Youssef Msakni", "age": 35, "position": "FWD", "rating": 83, "is_starter": true },
                         { "name": "Seifeddine Jaziri", "age": 32, "position": "FWD", "rating": 78, "is_starter": true },
                         { "name": "Elias Achouri", "age": 27, "position": "FWD", "rating": 79, "is_starter": true },
 
@@ -1046,10 +1046,10 @@
                     { "name": "Koen Casteels", "age": 33, "position": "GK", "rating": 84, "is_starter": false },
                     { "name": "Matz Sels", "age": 33, "position": "GK", "rating": 82, "is_starter": false },
 
-                    { "name": "Timothy Castagne", "age": 29, "position": "DEF", "rating": 84, "is_starter": true },
-                    { "name": "Wout Faes", "age": 27, "position": "DEF", "rating": 83, "is_starter": true },
+                    { "name": "Timothy Castagne", "age": 29, "position": "DEF", "rating": 83, "is_starter": true },
+                    { "name": "Wout Faes", "age": 27, "position": "DEF", "rating": 82, "is_starter": true },
                     { "name": "Arthur Theate", "age": 25, "position": "DEF", "rating": 83, "is_starter": true },
-                    { "name": "Maxim De Cuyper", "age": 24, "position": "DEF", "rating": 80, "is_starter": true },
+                    { "name": "Maxim De Cuyper", "age": 24, "position": "DEF", "rating": 82, "is_starter": true },
 
                     { "name": "Jan Vertonghen", "age": 37, "position": "DEF", "rating": 82, "is_starter": false },
                     { "name": "Zeno Debast", "age": 21, "position": "DEF", "rating": 81, "is_starter": false },
@@ -1059,15 +1059,15 @@
                     { "name": "Amadou Onana", "age": 24, "position": "MID", "rating": 85, "is_starter": true },
                     { "name": "Youri Tielemans", "age": 28, "position": "MID", "rating": 85, "is_starter": true },
 
-                    { "name": "Kevin De Bruyne", "age": 34, "position": "MID", "rating": 91, "is_starter": true },
-                    { "name": "Leandro Trossard", "age": 30, "position": "MID", "rating": 86, "is_starter": true },
-                    { "name": "Jérémy Doku", "age": 23, "position": "MID", "rating": 87, "is_starter": true },
+                    { "name": "Kevin De Bruyne", "age": 34, "position": "MID", "rating": 90, "is_starter": true },
+                    { "name": "Leandro Trossard", "age": 30, "position": "MID", "rating": 85, "is_starter": true },
+                    { "name": "Jérémy Doku", "age": 23, "position": "MID", "rating": 86, "is_starter": true },
 
                     { "name": "Charles De Ketelaere", "age": 24, "position": "MID", "rating": 83, "is_starter": false },
                     { "name": "Orel Mangala", "age": 27, "position": "MID", "rating": 82, "is_starter": false },
                     { "name": "Arthur Vermeeren", "age": 20, "position": "MID", "rating": 83, "is_starter": false },
 
-                    { "name": "Romelu Lukaku", "age": 32, "position": "FWD", "rating": 87, "is_starter": true },
+                    { "name": "Romelu Lukaku", "age": 32, "position": "FWD", "rating": 86, "is_starter": true },
                     { "name": "Loïs Openda", "age": 25, "position": "FWD", "rating": 85, "is_starter": false },
                     { "name": "Michy Batshuayi", "age": 32, "position": "FWD", "rating": 82, "is_starter": false },
 
@@ -1089,25 +1089,25 @@
                     { "name": "Mohamed Sobhi", "age": 26, "position": "GK", "rating": 79, "is_starter": false },
                     { "name": "Mahmoud Gad", "age": 26, "position": "GK", "rating": 77, "is_starter": false },
 
-                    { "name": "Mohamed Hany", "age": 29, "position": "DEF", "rating": 80, "is_starter": true },
-                    { "name": "Ahmed Hegazi", "age": 34, "position": "DEF", "rating": 81, "is_starter": true },
-                    { "name": "Mohamed Abdelmonem", "age": 26, "position": "DEF", "rating": 82, "is_starter": true },
-                    { "name": "Ahmed Fattouh", "age": 27, "position": "DEF", "rating": 80, "is_starter": true },
+                    { "name": "Mohamed Hany", "age": 29, "position": "DEF", "rating": 81, "is_starter": true },
+                    { "name": "Ahmed Hegazi", "age": 34, "position": "DEF", "rating": 82, "is_starter": true },
+                    { "name": "Mohamed Abdelmonem", "age": 26, "position": "DEF", "rating": 83, "is_starter": true },
+                    { "name": "Ahmed Fattouh", "age": 27, "position": "DEF", "rating": 81, "is_starter": true },
 
                     { "name": "Omar Kamal", "age": 32, "position": "DEF", "rating": 78, "is_starter": false },
                     { "name": "Rami Rabia", "age": 32, "position": "DEF", "rating": 78, "is_starter": false },
                     { "name": "Yasser Ibrahim", "age": 32, "position": "DEF", "rating": 78, "is_starter": false },
                     { "name": "Mohamed Hamdy", "age": 30, "position": "DEF", "rating": 77, "is_starter": false },
 
-                    { "name": "Hamdi Fathi", "age": 30, "position": "MID", "rating": 81, "is_starter": true },
-                    { "name": "Mohamed Elneny", "age": 33, "position": "MID", "rating": 80, "is_starter": true },
-                    { "name": "Emam Ashour", "age": 27, "position": "MID", "rating": 82, "is_starter": true },
+                    { "name": "Hamdi Fathi", "age": 30, "position": "MID", "rating": 82, "is_starter": true },
+                    { "name": "Mohamed Elneny", "age": 33, "position": "MID", "rating": 82, "is_starter": true },
+                    { "name": "Emam Ashour", "age": 27, "position": "MID", "rating": 83, "is_starter": true },
 
                     { "name": "Marwan عطية", "age": 27, "position": "MID", "rating": 79, "is_starter": false },
                     { "name": "Ahmed Nabil Koka", "age": 24, "position": "MID", "rating": 77, "is_starter": false },
                     { "name": "Nasser Maher", "age": 28, "position": "MID", "rating": 78, "is_starter": false },
 
-                    { "name": "Mohamed Salah", "age": 33, "position": "FWD", "rating": 90, "is_starter": true },
+                    { "name": "Mohamed Salah", "age": 33, "position": "FWD", "rating": 89, "is_starter": true },
                     { "name": "Omar Marmoush", "age": 26, "position": "FWD", "rating": 85, "is_starter": true },
                     { "name": "Mostafa Mohamed", "age": 27, "position": "FWD", "rating": 83, "is_starter": true },
 
@@ -1129,14 +1129,14 @@
                 "formation": "4-3-3",
                 "players": [
 
-                    { "name": "Alireza Beiranvand", "age": 32, "position": "GK", "rating": 83, "is_starter": true },
+                    { "name": "Alireza Beiranvand", "age": 32, "position": "GK", "rating": 82, "is_starter": true },
                     { "name": "Hossein Hosseini", "age": 32, "position": "GK", "rating": 80, "is_starter": false },
                     { "name": "Payam Niazmand", "age": 30, "position": "GK", "rating": 78, "is_starter": false },
 
-                    { "name": "Sadegh Moharrami", "age": 29, "position": "DEF", "rating": 80, "is_starter": true },
-                    { "name": "Shoja Khalilzadeh", "age": 36, "position": "DEF", "rating": 81, "is_starter": true },
-                    { "name": "Majid Hosseini", "age": 29, "position": "DEF", "rating": 80, "is_starter": true },
-                    { "name": "Milad Mohammadi", "age": 31, "position": "DEF", "rating": 80, "is_starter": true },
+                    { "name": "Sadegh Moharrami", "age": 29, "position": "DEF", "rating": 81, "is_starter": true },
+                    { "name": "Shoja Khalilzadeh", "age": 36, "position": "DEF", "rating": 82, "is_starter": true },
+                    { "name": "Majid Hosseini", "age": 29, "position": "DEF", "rating": 81, "is_starter": true },
+                    { "name": "Milad Mohammadi", "age": 31, "position": "DEF", "rating": 81, "is_starter": true },
 
                     { "name": "Hossein Kanaani", "age": 31, "position": "DEF", "rating": 80, "is_starter": false },
                     { "name": "Ali Karimi", "age": 31, "position": "DEF", "rating": 78, "is_starter": false },
@@ -1144,7 +1144,7 @@
                     { "name": "Ramin Rezaeian", "age": 35, "position": "DEF", "rating": 79, "is_starter": false },
 
                     { "name": "Saeid Ezatolahi", "age": 28, "position": "MID", "rating": 82, "is_starter": true },
-                    { "name": "Omid Ebrahimi", "age": 37, "position": "MID", "rating": 80, "is_starter": true },
+                    { "name": "Omid Ebrahimi", "age": 37, "position": "MID", "rating": 81, "is_starter": true },
                     { "name": "Alireza Jahanbakhsh", "age": 32, "position": "MID", "rating": 82, "is_starter": true },
 
                     { "name": "Saman Ghoddos", "age": 32, "position": "MID", "rating": 81, "is_starter": false },
@@ -1173,14 +1173,14 @@
                 "formation": "4-4-2",
                 "players": [
 
-                    { "name": "Stefan Marinovic", "age": 33, "position": "GK", "rating": 75, "is_starter": true },
+                    { "name": "Stefan Marinovic", "age": 33, "position": "GK", "rating": 77, "is_starter": true },
                     { "name": "Max Crocombe", "age": 31, "position": "GK", "rating": 73, "is_starter": false },
                     { "name": "Michael Woud", "age": 26, "position": "GK", "rating": 72, "is_starter": false },
 
-                    { "name": "Liberato Cacace", "age": 24, "position": "DEF", "rating": 78, "is_starter": true },
-                    { "name": "Tommy Smith", "age": 35, "position": "DEF", "rating": 76, "is_starter": true },
-                    { "name": "Michael Boxall", "age": 36, "position": "DEF", "rating": 76, "is_starter": true },
-                    { "name": "Tim Payne", "age": 31, "position": "DEF", "rating": 75, "is_starter": true },
+                    { "name": "Liberato Cacace", "age": 24, "position": "DEF", "rating": 77, "is_starter": true },
+                    { "name": "Tommy Smith", "age": 35, "position": "DEF", "rating": 79, "is_starter": true },
+                    { "name": "Michael Boxall", "age": 36, "position": "DEF", "rating": 80, "is_starter": true },
+                    { "name": "Tim Payne", "age": 31, "position": "DEF", "rating": 78, "is_starter": true },
 
                     { "name": "Bill Tuiloma", "age": 30, "position": "DEF", "rating": 75, "is_starter": false },
                     { "name": "Nando Pijnaker", "age": 26, "position": "DEF", "rating": 74, "is_starter": false },
@@ -1196,8 +1196,8 @@
                     { "name": "Matthew Garbett", "age": 23, "position": "MID", "rating": 75, "is_starter": false },
                     { "name": "Ben Old", "age": 22, "position": "MID", "rating": 75, "is_starter": false },
 
-                    { "name": "Chris Wood", "age": 34, "position": "FWD", "rating": 81, "is_starter": true },
-                    { "name": "Elijah Just", "age": 25, "position": "FWD", "rating": 77, "is_starter": true },
+                    { "name": "Chris Wood", "age": 34, "position": "FWD", "rating": 82, "is_starter": true },
+                    { "name": "Elijah Just", "age": 25, "position": "FWD", "rating": 78, "is_starter": true },
 
                     { "name": "Kosta Barbarouses", "age": 35, "position": "FWD", "rating": 76, "is_starter": false },
                     { "name": "Callum McCowatt", "age": 26, "position": "FWD", "rating": 75, "is_starter": false },
@@ -1221,19 +1221,19 @@
                     { "name": "David Raya", "age": 29, "position": "GK", "rating": 85, "is_starter": false },
                     { "name": "Álex Remiro", "age": 30, "position": "GK", "rating": 82, "is_starter": false },
 
-                    { "name": "Dani Carvajal", "age": 33, "position": "DEF", "rating": 87, "is_starter": true },
-                    { "name": "Robin Le Normand", "age": 29, "position": "DEF", "rating": 85, "is_starter": true },
+                    { "name": "Dani Carvajal", "age": 33, "position": "DEF", "rating": 85, "is_starter": true },
+                    { "name": "Robin Le Normand", "age": 29, "position": "DEF", "rating": 84, "is_starter": true },
                     { "name": "Aymeric Laporte", "age": 31, "position": "DEF", "rating": 85, "is_starter": true },
-                    { "name": "Alejandro Balde", "age": 22, "position": "DEF", "rating": 84, "is_starter": true },
+                    { "name": "Alejandro Balde", "age": 22, "position": "DEF", "rating": 84, "is_starter": false },
 
                     { "name": "Pau Cubarsí", "age": 18, "position": "DEF", "rating": 83, "is_starter": false },
-                    { "name": "Dani Vivian", "age": 26, "position": "DEF", "rating": 82, "is_starter": false },
+                    { "name": "Alejandro Grimaldo", "age": 30, "position": "DEF", "rating": 86, "is_starter": true },
                     { "name": "Pedro Porro", "age": 26, "position": "DEF", "rating": 84, "is_starter": false },
                     { "name": "José Gayà", "age": 30, "position": "DEF", "rating": 83, "is_starter": false },
 
-                    { "name": "Rodri", "age": 29, "position": "MID", "rating": 91, "is_starter": true },
+                    { "name": "Rodri", "age": 29, "position": "MID", "rating": 87, "is_starter": true },
                     { "name": "Pedri", "age": 23, "position": "MID", "rating": 89, "is_starter": true },
-                    { "name": "Fabián Ruiz", "age": 29, "position": "MID", "rating": 85, "is_starter": true },
+                    { "name": "Fabián Ruiz", "age": 29, "position": "MID", "rating": 87, "is_starter": true },
 
                     { "name": "Gavi", "age": 21, "position": "MID", "rating": 88, "is_starter": false },
                     { "name": "Mikel Merino", "age": 29, "position": "MID", "rating": 84, "is_starter": false },
@@ -1241,7 +1241,7 @@
 
                     { "name": "Lamine Yamal", "age": 18, "position": "FWD", "rating": 89, "is_starter": true },
                     { "name": "Nico Williams", "age": 23, "position": "FWD", "rating": 87, "is_starter": true },
-                    { "name": "Álvaro Morata", "age": 33, "position": "FWD", "rating": 85, "is_starter": true },
+                    { "name": "Álvaro Morata", "age": 33, "position": "FWD", "rating": 84, "is_starter": true },
 
                     { "name": "Ferran Torres", "age": 26, "position": "FWD", "rating": 84, "is_starter": false },
                     { "name": "Yeremy Pino", "age": 23, "position": "FWD", "rating": 83, "is_starter": false },
@@ -1261,30 +1261,30 @@
                 "formation": "4-3-3",
                 "players": [
 
-                    { "name": "Sergio Rochet", "age": 32, "position": "GK", "rating": 83, "is_starter": true },
+                    { "name": "Sergio Rochet", "age": 32, "position": "GK", "rating": 84, "is_starter": true },
                     { "name": "Franco Israel", "age": 25, "position": "GK", "rating": 79, "is_starter": false },
                     { "name": "Santiago Mele", "age": 27, "position": "GK", "rating": 78, "is_starter": false },
 
                     { "name": "Ronald Araújo", "age": 26, "position": "DEF", "rating": 87, "is_starter": true },
                     { "name": "José María Giménez", "age": 30, "position": "DEF", "rating": 86, "is_starter": true },
-                    { "name": "Matías Viña", "age": 27, "position": "DEF", "rating": 81, "is_starter": true },
-                    { "name": "Nahitan Nández", "age": 29, "position": "DEF", "rating": 83, "is_starter": true },
+                    { "name": "Matías Viña", "age": 27, "position": "DEF", "rating": 81, "is_starter": false },
+                    { "name": "Nahitan Nández", "age": 29, "position": "DEF", "rating": 83, "is_starter": false },
 
-                    { "name": "Sebastián Cáceres", "age": 26, "position": "DEF", "rating": 81, "is_starter": false },
-                    { "name": "Guillermo Varela", "age": 32, "position": "DEF", "rating": 80, "is_starter": false },
+                    { "name": "Sebastián Cáceres", "age": 26, "position": "DEF", "rating": 83, "is_starter": true },
+                    { "name": "Guillermo Varela", "age": 32, "position": "DEF", "rating": 84, "is_starter": true },
                     { "name": "Joaquín Piquerez", "age": 26, "position": "DEF", "rating": 81, "is_starter": false },
                     { "name": "Santiago Bueno", "age": 27, "position": "DEF", "rating": 80, "is_starter": false },
 
-                    { "name": "Federico Valverde", "age": 27, "position": "MID", "rating": 90, "is_starter": true },
+                    { "name": "Federico Valverde", "age": 27, "position": "MID", "rating": 91, "is_starter": true },
                     { "name": "Manuel Ugarte", "age": 24, "position": "MID", "rating": 85, "is_starter": true },
-                    { "name": "Nicolás De La Cruz", "age": 28, "position": "MID", "rating": 84, "is_starter": true },
+                    { "name": "Nicolás De La Cruz", "age": 28, "position": "MID", "rating": 84, "is_starter": false },
 
-                    { "name": "Giorgian De Arrascaeta", "age": 31, "position": "MID", "rating": 85, "is_starter": false },
+                    { "name": "Giorgian De Arrascaeta", "age": 31, "position": "MID", "rating": 86, "is_starter": true },
                     { "name": "Rodrigo Bentancur", "age": 27, "position": "MID", "rating": 85, "is_starter": false },
                     { "name": "Facundo Pellistri", "age": 24, "position": "MID", "rating": 82, "is_starter": false },
 
                     { "name": "Darwin Núñez", "age": 26, "position": "FWD", "rating": 87, "is_starter": true },
-                    { "name": "Luis Suárez", "age": 39, "position": "FWD", "rating": 84, "is_starter": true },
+                    { "name": "Facundo Pellistri", "age": 24, "position": "FWD", "rating": 83, "is_starter": true },
                     { "name": "Maximiliano Araújo", "age": 25, "position": "FWD", "rating": 83, "is_starter": true },
 
                     { "name": "Cristian Olivera", "age": 24, "position": "FWD", "rating": 81, "is_starter": false },
@@ -1305,7 +1305,7 @@
                 "formation": "4-2-3-1",
                 "players": [
 
-                    { "name": "Mohammed Al-Owais", "age": 33, "position": "GK", "rating": 79, "is_starter": true },
+                    { "name": "Mohammed Al-Owais", "age": 33, "position": "GK", "rating": 80, "is_starter": true },
                     { "name": "Nawaf Al-Aqidi", "age": 25, "position": "GK", "rating": 77, "is_starter": false },
                     { "name": "Mohammed Al-Yami", "age": 27, "position": "GK", "rating": 76, "is_starter": false },
 
@@ -1319,7 +1319,7 @@
                     { "name": "Saud Al-Zaid", "age": 25, "position": "DEF", "rating": 77, "is_starter": false },
                     { "name": "Ziyad Al-Sahafi", "age": 30, "position": "DEF", "rating": 78, "is_starter": false },
 
-                    { "name": "Salem Al-Dawsari", "age": 34, "position": "MID", "rating": 83, "is_starter": true },
+                    { "name": "Salem Al-Dawsari", "age": 34, "position": "MID", "rating": 84, "is_starter": true },
                     { "name": "Mohammed Kanno", "age": 31, "position": "MID", "rating": 82, "is_starter": true },
                     { "name": "Abdullah Otayf", "age": 33, "position": "MID", "rating": 80, "is_starter": true },
 
@@ -1349,31 +1349,31 @@
                 "formation": "4-3-3",
                 "players": [
 
-                    { "name": "Vozinha", "age": 38, "position": "GK", "rating": 77, "is_starter": true },
+                    { "name": "Vozinha", "age": 38, "position": "GK", "rating": 79, "is_starter": true },
                     { "name": "Marcio Rosa", "age": 27, "position": "GK", "rating": 75, "is_starter": false },
                     { "name": "Kevin Sousa", "age": 29, "position": "GK", "rating": 74, "is_starter": false },
 
-                    { "name": "Stopira", "age": 37, "position": "DEF", "rating": 76, "is_starter": true },
-                    { "name": "Logan Costa", "age": 24, "position": "DEF", "rating": 81, "is_starter": true },
-                    { "name": "Roberto Lopes", "age": 32, "position": "DEF", "rating": 78, "is_starter": true },
-                    { "name": "Steven Moreira", "age": 31, "position": "DEF", "rating": 79, "is_starter": true },
+                    { "name": "Stopira", "age": 37, "position": "DEF", "rating": 80, "is_starter": true },
+                    { "name": "Logan Costa", "age": 24, "position": "DEF", "rating": 82, "is_starter": true },
+                    { "name": "Roberto Lopes", "age": 32, "position": "DEF", "rating": 81, "is_starter": true },
+                    { "name": "Steven Moreira", "age": 31, "position": "DEF", "rating": 80, "is_starter": true },
 
                     { "name": "Diney", "age": 30, "position": "DEF", "rating": 76, "is_starter": false },
                     { "name": "Fernando Varela", "age": 37, "position": "DEF", "rating": 77, "is_starter": false },
                     { "name": "João Paulo Fernandes", "age": 28, "position": "DEF", "rating": 75, "is_starter": false },
                     { "name": "Deroy Duarte", "age": 26, "position": "DEF", "rating": 76, "is_starter": false },
 
-                    { "name": "Patrick Andrade", "age": 32, "position": "MID", "rating": 78, "is_starter": true },
-                    { "name": "Kevin Pina", "age": 27, "position": "MID", "rating": 79, "is_starter": true },
-                    { "name": "Jovane Cabral", "age": 27, "position": "MID", "rating": 80, "is_starter": true },
+                    { "name": "Patrick Andrade", "age": 32, "position": "MID", "rating": 82, "is_starter": true },
+                    { "name": "Kevin Pina", "age": 27, "position": "MID", "rating": 81, "is_starter": true },
+                    { "name": "Jovane Cabral", "age": 27, "position": "MID", "rating": 82, "is_starter": true },
 
                     { "name": "Kenny Rocha Santos", "age": 25, "position": "MID", "rating": 77, "is_starter": false },
                     { "name": "Bebé", "age": 34, "position": "MID", "rating": 78, "is_starter": false },
                     { "name": "Heldon Ramos", "age": 36, "position": "MID", "rating": 76, "is_starter": false },
 
-                    { "name": "Ryan Mendes", "age": 35, "position": "FWD", "rating": 79, "is_starter": true },
-                    { "name": "Julio Tavares", "age": 36, "position": "FWD", "rating": 78, "is_starter": true },
-                    { "name": "Gilson Tavares", "age": 24, "position": "FWD", "rating": 77, "is_starter": true },
+                    { "name": "Ryan Mendes", "age": 35, "position": "FWD", "rating": 80, "is_starter": true },
+                    { "name": "Julio Tavares", "age": 36, "position": "FWD", "rating": 80, "is_starter": true },
+                    { "name": "Gilson Tavares", "age": 24, "position": "FWD", "rating": 81, "is_starter": true },
 
                     { "name": "Benchimol", "age": 29, "position": "FWD", "rating": 76, "is_starter": false },
                     { "name": "Zé Luís", "age": 34, "position": "FWD", "rating": 78, "is_starter": false },
@@ -1393,11 +1393,11 @@
                 "formation": "4-3-3",
                 "players": [
 
-                    { "name": "Mike Maignan", "age": 30, "position": "GK", "rating": 90, "is_starter": true },
+                    { "name": "Mike Maignan", "age": 30, "position": "GK", "rating": 89, "is_starter": true },
                     { "name": "Brice Samba", "age": 31, "position": "GK", "rating": 84, "is_starter": false },
                     { "name": "Alphonse Areola", "age": 33, "position": "GK", "rating": 83, "is_starter": false },
 
-                    { "name": "Jules Koundé", "age": 27, "position": "DEF", "rating": 87, "is_starter": true },
+                    { "name": "Jules Koundé", "age": 27, "position": "DEF", "rating": 86, "is_starter": true },
                     { "name": "William Saliba", "age": 25, "position": "DEF", "rating": 89, "is_starter": true },
                     { "name": "Dayot Upamecano", "age": 27, "position": "DEF", "rating": 87, "is_starter": true },
                     { "name": "Theo Hernández", "age": 28, "position": "DEF", "rating": 88, "is_starter": true },
@@ -1407,17 +1407,17 @@
                     { "name": "Ibrahima Konaté", "age": 26, "position": "DEF", "rating": 87, "is_starter": false },
                     { "name": "Jonathan Clauss", "age": 33, "position": "DEF", "rating": 83, "is_starter": false },
 
-                    { "name": "Aurélien Tchouaméni", "age": 26, "position": "MID", "rating": 88, "is_starter": true },
-                    { "name": "Adrien Rabiot", "age": 30, "position": "MID", "rating": 86, "is_starter": true },
-                    { "name": "Eduardo Camavinga", "age": 24, "position": "MID", "rating": 89, "is_starter": true },
+                    { "name": "Aurélien Tchouaméni", "age": 26, "position": "MID", "rating": 87, "is_starter": true },
+                    { "name": "Adrien Rabiot", "age": 30, "position": "MID", "rating": 85, "is_starter": true },
+                    { "name": "Eduardo Camavinga", "age": 24, "position": "MID", "rating": 87, "is_starter": true },
 
                     { "name": "Warren Zaïre-Emery", "age": 20, "position": "MID", "rating": 86, "is_starter": false },
                     { "name": "Youssouf Fofana", "age": 27, "position": "MID", "rating": 85, "is_starter": false },
                     { "name": "Kingsley Coman", "age": 30, "position": "MID", "rating": 87, "is_starter": false },
 
                     { "name": "Kylian Mbappé", "age": 27, "position": "FWD", "rating": 93, "is_starter": true },
-                    { "name": "Ousmane Dembélé", "age": 29, "position": "FWD", "rating": 88, "is_starter": true },
-                    { "name": "Randal Kolo Muani", "age": 27, "position": "FWD", "rating": 86, "is_starter": true },
+                    { "name": "Ousmane Dembélé", "age": 29, "position": "FWD", "rating": 90, "is_starter": true },
+                    { "name": "Randal Kolo Muani", "age": 27, "position": "FWD", "rating": 84, "is_starter": true },
 
                     { "name": "Olivier Giroud", "age": 40, "position": "FWD", "rating": 85, "is_starter": false },
                     { "name": "Marcus Thuram", "age": 28, "position": "FWD", "rating": 86, "is_starter": false },
@@ -1442,9 +1442,9 @@
                     { "name": "Mory Diaw", "age": 32, "position": "GK", "rating": 78, "is_starter": false },
 
                     { "name": "Kalidou Koulibaly", "age": 34, "position": "DEF", "rating": 86, "is_starter": true },
-                    { "name": "Abdou Diallo", "age": 29, "position": "DEF", "rating": 82, "is_starter": true },
+                    { "name": "Abdou Diallo", "age": 29, "position": "DEF", "rating": 83, "is_starter": true },
                     { "name": "Moussa Niakhaté", "age": 29, "position": "DEF", "rating": 83, "is_starter": true },
-                    { "name": "Ismail Jakobs", "age": 26, "position": "DEF", "rating": 81, "is_starter": true },
+                    { "name": "Ismail Jakobs", "age": 26, "position": "DEF", "rating": 83, "is_starter": true },
 
                     { "name": "Formose Mendy", "age": 24, "position": "DEF", "rating": 79, "is_starter": false },
                     { "name": "Fodé Ballo-Touré", "age": 28, "position": "DEF", "rating": 80, "is_starter": false },
@@ -1459,9 +1459,9 @@
                     { "name": "Habib Diallo", "age": 30, "position": "MID", "rating": 80, "is_starter": false },
                     { "name": "Pape Gueye", "age": 26, "position": "MID", "rating": 81, "is_starter": false },
 
-                    { "name": "Sadio Mané", "age": 33, "position": "FWD", "rating": 88, "is_starter": true },
+                    { "name": "Sadio Mané", "age": 33, "position": "FWD", "rating": 86, "is_starter": true },
                     { "name": "Ismaïla Sarr", "age": 27, "position": "FWD", "rating": 84, "is_starter": true },
-                    { "name": "Nicolas Jackson", "age": 24, "position": "FWD", "rating": 83, "is_starter": true },
+                    { "name": "Nicolas Jackson", "age": 24, "position": "FWD", "rating": 84, "is_starter": true },
 
                     { "name": "Boulaye Dia", "age": 29, "position": "FWD", "rating": 83, "is_starter": false },
                     { "name": "Iliman Ndiaye", "age": 25, "position": "FWD", "rating": 84, "is_starter": false },
@@ -1481,14 +1481,14 @@
                 "formation": "4-2-3-1",
                 "players": [
 
-                    { "name": "Jalal Hassan", "age": 33, "position": "GK", "rating": 77, "is_starter": true },
+                    { "name": "Jalal Hassan", "age": 33, "position": "GK", "rating": 78, "is_starter": true },
                     { "name": "Fahad Talib", "age": 30, "position": "GK", "rating": 75, "is_starter": false },
                     { "name": "Ahmed Basil", "age": 28, "position": "GK", "rating": 74, "is_starter": false },
 
-                    { "name": "Rebin Sulaka", "age": 32, "position": "DEF", "rating": 78, "is_starter": true },
-                    { "name": "Ali Adnan", "age": 32, "position": "DEF", "rating": 79, "is_starter": true },
-                    { "name": "Mustafa Nadhim", "age": 31, "position": "DEF", "rating": 77, "is_starter": true },
-                    { "name": "Frans Dhia Putros", "age": 31, "position": "DEF", "rating": 78, "is_starter": true },
+                    { "name": "Rebin Sulaka", "age": 32, "position": "DEF", "rating": 79, "is_starter": true },
+                    { "name": "Ali Adnan", "age": 32, "position": "DEF", "rating": 80, "is_starter": true },
+                    { "name": "Mustafa Nadhim", "age": 31, "position": "DEF", "rating": 79, "is_starter": true },
+                    { "name": "Frans Dhia Putros", "age": 31, "position": "DEF", "rating": 81, "is_starter": true },
 
                     { "name": "Zaid Tahseen", "age": 24, "position": "DEF", "rating": 76, "is_starter": false },
                     { "name": "Saad Natiq", "age": 31, "position": "DEF", "rating": 77, "is_starter": false },
@@ -1503,9 +1503,9 @@
                     { "name": "Zidane Iqbal", "age": 22, "position": "MID", "rating": 80, "is_starter": false },
                     { "name": "Aymen Hussein", "age": 29, "position": "MID", "rating": 79, "is_starter": false },
 
-                    { "name": "Mohannad Ali", "age": 25, "position": "FWD", "rating": 80, "is_starter": true },
+                    { "name": "Mohannad Ali", "age": 25, "position": "FWD", "rating": 82, "is_starter": true },
                     { "name": "Aymen Hussein", "age": 29, "position": "FWD", "rating": 81, "is_starter": true },
-                    { "name": "Ali Al-Hamadi", "age": 23, "position": "FWD", "rating": 80, "is_starter": true },
+                    { "name": "Ali Al-Hamadi", "age": 23, "position": "FWD", "rating": 82, "is_starter": true },
 
                     { "name": "Youssef Amyn", "age": 21, "position": "FWD", "rating": 79, "is_starter": false },
                     { "name": "Ahmed Yasin", "age": 33, "position": "FWD", "rating": 78, "is_starter": false },
@@ -1525,21 +1525,21 @@
                 "formation": "4-3-3",
                 "players": [
 
-                    { "name": "Ørjan Nyland", "age": 34, "position": "GK", "rating": 80, "is_starter": true },
+                    { "name": "Ørjan Nyland", "age": 34, "position": "GK", "rating": 81, "is_starter": true },
                     { "name": "Egil Selvik", "age": 27, "position": "GK", "rating": 77, "is_starter": false },
                     { "name": "Kristoffer Klaesson", "age": 25, "position": "GK", "rating": 76, "is_starter": false },
 
                     { "name": "Julian Ryerson", "age": 27, "position": "DEF", "rating": 83, "is_starter": true },
-                    { "name": "Leo Østigård", "age": 26, "position": "DEF", "rating": 82, "is_starter": true },
+                    { "name": "Leo Østigård", "age": 26, "position": "DEF", "rating": 83, "is_starter": true },
                     { "name": "Kristoffer Ajer", "age": 27, "position": "DEF", "rating": 83, "is_starter": true },
-                    { "name": "Birger Meling", "age": 30, "position": "DEF", "rating": 81, "is_starter": true },
+                    { "name": "Birger Meling", "age": 30, "position": "DEF", "rating": 82, "is_starter": true },
 
                     { "name": "Stian Gregersen", "age": 29, "position": "DEF", "rating": 79, "is_starter": false },
                     { "name": "Marcus Holmgren Pedersen", "age": 25, "position": "DEF", "rating": 80, "is_starter": false },
                     { "name": "Fredrik Bjørkan", "age": 27, "position": "DEF", "rating": 79, "is_starter": false },
                     { "name": "Andreas Hanche-Olsen", "age": 28, "position": "DEF", "rating": 80, "is_starter": false },
 
-                    { "name": "Martin Ødegaard", "age": 27, "position": "MID", "rating": 90, "is_starter": true },
+                    { "name": "Martin Ødegaard", "age": 27, "position": "MID", "rating": 89, "is_starter": true },
                     { "name": "Sander Berge", "age": 27, "position": "MID", "rating": 84, "is_starter": true },
                     { "name": "Patrick Berg", "age": 27, "position": "MID", "rating": 82, "is_starter": true },
 
@@ -1549,10 +1549,10 @@
 
                     { "name": "Erling Haaland", "age": 25, "position": "FWD", "rating": 93, "is_starter": true },
                     { "name": "Alexander Sørloth", "age": 30, "position": "FWD", "rating": 85, "is_starter": true },
-                    { "name": "Mohamed Elyounoussi", "age": 30, "position": "FWD", "rating": 83, "is_starter": true },
+                    { "name": "Mohamed Elyounoussi", "age": 30, "position": "FWD", "rating": 83, "is_starter": false },
 
                     { "name": "Jørgen Strand Larsen", "age": 25, "position": "FWD", "rating": 83, "is_starter": false },
-                    { "name": "Antonio Nusa", "age": 21, "position": "FWD", "rating": 85, "is_starter": false },
+                    { "name": "Antonio Nusa", "age": 21, "position": "FWD", "rating": 85, "is_starter": true },
                     { "name": "Ola Solbakken", "age": 26, "position": "FWD", "rating": 82, "is_starter": false },
 
                     { "name": "Aron Dønnum", "age": 27, "position": "FWD", "rating": 81, "is_starter": false },
@@ -1574,8 +1574,8 @@
                     { "name": "Walter Benítez", "age": 32, "position": "GK", "rating": 82, "is_starter": false },
 
                     { "name": "Nahuel Molina", "age": 27, "position": "DEF", "rating": 84, "is_starter": true },
-                    { "name": "Cristian Romero", "age": 27, "position": "DEF", "rating": 88, "is_starter": true },
-                    { "name": "Lisandro Martínez", "age": 27, "position": "DEF", "rating": 87, "is_starter": true },
+                    { "name": "Cristian Romero", "age": 27, "position": "DEF", "rating": 87, "is_starter": true },
+                    { "name": "Lisandro Martínez", "age": 27, "position": "DEF", "rating": 86, "is_starter": true },
                     { "name": "Nicolás Tagliafico", "age": 33, "position": "DEF", "rating": 84, "is_starter": true },
 
                     { "name": "Gonzalo Montiel", "age": 28, "position": "DEF", "rating": 82, "is_starter": false },
@@ -1584,16 +1584,16 @@
                     { "name": "Juan Foyth", "age": 27, "position": "DEF", "rating": 82, "is_starter": false },
 
                     { "name": "Rodrigo De Paul", "age": 31, "position": "MID", "rating": 86, "is_starter": true },
-                    { "name": "Enzo Fernández", "age": 25, "position": "MID", "rating": 88, "is_starter": true },
+                    { "name": "Enzo Fernández", "age": 25, "position": "MID", "rating": 87, "is_starter": true },
                     { "name": "Alexis Mac Allister", "age": 27, "position": "MID", "rating": 88, "is_starter": true },
 
                     { "name": "Leandro Paredes", "age": 31, "position": "MID", "rating": 85, "is_starter": false },
                     { "name": "Giovani Lo Celso", "age": 29, "position": "MID", "rating": 86, "is_starter": false },
                     { "name": "Exequiel Palacios", "age": 27, "position": "MID", "rating": 85, "is_starter": false },
 
-                    { "name": "Lionel Messi", "age": 39, "position": "FWD", "rating": 92, "is_starter": true },
+                    { "name": "Lionel Messi", "age": 39, "position": "FWD", "rating": 91, "is_starter": true },
                     { "name": "Julián Álvarez", "age": 26, "position": "FWD", "rating": 88, "is_starter": true },
-                    { "name": "Lautaro Martínez", "age": 28, "position": "FWD", "rating": 89, "is_starter": true },
+                    { "name": "Lautaro Martínez", "age": 28, "position": "FWD", "rating": 88, "is_starter": true },
 
                     { "name": "Ángel Correa", "age": 31, "position": "FWD", "rating": 85, "is_starter": false },
                     { "name": "Nicolás González", "age": 27, "position": "FWD", "rating": 85, "is_starter": false },
@@ -1613,14 +1613,14 @@
                 "formation": "4-2-3-1",
                 "players": [
 
-                    { "name": "Alexander Schlager", "age": 29, "position": "GK", "rating": 81, "is_starter": true },
+                    { "name": "Alexander Schlager", "age": 29, "position": "GK", "rating": 82, "is_starter": true },
                     { "name": "Patrick Pentz", "age": 28, "position": "GK", "rating": 79, "is_starter": false },
                     { "name": "Heinz Lindner", "age": 35, "position": "GK", "rating": 77, "is_starter": false },
 
-                    { "name": "Stefan Posch", "age": 28, "position": "DEF", "rating": 82, "is_starter": true },
+                    { "name": "Stefan Posch", "age": 28, "position": "DEF", "rating": 83, "is_starter": true },
                     { "name": "Kevin Danso", "age": 27, "position": "DEF", "rating": 84, "is_starter": true },
                     { "name": "Maximilian Wöber", "age": 27, "position": "DEF", "rating": 82, "is_starter": true },
-                    { "name": "Phillipp Mwene", "age": 31, "position": "DEF", "rating": 79, "is_starter": true },
+                    { "name": "Phillipp Mwene", "age": 31, "position": "DEF", "rating": 82, "is_starter": true },
 
                     { "name": "Gernot Trauner", "age": 33, "position": "DEF", "rating": 81, "is_starter": false },
                     { "name": "David Alaba", "age": 34, "position": "DEF", "rating": 86, "is_starter": false },
@@ -1631,7 +1631,7 @@
                     { "name": "Marcel Sabitzer", "age": 32, "position": "MID", "rating": 85, "is_starter": true },
 
                     { "name": "Christoph Baumgartner", "age": 26, "position": "MID", "rating": 84, "is_starter": true },
-                    { "name": "Romano Schmid", "age": 26, "position": "MID", "rating": 81, "is_starter": true },
+                    { "name": "Romano Schmid", "age": 26, "position": "MID", "rating": 83, "is_starter": true },
                     { "name": "Matthias Seidl", "age": 24, "position": "MID", "rating": 78, "is_starter": false },
                     { "name": "Xaver Schlager", "age": 28, "position": "MID", "rating": 83, "is_starter": false },
 
@@ -1657,13 +1657,13 @@
                 "formation": "4-3-3",
                 "players": [
 
-                    { "name": "Alexis Guendouz", "age": 29, "position": "GK", "rating": 79, "is_starter": true },
+                    { "name": "Alexis Guendouz", "age": 29, "position": "GK", "rating": 81, "is_starter": true },
                     { "name": "Anthony Mandréa", "age": 29, "position": "GK", "rating": 78, "is_starter": false },
                     { "name": "Moustafa Zeghba", "age": 35, "position": "GK", "rating": 77, "is_starter": false },
 
-                    { "name": "Youcef Atal", "age": 29, "position": "DEF", "rating": 81, "is_starter": true },
+                    { "name": "Youcef Atal", "age": 29, "position": "DEF", "rating": 83, "is_starter": true },
                     { "name": "Aïssa Mandi", "age": 34, "position": "DEF", "rating": 82, "is_starter": true },
-                    { "name": "Mohamed Amine Tougaï", "age": 25, "position": "DEF", "rating": 79, "is_starter": true },
+                    { "name": "Mohamed Amine Tougaï", "age": 25, "position": "DEF", "rating": 81, "is_starter": true },
                     { "name": "Rayan Aït-Nouri", "age": 24, "position": "DEF", "rating": 84, "is_starter": true },
 
                     { "name": "Ahmed Touba", "age": 27, "position": "DEF", "rating": 78, "is_starter": false },
@@ -1671,16 +1671,16 @@
                     { "name": "Jaouen Hadjam", "age": 22, "position": "DEF", "rating": 77, "is_starter": false },
 
                     { "name": "Ismaël Bennacer", "age": 28, "position": "MID", "rating": 85, "is_starter": true },
-                    { "name": "Hicham Boudaoui", "age": 26, "position": "MID", "rating": 82, "is_starter": true },
-                    { "name": "Ahmed Kendouci", "age": 26, "position": "MID", "rating": 79, "is_starter": true },
+                    { "name": "Hicham Boudaoui", "age": 26, "position": "MID", "rating": 82, "is_starter": false },
+                    { "name": "Ahmed Kendouci", "age": 26, "position": "MID", "rating": 82, "is_starter": true },
 
                     { "name": "Farès Chaïbi", "age": 23, "position": "MID", "rating": 82, "is_starter": false },
                     { "name": "Sofiane Bendebka", "age": 33, "position": "MID", "rating": 79, "is_starter": false },
                     { "name": "Adem Zorgane", "age": 25, "position": "MID", "rating": 79, "is_starter": false },
-                    { "name": "Houssem Aouar", "age": 27, "position": "MID", "rating": 83, "is_starter": false },
+                    { "name": "Houssem Aouar", "age": 27, "position": "MID", "rating": 84, "is_starter": true },
 
                     { "name": "Riyad Mahrez", "age": 35, "position": "FWD", "rating": 86, "is_starter": true },
-                    { "name": "Amine Gouiri", "age": 25, "position": "FWD", "rating": 83, "is_starter": true },
+                    { "name": "Amine Gouiri", "age": 25, "position": "FWD", "rating": 85, "is_starter": true },
                     { "name": "Mohamed Amoura", "age": 25, "position": "FWD", "rating": 83, "is_starter": true },
 
                     { "name": "Baghdad Bounedjah", "age": 34, "position": "FWD", "rating": 81, "is_starter": false },
@@ -1701,29 +1701,29 @@
                 "formation": "4-2-3-1",
                 "players": [
 
-                    { "name": "Yazeed Abulaila", "age": 32, "position": "GK", "rating": 77, "is_starter": true },
+                    { "name": "Yazeed Abulaila", "age": 32, "position": "GK", "rating": 79, "is_starter": true },
                     { "name": "Abdullah Al-Fakhouri", "age": 25, "position": "GK", "rating": 74, "is_starter": false },
                     { "name": "Ahmed Abdel-Sattar", "age": 31, "position": "GK", "rating": 74, "is_starter": false },
 
-                    { "name": "Ehsan Haddad", "age": 32, "position": "DEF", "rating": 77, "is_starter": true },
-                    { "name": "Yazan Al-Arab", "age": 29, "position": "DEF", "rating": 78, "is_starter": true },
-                    { "name": "Abdallah Nasib", "age": 31, "position": "DEF", "rating": 77, "is_starter": true },
-                    { "name": "Mohannad Abu Taha", "age": 22, "position": "DEF", "rating": 76, "is_starter": true },
+                    { "name": "Ehsan Haddad", "age": 32, "position": "DEF", "rating": 78, "is_starter": true },
+                    { "name": "Yazan Al-Arab", "age": 29, "position": "DEF", "rating": 79, "is_starter": true },
+                    { "name": "Abdallah Nasib", "age": 31, "position": "DEF", "rating": 80, "is_starter": true },
+                    { "name": "Mohannad Abu Taha", "age": 22, "position": "DEF", "rating": 79, "is_starter": true },
 
                     { "name": "Salem Al-Ajalin", "age": 37, "position": "DEF", "rating": 75, "is_starter": false },
                     { "name": "Baraa Marei", "age": 31, "position": "DEF", "rating": 75, "is_starter": false },
                     { "name": "Yazan Al-Naimat", "age": 26, "position": "DEF", "rating": 74, "is_starter": false },
 
-                    { "name": "Nizar Al-Rashdan", "age": 26, "position": "MID", "rating": 77, "is_starter": true },
-                    { "name": "Noor Al-Rawabdeh", "age": 28, "position": "MID", "rating": 78, "is_starter": true },
-                    { "name": "Ibrahim Sadeh", "age": 25, "position": "MID", "rating": 77, "is_starter": true },
+                    { "name": "Nizar Al-Rashdan", "age": 26, "position": "MID", "rating": 82, "is_starter": true },
+                    { "name": "Noor Al-Rawabdeh", "age": 28, "position": "MID", "rating": 80, "is_starter": true },
+                    { "name": "Ibrahim Sadeh", "age": 25, "position": "MID", "rating": 79, "is_starter": true },
 
                     { "name": "Mousa Al-Taamari", "age": 28, "position": "MID", "rating": 83, "is_starter": true },
-                    { "name": "Mahmoud Al-Mardi", "age": 31, "position": "MID", "rating": 78, "is_starter": true },
+                    { "name": "Mahmoud Al-Mardi", "age": 31, "position": "MID", "rating": 80, "is_starter": true },
                     { "name": "Ali Olwan", "age": 25, "position": "MID", "rating": 79, "is_starter": false },
                     { "name": "Anas Al-Awadat", "age": 23, "position": "MID", "rating": 76, "is_starter": false },
 
-                    { "name": "Yazan Al-Naimat", "age": 26, "position": "FWD", "rating": 81, "is_starter": true },
+                    { "name": "Yazan Al-Naimat", "age": 26, "position": "FWD", "rating": 82, "is_starter": true },
                     { "name": "Hamza Al-Dardour", "age": 34, "position": "FWD", "rating": 76, "is_starter": false },
                     { "name": "Baha' Faisal", "age": 30, "position": "FWD", "rating": 77, "is_starter": false },
 
@@ -1750,9 +1750,9 @@
                     { "name": "Rui Patrício", "age": 37, "position": "GK", "rating": 82, "is_starter": false },
 
                     { "name": "João Cancelo", "age": 31, "position": "DEF", "rating": 87, "is_starter": true },
-                    { "name": "Rúben Dias", "age": 28, "position": "DEF", "rating": 89, "is_starter": true },
-                    { "name": "Gonçalo Inácio", "age": 24, "position": "DEF", "rating": 85, "is_starter": true },
-                    { "name": "Nuno Mendes", "age": 23, "position": "DEF", "rating": 87, "is_starter": true },
+                    { "name": "Rúben Dias", "age": 28, "position": "DEF", "rating": 88, "is_starter": true },
+                    { "name": "Gonçalo Inácio", "age": 24, "position": "DEF", "rating": 84, "is_starter": true },
+                    { "name": "Nuno Mendes", "age": 23, "position": "DEF", "rating": 89, "is_starter": true },
 
                     { "name": "Pepe", "age": 42, "position": "DEF", "rating": 83, "is_starter": false },
                     { "name": "António Silva", "age": 22, "position": "DEF", "rating": 86, "is_starter": false },
@@ -1760,16 +1760,16 @@
                     { "name": "Raphaël Guerreiro", "age": 32, "position": "DEF", "rating": 84, "is_starter": false },
 
                     { "name": "Bruno Fernandes", "age": 31, "position": "MID", "rating": 90, "is_starter": true },
-                    { "name": "Vitinha", "age": 26, "position": "MID", "rating": 88, "is_starter": true },
-                    { "name": "Bernardo Silva", "age": 31, "position": "MID", "rating": 90, "is_starter": true },
+                    { "name": "Vitinha", "age": 26, "position": "MID", "rating": 89, "is_starter": true },
+                    { "name": "Bernardo Silva", "age": 31, "position": "MID", "rating": 87, "is_starter": true },
 
-                    { "name": "João Neves", "age": 21, "position": "MID", "rating": 87, "is_starter": false },
+                    { "name": "João Neves", "age": 21, "position": "MID", "rating": 88, "is_starter": true },
                     { "name": "Rúben Neves", "age": 29, "position": "MID", "rating": 86, "is_starter": false },
                     { "name": "Matheus Nunes", "age": 27, "position": "MID", "rating": 85, "is_starter": false },
 
                     { "name": "Cristiano Ronaldo", "age": 41, "position": "FWD", "rating": 90, "is_starter": true },
-                    { "name": "Rafael Leão", "age": 27, "position": "FWD", "rating": 89, "is_starter": true },
-                    { "name": "Gonçalo Ramos", "age": 25, "position": "FWD", "rating": 86, "is_starter": true },
+                    { "name": "Rafael Leão", "age": 27, "position": "FWD", "rating": 87, "is_starter": true },
+                    { "name": "Gonçalo Ramos", "age": 25, "position": "FWD", "rating": 86, "is_starter": false },
 
                     { "name": "João Félix", "age": 26, "position": "FWD", "rating": 86, "is_starter": false },
                     { "name": "Diogo Jota", "age": 29, "position": "FWD", "rating": 88, "is_starter": false },
@@ -1796,7 +1796,7 @@
                     { "name": "Daniel Muñoz", "age": 29, "position": "DEF", "rating": 84, "is_starter": true },
                     { "name": "Davinson Sánchez", "age": 29, "position": "DEF", "rating": 84, "is_starter": true },
                     { "name": "Jhon Lucumí", "age": 27, "position": "DEF", "rating": 84, "is_starter": true },
-                    { "name": "Deiver Machado", "age": 31, "position": "DEF", "rating": 82, "is_starter": true },
+                    { "name": "Deiver Machado", "age": 31, "position": "DEF", "rating": 83, "is_starter": true },
 
                     { "name": "Yerry Mina", "age": 31, "position": "DEF", "rating": 82, "is_starter": false },
                     { "name": "Carlos Cuesta", "age": 27, "position": "DEF", "rating": 82, "is_starter": false },
@@ -1805,7 +1805,7 @@
 
                     { "name": "James Rodríguez", "age": 35, "position": "MID", "rating": 85, "is_starter": true },
                     { "name": "Jefferson Lerma", "age": 31, "position": "MID", "rating": 84, "is_starter": true },
-                    { "name": "Richard Ríos", "age": 26, "position": "MID", "rating": 83, "is_starter": true },
+                    { "name": "Richard Ríos", "age": 26, "position": "MID", "rating": 84, "is_starter": true },
 
                     { "name": "Jorge Carrascal", "age": 27, "position": "MID", "rating": 83, "is_starter": false },
                     { "name": "Juan Fernando Quintero", "age": 32, "position": "MID", "rating": 82, "is_starter": false },
@@ -1928,7 +1928,7 @@
                     { "name": "Kyle Walker", "age": 36, "position": "DEF", "rating": 85, "is_starter": true },
                     { "name": "John Stones", "age": 31, "position": "DEF", "rating": 88, "is_starter": true },
                     { "name": "Marc Guéhi", "age": 25, "position": "DEF", "rating": 84, "is_starter": true },
-                    { "name": "Luke Shaw", "age": 31, "position": "DEF", "rating": 85, "is_starter": true },
+                    { "name": "Luke Shaw", "age": 31, "position": "DEF", "rating": 83, "is_starter": true },
 
                     { "name": "Kieran Trippier", "age": 35, "position": "DEF", "rating": 84, "is_starter": false },
                     { "name": "Reece James", "age": 27, "position": "DEF", "rating": 86, "is_starter": false },
@@ -1937,15 +1937,15 @@
 
                     { "name": "Declan Rice", "age": 27, "position": "MID", "rating": 90, "is_starter": true },
                     { "name": "Jude Bellingham", "age": 23, "position": "MID", "rating": 92, "is_starter": true },
-                    { "name": "Phil Foden", "age": 26, "position": "MID", "rating": 91, "is_starter": true },
+                    { "name": "Phil Foden", "age": 26, "position": "MID", "rating": 87, "is_starter": true },
 
                     { "name": "Jordan Henderson", "age": 36, "position": "MID", "rating": 83, "is_starter": false },
                     { "name": "Conor Gallagher", "age": 26, "position": "MID", "rating": 84, "is_starter": false },
                     { "name": "Trent Alexander-Arnold", "age": 27, "position": "MID", "rating": 88, "is_starter": false },
 
                     { "name": "Harry Kane", "age": 33, "position": "FWD", "rating": 92, "is_starter": true },
-                    { "name": "Bukayo Saka", "age": 25, "position": "FWD", "rating": 91, "is_starter": true },
-                    { "name": "Marcus Rashford", "age": 28, "position": "FWD", "rating": 88, "is_starter": true },
+                    { "name": "Bukayo Saka", "age": 25, "position": "FWD", "rating": 89, "is_starter": true },
+                    { "name": "Marcus Rashford", "age": 28, "position": "FWD", "rating": 85, "is_starter": true },
 
                     { "name": "Jack Grealish", "age": 30, "position": "FWD", "rating": 87, "is_starter": false },
                     { "name": "Jarrod Bowen", "age": 29, "position": "FWD", "rating": 85, "is_starter": false },
