@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://wc2026simulador.com/sitemap.xml

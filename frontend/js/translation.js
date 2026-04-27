@@ -174,6 +174,21 @@ en: {
     }
 };
 
+const SEO = {
+    pt: {
+        title: "Simulador Copa do Mundo 2026 | Simule grupos e campeão",
+        description: "Simule a Copa do Mundo 2026 completa. Fase de grupos com 48 seleções, mata-mata e campeão. Modo automático com estatísticas reais e modo manual.",
+        ogTitle: "Simulador Copa do Mundo 2026",
+        ogDescription: "Simule a Copa do Mundo 2026 completa. 48 seleções, fase de grupos e mata-mata.",
+    },
+    en: {
+        title: "World Cup 2026 Simulator | Simulate groups and champion",
+        description: "Simulate the full 2026 World Cup. 48 teams, group stage, knockout rounds and champion. Automatic mode with real stats and manual mode.",
+        ogTitle: "World Cup 2026 Simulator",
+        ogDescription: "Simulate the full 2026 World Cup. 48 teams, group stage and knockout rounds.",
+    }
+};
+
 let current = localStorage.getItem("lang") || "pt";
 
 const btnLang = document.getElementById("btnLang");
@@ -196,17 +211,40 @@ btnLang.addEventListener("click", () => {
 
 function applyTranslation() {
     const t = translations[current];
+    const seo = SEO[current];
+
+    // Atualiza lang do HTML (importante pro Google)
+    document.documentElement.lang = current === "pt" ? "pt-BR" : "en";
+
+    // Atualiza title e meta description dinamicamente
+    if (seo) {
+        document.title = seo.title;
+
+        const metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) metaDesc.setAttribute("content", seo.description);
+
+        const ogTitle = document.querySelector('meta[property="og:title"]');
+        if (ogTitle) ogTitle.setAttribute("content", seo.ogTitle);
+
+        const ogDesc = document.querySelector('meta[property="og:description"]');
+        if (ogDesc) ogDesc.setAttribute("content", seo.ogDescription);
+
+        const twTitle = document.querySelector('meta[name="twitter:title"]');
+        if (twTitle) twTitle.setAttribute("content", seo.ogTitle);
+
+        const twDesc = document.querySelector('meta[name="twitter:description"]');
+        if (twDesc) twDesc.setAttribute("content", seo.ogDescription);
+    }
+
+    // Aplica traduções nos elementos
     document.querySelectorAll("[data-i18n]").forEach(el => {
         const key = el.getAttribute("data-i18n");
-        if(t[key]){
-            el.textContent = t[key];
-        }
+        if (t[key]) el.textContent = t[key];
     });
+
     document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
         const key = el.getAttribute("data-i18n-placeholder");
-        if(t[key]){
-            el.placeholder = t[key];
-        }
+        if (t[key]) el.placeholder = t[key];
     });
     btnLang.textContent = t.lang;
 }
