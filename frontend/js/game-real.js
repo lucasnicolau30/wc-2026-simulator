@@ -675,13 +675,23 @@ function renderBracketMatch(match, label = null, shootout = null){
 async function loadKnockout(){
   const wrap = document.getElementById('knockout-wrap');
 
-  const response = await fetch(`${API_BASE_URL}/knockout-matches`);
+  let response = await fetch(`${API_BASE_URL}/knockout-matches`);
   if(!response.ok) return;
-  const matches = await response.json();
+  let matches = await response.json();
 
   if(matches.length === 0){
-    wrap.innerHTML = `<p class="knockout-placeholder">${translations[current].knockoutPlaceholder}</p>`;
-    return;
+    const generated = await tryGenerateStage('r32');
+    if(!generated){
+      wrap.innerHTML = `<p class="knockout-placeholder">${translations[current].knockoutPlaceholder}</p>`;
+      return;
+    }
+    response = await fetch(`${API_BASE_URL}/knockout-matches`);
+    if(!response.ok) return;
+    matches = await response.json();
+    if(matches.length === 0){
+      wrap.innerHTML = `<p class="knockout-placeholder">${translations[current].knockoutPlaceholder}</p>`;
+      return;
+    }
   }
 
   await hydrateShootoutsFromDb(matches);
@@ -724,6 +734,7 @@ async function loadKnockout(){
     }
     championHtml = `
       <div class="bracket-champion">
+        <div class="champion-trophy">🏆</div>
         <div class="champion-label">${translations[current].bracketChampion}</div>
         <div class="champion-team">
           <img src="${getFlagSrc(championName)}" class="champion-flag" alt="${championName}" />

@@ -72,6 +72,12 @@ pt: {
     cancel: "Cancelar",
     confirm: "Reiniciar",
 
+    // botão de voltar
+    back: "VOLTAR",
+    backTitle: "Voltar ao início?",
+    backText: "Todos os dados da simulação serão perdidos. Essa ação não pode ser desfeita.",
+    backConfirm: "Voltar",
+
     // game-manual.html
     manualGameHeader: "WC2026 — Manual",
     manualResetTitle: "Reiniciar simulação?",
@@ -150,6 +156,12 @@ en: {
     resetText: "This will erase all matches, penalties and stats. Teams and players will be kept.",
     cancel: "Cancel",
     confirm: "Reset",
+
+    // back button
+    back: "BACK",
+    backTitle: "Go back to start?",
+    backText: "All simulation data will be lost. This action cannot be undone.",
+    backConfirm: "Back",
 
     // game-manual.html
     manualGameHeader: "WC2026 — Manual",

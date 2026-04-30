@@ -76,6 +76,7 @@ wc-2026/
 │  │  ├─ translation.js         # i18n system (PT / EN)
 │  │  ├─ particles.js           # Canvas particle background animation
 │  │  ├─ simulation.js          # Mode selection logic and navigation
+│  │  ├─ back-button.js         # Shared back button modal logic
 │  │  ├─ game-real.js           # Automatic simulation mode logic
 │  │  └─ game-manual.js         # Manual mode logic
 │  │
