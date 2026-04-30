@@ -21,19 +21,25 @@ Below are some views of the application, including group stage management, knock
 
 <img src="frontend/img/preview/sim-pc.png" height="400">
 
-<img src="frontend/img/preview/sim-mobile.jpeg" height="400">
+<img src="frontend/img/preview/sim-mobile.png" height="400">
 
 ### 📊 Group Stage
 
 <img src="frontend/img/preview/groups-pc.png" height="400">
 
-<img src="frontend/img/preview/groups-mobile.jpeg" height="400">
+<img src="frontend/img/preview/groups-mobile.png" height="400">
+
+## 🆚 Matches
+
+<img src="frontend/img/preview/matches-pc.png" height="400">
+
+<img src="frontend/img/preview/matches-mobile.png" height="400">
 
 ### 🏆 Knockout Stage
 
 <img src="frontend/img/preview/knockout-pc.png" height="400">
 
-<img src="frontend/img/preview/knockout-mobile.jpeg" height="400">
+<img src="frontend/img/preview/knockout-mobile.png" height="400">
 
 ### 📈 Player Performance Ranking
 
