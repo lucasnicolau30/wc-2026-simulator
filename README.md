@@ -188,6 +188,7 @@ The application supports **Portuguese (PT-BR)** and **English (EN)** via a custo
 - [UI Components Inspiration](https://uiverse.io/SamiBouchareb/warm-catfish-72)
 - [UI Components Inspiration](https://uiverse.io/JaydipPrajapati1910/dry-frog-0)
 - [UI Components Inspiration](https://uiverse.io/alexruix/slippery-frog-10)
+- [UI Components Inspiration](https://uiverse.io/aryamitra06/silent-lion-21)
 
 ## 👨‍💻 Author
 
