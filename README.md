@@ -19,34 +19,34 @@ Below are some views of the application, including group stage management, knock
 
 ### 🏠 Home Page
 
-![Home](frontend/img/preview/home-pc.png)
+<img src="frontend/img/preview/home-pc.png" height="400">
 
-![Home](frontend/img/preview/home-mobile.jpeg)
+<img src="frontend/img/preview/home-mobile.jpeg" height="400">
 
 
 ### ⚽ Simulation Mode Selection
 
-![Simulation Mode](frontend/img/preview/sim-pc.png)
+<img src="frontend/img/preview/sim-pc.png" height="400">
 
-![Simulation Mode](frontend/img/preview/sim-mobile.jpeg)
+<img src="frontend/img/preview/sim-mobile.jpeg" height="400">
 
 ### 📊 Group Stage
 
-![Group Stage](frontend/img/preview/groups-pc.png)
+<img src="frontend/img/preview/groups-pc.png" height="400">
 
-![Group Stage](frontend/img/preview/groups-mobile.jpeg)
+<img src="frontend/img/preview/groups-mobile.jpeg" height="400">
 
 ### 🏆 Knockout Stage
 
-![Knockout Stage](frontend/img/preview/knockout-pc.png)
+<img src="frontend/img/preview/knockout-pc.png" height="400">
 
-![Knockout Stage](frontend/img/preview/knockout-mobile.jpeg)
+<img src="frontend/img/preview/knockout-mobile.jpeg" height="400">
 
 ### 📈 Player Performance Ranking
 
-![Performance](frontend/img/preview/performance-pc.png)
+<img src="frontend/img/preview/performance-pc.png" height="400">
 
-![Performance](frontend/img/preview/performance-mobile.jpeg)
+<img src="frontend/img/preview/performance-mobile.png" height="400">
 
 ## 💡 Context
 
@@ -81,7 +81,9 @@ wc-2026/
 │  ├─ home.html
 │  ├─ simulation.html
 │  ├─ game-real.html
-│  └─ game-manual.html
+│  ├─ game-manual.html
+│  ├─ robots.txt                # Search engine crawl rules
+│  └─ sitemap.xml               # Sitemap for Google indexing
 │
 ├─ .env
 ├─ package.json
@@ -153,22 +155,41 @@ This design allows:
 - player performance tracking  
 - tournament progression logic  
 
----
-
-
 ## 📡 API Documentation
 
-Swagger documentation is available at: - [Swagger](http://localhost:8000/docs)
+Swagger documentation is available at: [Swagger](http://localhost:8000/docs)
 
-![Swagger](frontend/img/preview/swagger.png)
+<img src="frontend/img/preview/swagger.png" height="400">
+
+## 🌐 Deployment & SEO
+
+The application is deployed on **Hostinger** using Node.js hosting with a custom domain.
+
+Production setup:
+- Entry point: `backend/src/server.js`
+- Frontend served as static files via `express.static`
+- Environment variables configured via `.env`: `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`, `PORT`, `FRONTEND_URL`
+SEO configuration:
+- `robots.txt` at `frontend/robots.txt` — allows full crawling by search engines
+- `sitemap.xml` at `frontend/sitemap.xml` — submitted to Google Search Console
+- `home.html` includes full meta tags: `title`, `description`, `keywords`, Open Graph, Twitter Card, and `hreflang` for PT/EN
+- `translation.js` dynamically updates `document.lang`, `<title>`, and all meta tags on language switch
+
+## 🌍 Internationalization
+
+The application supports **Portuguese (PT-BR)** and **English (EN)** via a custom i18n system:
+
+- Language stored in `localStorage` and persisted across pages
+- All UI strings defined in `frontend/js/translation.js`
+- `hreflang` tags configured for bilingual SEO indexing
 
 ## 📖 References
 
 - [FIFA World Cup 2026 Official Format](https://www.fifa.com/pt/tournaments/mens/worldcup/canadamexicousa2026)
-- [FIFA Ranking Data](https://inside.fifa.com/fifa-world-ranking/men) -> Last update: 12/04/2026
+- [FIFA Ranking Data](https://inside.fifa.com/fifa-world-ranking/men) — Last update: 12/04/2026
 - [MySQL Documentation](https://dev.mysql.com/)
 - [Simulator Reference](https://interativos.ge.globo.com/futebol/copa-do-mundo/especial/simulador-da-copa-do-mundo-2026)
-- [Players Reference](https://www.sofascore.com/pt) -> Last update: 24/04/2026
+- [Players Reference](https://www.sofascore.com/pt) — Last update: 24/04/2026
 - [UI Components Inspiration](https://uiverse.io/SamiBouchareb/warm-catfish-72)
 - [UI Components Inspiration](https://uiverse.io/JaydipPrajapati1910/dry-frog-0)
 - [UI Components Inspiration](https://uiverse.io/alexruix/slippery-frog-10)
