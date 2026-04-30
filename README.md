@@ -17,14 +17,7 @@ Full-stack web application developed to simulate the FIFA World Cup 2026, includ
 
 Below are some views of the application, including group stage management, knockout bracket generation, and mobile responsiveness.
 
-### 🏠 Home Page
-
-<img src="frontend/img/preview/home-pc.png" height="400">
-
-<img src="frontend/img/preview/home-mobile.jpeg" height="400">
-
-
-### ⚽ Simulation Mode Selection
+### ⚽ Mode Selection
 
 <img src="frontend/img/preview/sim-pc.png" height="400">
 
@@ -75,11 +68,12 @@ wc-2026/
 │  ├─ js/
 │  │  ├─ config.js              # API base URL configuration
 │  │  ├─ translation.js         # i18n system (PT / EN)
+│  │  ├─ particles.js           # Canvas particle background animation
+│  │  ├─ simulation.js          # Mode selection logic and navigation
 │  │  ├─ game-real.js           # Automatic simulation mode logic
 │  │  └─ game-manual.js         # Manual mode logic
 │  │
-│  ├─ home.html
-│  ├─ simulation.html
+│  ├─ simulation.html           # Entry point — mode selection
 │  ├─ game-real.html
 │  ├─ game-manual.html
 │  ├─ robots.txt                # Search engine crawl rules
@@ -167,12 +161,13 @@ The application is deployed on **Hostinger** using Node.js hosting with a custom
 
 Production setup:
 - Entry point: `backend/src/server.js`
-- Frontend served as static files via `express.static`
+- Frontend served as static files via `express.static`, with `simulation.html` as the index
 - Environment variables configured via `.env`: `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`, `PORT`, `FRONTEND_URL`
+
 SEO configuration:
-- `robots.txt` at `frontend/robots.txt` — allows full crawling by search engines
-- `sitemap.xml` at `frontend/sitemap.xml` — submitted to Google Search Console
-- `home.html` includes full meta tags: `title`, `description`, `keywords`, Open Graph, Twitter Card, and `hreflang` for PT/EN
+- `robots.txt` — allows full crawling by search engines
+- `sitemap.xml` — submitted to Google Search Console; canonical root URL points to `simulation.html`
+- `simulation.html` includes full meta tags: `title`, `description`, `keywords`, Open Graph, Twitter Card, and `hreflang` for PT/EN
 - `translation.js` dynamically updates `document.lang`, `<title>`, and all meta tags on language switch
 
 ## 🌍 Internationalization

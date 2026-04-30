@@ -3,7 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title data-i18n="simHeader">Escolha o Modo de Simulação — WC2026</title>
+
+  <!-- SEO -->
+  <title>Simulador Copa do Mundo 2026 | Simule grupos e campeão</title>
+  <meta name="description" content="Simule a Copa do Mundo 2026 completa. Fase de grupos com 48 seleções, mata-mata e campeão. Modo automático com estatísticas reais e modo manual." />
+  <meta name="keywords" content="simulador copa do mundo 2026, copa 2026, world cup 2026 simulator, simulador copa 2026, WC2026" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://wc2026simulador.com/" />
+
+  <!-- Open Graph (WhatsApp, Facebook, LinkedIn) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://wc2026simulador.com/" />
+  <meta property="og:title" content="Simulador Copa do Mundo 2026" />
+  <meta property="og:description" content="Simule a Copa do Mundo 2026 completa. 48 seleções, fase de grupos e mata-mata." />
+  <meta property="og:image" content="https://wc2026simulador.com/img/bg-simulation.jpg" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:locale:alternate" content="en_US" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Simulador Copa do Mundo 2026" />
+  <meta name="twitter:description" content="Simule a Copa do Mundo 2026 completa. 48 seleções, fase de grupos e mata-mata." />
+  <meta name="twitter:image" content="https://wc2026simulador.com/img/bg-simulation.jpg" />
+
+  <!-- hreflang -->
+  <link rel="alternate" hreflang="pt" href="https://wc2026simulador.com/" />
+  <link rel="alternate" hreflang="en" href="https://wc2026simulador.com/?lang=en" />
+  <link rel="alternate" hreflang="x-default" href="https://wc2026simulador.com/" />
+
   <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="css/shared.css" />
   <link rel="stylesheet" href="css/simulation.css" />
@@ -15,15 +42,13 @@
   <button id="btnLang">EN</button>
 
   <main class="sim-container">
-    <div class="sim-logo-wrap">
-      <img src="img/wc-logo.avif" class="sim-logo" alt="FIFA World Cup 2026" />
+
+    <div class="sim-hero">
+      <h1 class="sim-hero-title" data-i18n="homeTitle">SIMULADOR DA COPA DO MUNDO 2026</h1>
     </div>
 
     <div class="sim-header">
-      <h1 class="sim-title" data-i18n="simTitle">Escolha o Modo de Simulação</h1>
-      <p class="sim-subtitle" data-i18n="simSubtitle">
-        Selecione entre simulação automática com base em estatísticas reais ou simule manualmente as partidas.
-      </p>
+      <h2 class="sim-title" data-i18n="simTitle">Escolha o Modo de Simulação</h2>
     </div>
 
     <section class="sim-cards">
@@ -69,7 +94,11 @@
 
   <div id="pageLoader">
     <div class="loader-content">
-      <img src="img/wc-logo.avif" class="loader-logo" alt="WC2026" />
+      <div class="loader">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
       <p data-i18n="loadingSimulation">Carregando simulação...</p>
     </div>
   </div>

@@ -53,7 +53,7 @@ const swaggerSpec = swaggerJsdoc({
 });
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.use(express.static(path.join(__dirname, '..', '..', 'frontend'), { index: 'home.html' }));
+app.use(express.static(path.join(__dirname, '..', '..', 'frontend'), { index: 'simulation.html' }));
 
 let pool = null;
 

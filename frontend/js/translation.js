@@ -1,15 +1,8 @@
 const translations = {
 pt: {
-    // home.html
-    homeHeader: "WC2026 Simulador",
-    homeTitle: "SIMULADOR DA COPA DO MUNDO",
-    homeDescription: "Simule o maior torneio do mundo.",
-    loading: "Carregando modos...",
-    startSimulation: "Simular Agora",
-    lang: "EN",
-
     // simulation.html
-    simHeader: "Escolha o Modo de Simulação — WC2026",
+    homeTitle: "SIMULADOR DA COPA DO MUNDO 2026",
+    lang: "EN",
     simTitle: "Escolha o Modo de Simulação",
     simSubtitle: "Selecione entre simulação automática com base em estatísticas reais ou simule manualmente as partidas.",
     realTitle: "Simulação Real",
@@ -60,6 +53,7 @@ pt: {
     bracketSF: "SEMIS",
     bracketFinal: "FINAL",
     bracket3rd: "3º LUGAR",
+    bracketChampion: "Campeão",
 
     // game-real.html — performance
     performancePageTitle: "Desempenhos",
@@ -82,21 +76,12 @@ pt: {
     manualGameHeader: "WC2026 — Manual",
     manualResetTitle: "Reiniciar simulação?",
     manualResetText: "Isso apagará todos os jogos e resultados. As seleções e jogadores serão mantidos.",
-    saveMatch: "Salvar",
-    drawNotAllowed: "Empate não permitido no mata-mata. Um time deve vencer.",
     },
 
 en: {
-    // home.html
-    homeHeader: "WC2026 Simulator",
-    homeTitle: "WORLD CUP SIMULATOR",
-    homeDescription: "Simulate the biggest tournament in the world.",
-    loading: "Loading modes...",
-    startSimulation: "Simulate Now",
-    lang: "PT",
-
     // simulation.html
-    simHeader: "Choose Simulation Mode — WC2026",
+    homeTitle: "WORLD CUP SIMULATOR 2026",
+    lang: "PT",
     simTitle: "Choose Simulation Mode",
     simSubtitle: "Select between automatic simulation based on real statistics or manually simulate each match.",
     realTitle: "Real Simulation",
@@ -147,6 +132,7 @@ en: {
     bracketSF: "SF",
     bracketFinal: "FINAL",
     bracket3rd: "3RD PLACE",
+    bracketChampion: "Champion",
 
     // game-real.html — performance
     performancePageTitle: "Performance",

@@ -437,13 +437,32 @@ async function loadKnockout(){
   const finalMatch = byNum[BRACKET_LAYOUT.finalMatch];
   const thirdHtml = thirdMatch ? `<div class="bracket-third">${renderBracketMatch(thirdMatch, translations[current].bracket3rd)}</div>` : '';
 
+  let championHtml = '';
+  if (finalMatch && finalMatch.home_score !== null) {
+    let championName;
+    if (finalMatch.home_score > finalMatch.away_score) {
+      championName = finalMatch.home_name;
+    } else {
+      championName = finalMatch.away_name;
+    }
+    championHtml = `
+      <div class="bracket-champion">
+        <div class="champion-label">${translations[current].bracketChampion}</div>
+        <div class="champion-team">
+          <img src="${getFlagSrc(championName)}" class="champion-flag" alt="${championName}" />
+          <span>${getDisplayName(championName)}</span>
+        </div>
+      </div>
+    `;
+  }
+
   wrap.innerHTML = `
     <div class="knockout-bracket">
       <div class="bracket-col">${buildCol(BRACKET_LAYOUT.r32Left, translations[current].bracketR32)}</div>
       <div class="bracket-col">${buildCol(BRACKET_LAYOUT.r16Left, translations[current].bracketR16)}</div>
       <div class="bracket-col">${buildCol(BRACKET_LAYOUT.qfLeft, translations[current].bracketQF)}</div>
       <div class="bracket-col">${buildCol(BRACKET_LAYOUT.sfLeft, translations[current].bracketSF)}</div>
-      <div class="bracket-col final-col">${renderBracketMatch(finalMatch, translations[current].bracketFinal)}</div>
+      <div class="bracket-col final-col">${championHtml}${renderBracketMatch(finalMatch, translations[current].bracketFinal)}</div>
       <div class="bracket-col">${buildCol(BRACKET_LAYOUT.sfRight, translations[current].bracketSF)}</div>
       <div class="bracket-col">${buildCol(BRACKET_LAYOUT.qfRight, translations[current].bracketQF)}</div>
       <div class="bracket-col">${buildCol(BRACKET_LAYOUT.r16Right, translations[current].bracketR16)}</div>

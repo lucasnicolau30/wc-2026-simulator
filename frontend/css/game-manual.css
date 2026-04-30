@@ -1,13 +1,3 @@
-.bracket-team--clickable {
-  cursor: pointer;
-  border-radius: 4px;
-  transition: background 0.15s ease;
-}
-
-.bracket-team--clickable:hover {
-  background: rgba(244, 197, 66, 0.14);
-}
-
 /* score input dentro dos match cards */
 .match-score-form {
   display: flex;
@@ -45,6 +35,7 @@
   font-size: 20px;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.45);
+  text-shadow: 0 0 10px rgba(255,200,80,0.3);
 }
 
 /* rodapé do match card com botão salvar */
