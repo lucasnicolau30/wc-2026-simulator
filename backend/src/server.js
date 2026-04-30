@@ -22,9 +22,11 @@ const corsOptions = FRONTEND_URL
     ? { origin: FRONTEND_URL.split(',').map(o => o.trim()), credentials: true }
     : { origin: true, credentials: true };
 
+// Middlewares
 app.use(cors(corsOptions));
 app.use(express.json());
 
+// Rate limiters
 const globalLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     limit: 9000,
