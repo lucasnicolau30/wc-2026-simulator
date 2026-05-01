@@ -74,6 +74,42 @@ const teamAbbr = {
   "Gana": "GHA", "Panamá": "PAN"
 };
 
+const teamAbbrPt = {
+  "Estados Unidos": "EUA",
+  "Alemanha":       "ALE",
+  "Inglaterra":     "ING",
+  "Holanda":        "HOL",
+  "Coreia do Sul":  "COR",
+  "Suécia":         "SUE",
+  "Escócia":        "ESC",
+  "Catar":                  "CAT",
+  "Egito":                  "EGI",
+  "Equador":                "EQU",
+  "Argélia":                "ARG",
+  "Suíça":                  "SUI",
+  "Cabo Verde":             "CBV",
+  "Japão":                  "JAP",
+  "Bósnia e Herzegovina":   "BOS",
+  "Nova Zelândia":          "NZE",
+  "Costa do Marfim":        "CDM",
+  "Arábia Saudita":         "ARA",
+  "Congo":                  "RDC",
+  "Áustria":                "AUS",
+  "África do Sul":          "AFR",
+};
+
+function getAbbr(ptName) {
+  if (current === "pt") return teamAbbrPt[ptName] || teamAbbr[ptName] || ptName;
+  return teamAbbr[ptName] || ptName;
+}
+
+function refreshBracketAbbr() {
+  document.querySelectorAll('[data-abbr-team]').forEach(el => {
+    const span = el.querySelector('.bracket-abbr');
+    if (span) span.textContent = getAbbr(el.dataset.abbrTeam);
+  });
+}
+
 function getFlagSrc(name){
   const code = countryFlags[name];
   if(!code) return "https://via.placeholder.com/24x24?text=?";
@@ -397,8 +433,6 @@ function renderBracketMatch(match, label = null){
   const homeWon = played && match.home_score > match.away_score;
   const awayWon = played && match.away_score > match.home_score;
 
-  const homeAbbr = teamAbbr[match.home_name] || match.home_name;
-  const awayAbbr = teamAbbr[match.away_name] || match.away_name;
   const labelHtml = label ? `<div class="bracket-match-label">${label}</div>` : '';
 
   return `
@@ -406,12 +440,12 @@ function renderBracketMatch(match, label = null){
       ${labelHtml}
       <div class="bracket-team ${homeWon ? 'winner' : played ? 'loser' : ''}">
         <img class="bracket-flag" src="${getFlagSrc(match.home_name)}" alt="${match.home_name}" />
-        <span class="bracket-team-name">${homeAbbr}</span>
+        <span class="bracket-team-name" data-abbr-team="${match.home_name}"><span class="bracket-abbr">${getAbbr(match.home_name)}</span></span>
         <span class="bracket-score">${played ? match.home_score : '-'}</span>
       </div>
       <div class="bracket-team ${awayWon ? 'winner' : played ? 'loser' : ''}">
         <img class="bracket-flag" src="${getFlagSrc(match.away_name)}" alt="${match.away_name}" />
-        <span class="bracket-team-name">${awayAbbr}</span>
+        <span class="bracket-team-name" data-abbr-team="${match.away_name}"><span class="bracket-abbr">${getAbbr(match.away_name)}</span></span>
         <span class="bracket-score">${played ? match.away_score : '-'}</span>
       </div>
     </div>`;
@@ -469,6 +503,7 @@ async function loadKnockout(){
       <div class="bracket-col">${buildCol(BRACKET_LAYOUT.r32Right, translations[current].bracketR32)}</div>
     </div>
     ${thirdHtml}`;
+
 }
 
 document.querySelector('[data-tab="knockout"]').addEventListener("click", loadKnockout);
@@ -524,3 +559,5 @@ setBodyBackground("groups");
 loadGroups();
 loadMatches();
 loadKnockout();
+
+document.addEventListener('langChanged', refreshBracketAbbr);

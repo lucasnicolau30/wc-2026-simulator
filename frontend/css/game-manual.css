@@ -103,11 +103,27 @@
   text-align: center;
 }
 
+.page-footer {
+  margin-top: 2rem;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+#btnNextRound {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .score-input {
     width: 44px;
     height: 40px;
     font-size: 18px;
+  }
+
+  #btnNextRound {
+    display: flex;
   }
 
   .score-sep {

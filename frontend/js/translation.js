@@ -28,7 +28,7 @@ pt: {
     // game-real.html — matches
     matchesTitle: "Partidas",
     loadingMatches: "Carregando partidas...",
-    simulateAll: "Simular Todas",
+    simulateAll: "Simular Partidas",
     round1: "Rodada 1",
     round2: "Rodada 2",
     round3: "Rodada 3",
@@ -72,6 +72,9 @@ pt: {
     cancel: "Cancelar",
     confirm: "Reiniciar",
 
+    // próxima rodada
+    nextRound: "Próxima Rodada",
+
     // botão de voltar
     back: "VOLTAR",
     backTitle: "Voltar ao início?",
@@ -82,6 +85,7 @@ pt: {
     manualGameHeader: "WC2026 — Manual",
     manualResetTitle: "Reiniciar simulação?",
     manualResetText: "Isso apagará todos os jogos e resultados. As seleções e jogadores serão mantidos.",
+
     },
 
 en: {
@@ -157,6 +161,9 @@ en: {
     cancel: "Cancel",
     confirm: "Reset",
 
+    // next round
+    nextRound: "Next Round",
+
     // back button
     back: "BACK",
     backTitle: "Go back to start?",
@@ -169,6 +176,7 @@ en: {
     manualResetText: "This will erase all matches and results. Teams and players will be kept.",
     saveMatch: "Save",
     drawNotAllowed: "Draws not allowed in knockout. One team must win.",
+
     }
 };
 
@@ -245,6 +253,7 @@ function applyTranslation() {
         if (t[key]) el.placeholder = t[key];
     });
     btnLang.textContent = t.lang;
+    document.dispatchEvent(new CustomEvent('langChanged'));
 }
 
 applyTranslation();

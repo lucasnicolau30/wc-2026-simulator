@@ -29,7 +29,7 @@ Below are some views of the application, including group stage management, knock
 
 <img src="frontend/img/preview/groups-mobile.png" height="400">
 
-## 🆚 Matches
+### 🆚 Matches
 
 <img src="frontend/img/preview/matches-pc.png" height="400">
 
@@ -62,7 +62,7 @@ wc-2026/
 ├─ backend/
 │  ├─ seed/
 │  │  ├─ selections.json        # Teams and players dataset
-│  │  └─ seed.js                # Database seed script
+│  │  └─ validate.js            # Dataset validation script
 │  │
 │  └─ src/
 │     ├─ server.js              # Express API + database setup
@@ -70,7 +70,13 @@ wc-2026/
 │
 ├─ frontend/
 │  ├─ css/
-│  ├─ img/
+│  │  ├─ shared.css             # Global styles and shared components
+│  │  ├─ simulation.css         # Mode selection page styles
+│  │  ├─ game-real.css          # Automatic simulation page styles
+│  │  └─ game-manual.css        # Manual simulation page styles
+│  │
+│  ├─ img/                      # Flags, backgrounds and preview screenshots
+│  │
 │  ├─ js/
 │  │  ├─ config.js              # API base URL configuration
 │  │  ├─ translation.js         # i18n system (PT / EN)
@@ -81,8 +87,8 @@ wc-2026/
 │  │  └─ game-manual.js         # Manual mode logic
 │  │
 │  ├─ simulation.html           # Entry point — mode selection
-│  ├─ game-real.html
-│  ├─ game-manual.html
+│  ├─ game-real.html            # Automatic simulation page
+│  ├─ game-manual.html          # Manual simulation page
 │  ├─ robots.txt                # Search engine crawl rules
 │  └─ sitemap.xml               # Sitemap for Google indexing
 │

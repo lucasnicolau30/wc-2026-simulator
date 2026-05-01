@@ -113,6 +113,42 @@ const teamAbbr = {
   "Gana": "GHA", "Panamá": "PAN"
 };
 
+const teamAbbrPt = {
+  "Estados Unidos": "EUA",
+  "Alemanha":       "ALE",
+  "Inglaterra":     "ING",
+  "Holanda":        "HOL",
+  "Coreia do Sul":  "COR",
+  "Suécia":         "SUE",
+  "Escócia":        "ESC",
+  "Catar":                  "CAT",
+  "Egito":                  "EGI",
+  "Equador":                "EQU",
+  "Argélia":                "ARG",
+  "Suíça":                  "SUI",
+  "Cabo Verde":             "CBV",
+  "Japão":                  "JAP",
+  "Bósnia e Herzegovina":   "BOS",
+  "Nova Zelândia":          "NZE",
+  "Costa do Marfim":        "CDM",
+  "Arábia Saudita":         "ARA",
+  "Congo":                  "RDC",
+  "Áustria":                "AUS",
+  "África do Sul":          "AFR",
+};
+
+function getAbbr(ptName) {
+  if (current === "pt") return teamAbbrPt[ptName] || teamAbbr[ptName] || ptName;
+  return teamAbbr[ptName] || ptName;
+}
+
+function refreshBracketAbbr() {
+  document.querySelectorAll('[data-abbr-team]').forEach(el => {
+    const span = el.querySelector('.bracket-abbr');
+    if (span) span.textContent = getAbbr(el.dataset.abbrTeam);
+  });
+}
+
 function getFlagSrc(countryName) {
   const flagCode = countryFlags[countryName];
   if (!flagCode) return "https://via.placeholder.com/24x24?text=?";
@@ -509,13 +545,39 @@ async function tryGenerateStage(stage){
     }
 }
 
+function updateNextRoundBtn() {
+  const btns = Array.from(document.querySelectorAll("#matches-round-filter .round-btn"));
+  const activeIdx = btns.findIndex(b => b.classList.contains("active"));
+  const btn = document.getElementById("btnNextRound");
+  if (!btn) return;
+  if (activeIdx < btns.length - 1) {
+    btn.style.display = '';
+  } else {
+    btn.style.display = 'none';
+  }
+}
+
 document.querySelectorAll("#matches-round-filter .round-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll("#matches-round-filter .round-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
     loadMatches();
+    updateNextRoundBtn();
   });
 });
+
+document.getElementById("btnNextRound").addEventListener("click", () => {
+  const btns = Array.from(document.querySelectorAll("#matches-round-filter .round-btn"));
+  const activeIdx = btns.findIndex(b => b.classList.contains("active"));
+  const next = btns[activeIdx + 1];
+  if (!next) return;
+  btns.forEach(b => b.classList.remove("active"));
+  next.classList.add("active");
+  loadMatches();
+  updateNextRoundBtn();
+});
+
+updateNextRoundBtn();
 
 document.getElementById("simulate-all-matches").addEventListener("click", async () => {
     const activeBtn = document.querySelector("#matches-round-filter .round-btn.active");
@@ -643,9 +705,6 @@ function renderBracketMatch(match, label = null, shootout = null){
   if(awayWon) awayClasses.push('winner');
   if(played && !awayWon) awayClasses.push('loser');
 
-  const homeAbbr = teamAbbr[match.home_name] || match.home_name;
-  const awayAbbr = teamAbbr[match.away_name] || match.away_name;
-
   const playedClass = played ? 'played' : '';
   const labelHtml = label ? `<div class="bracket-match-label">${label}</div>` : '';
 
@@ -660,12 +719,12 @@ function renderBracketMatch(match, label = null, shootout = null){
       ${labelHtml}
       <div class="bracket-team ${homeClasses.join(' ')}">
         <img class="bracket-flag" src="${getFlagSrc(match.home_name)}" alt="${match.home_name}" />
-        <span class="bracket-team-name">${homeAbbr}${homePk}</span>
+        <span class="bracket-team-name" data-abbr-team="${match.home_name}"><span class="bracket-abbr">${getAbbr(match.home_name)}</span>${homePk}</span>
         <span class="bracket-score">${homeScore}</span>
       </div>
       <div class="bracket-team ${awayClasses.join(' ')}">
         <img class="bracket-flag" src="${getFlagSrc(match.away_name)}" alt="${match.away_name}" />
-        <span class="bracket-team-name">${awayAbbr}${awayPk}</span>
+        <span class="bracket-team-name" data-abbr-team="${match.away_name}"><span class="bracket-abbr">${getAbbr(match.away_name)}</span>${awayPk}</span>
         <span class="bracket-score">${awayScore}</span>
       </div>
     </div>
@@ -676,7 +735,7 @@ async function loadKnockout(){
   const wrap = document.getElementById('knockout-wrap');
 
   let response = await fetch(`${API_BASE_URL}/knockout-matches`);
-  if(!response.ok) return;
+  if(!response.ok) { return; }
   let matches = await response.json();
 
   if(matches.length === 0){
@@ -686,7 +745,7 @@ async function loadKnockout(){
       return;
     }
     response = await fetch(`${API_BASE_URL}/knockout-matches`);
-    if(!response.ok) return;
+    if(!response.ok) { return; }
     matches = await response.json();
     if(matches.length === 0){
       wrap.innerHTML = `<p class="knockout-placeholder">${translations[current].knockoutPlaceholder}</p>`;
@@ -825,3 +884,5 @@ resetConfirm.addEventListener("click", async () => {
   loadKnockout();
   renderPerformance();
 });
+
+document.addEventListener('langChanged', refreshBracketAbbr);

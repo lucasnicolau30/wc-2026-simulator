@@ -631,7 +631,7 @@ body.bg-performance {
 }
 
 .group-stats-header span {
-  width: 36px;
+  width: 32px;
   text-align: center;
 }
 
@@ -701,7 +701,7 @@ body.bg-performance {
 }
 
 .group-team-pts span {
-  width: 36px;
+  width: 32px;
   text-align: center;
 }
 
@@ -858,6 +858,20 @@ body.bg-performance {
 
 .page-footer {
   margin-top: 2rem;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+#btnNextRound {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  #btnNextRound {
+    display: flex;
+  }
 }
 
 /* ===== pênaltis ===== */
@@ -1451,11 +1465,13 @@ body.bg-performance {
   RESPONSIVO
 ========================= */
 
-@media (max-width: 1200px) {
+@media (max-width: 1400px) {
   .groups-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+}
 
+@media (max-width: 1200px) {
   .performance-card {
     grid-template-columns: 60px minmax(0, 1.2fr) minmax(0, 1fr) 90px 110px;
   }
@@ -1491,10 +1507,20 @@ body.bg-performance {
 
   .navbar {
     top: 14px;
-    left: 80px;
+    left: 60px;
     right: 220px;
     width: auto;
     transform: none;
+  }
+
+  .back-button span {
+    display: none;
+  }
+
+  .back-button {
+    padding: 0 10px;
+    gap: 0;
+    min-width: 30px;
   }
 
   .round-btn {
@@ -1556,12 +1582,22 @@ body.bg-performance {
 
 @media (max-width: 768px) {
   .navbar {
-    left: 76px;
+    left: 60px;
     right: 216px;
     width: auto;
     transform: none;
     justify-content: center;
     padding-top: 0;
+  }
+
+  .back-button span {
+    display: none;
+  }
+
+  .back-button {
+    padding: 0 10px;
+    gap: 0;
+    min-width: 30px;
   }
 
 
