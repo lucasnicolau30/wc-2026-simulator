@@ -1,4 +1,4 @@
-# ⚽ WC-2026 — World Cup Simulator System
+# WC-2026 — World Cup Simulator System
 
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=node.js&logoColor=white)
 ![Express](https://img.shields.io/badge/Express-000000?style=flat&logo=express&logoColor=white)
@@ -9,45 +9,47 @@
 ![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=flat&logo=swagger&logoColor=black)
 ![Hostinger](https://img.shields.io/badge/Hostinger-673DE6?style=flat&logo=hostinger&logoColor=white)
 
+Read in: [Português](README.pt-br.md) | English
+
 Full-stack web application developed to simulate the FIFA World Cup 2026, including group stage logic, best third-place qualification, knockout generation, and player-level statistics, supporting both probabilistic automatic simulation and fully manual match input modes.
 
-🔗 **Live Demo:** https://wc2026simulador.com/
+**Live Demo:** https://wc2026simulador.com/
 
-## 📸 Screenshots
+## Screenshots
 
 Below are some views of the application, including group stage management, knockout bracket generation, and mobile responsiveness.
 
-### ⚽ Mode Selection
+### Mode Selection
 
 <img src="frontend/img/preview/sim-pc.png" height="400">
 
 <img src="frontend/img/preview/sim-mobile.png" height="400">
 
-### 📊 Group Stage
+### Group Stage
 
 <img src="frontend/img/preview/groups-pc.png" height="400">
 
 <img src="frontend/img/preview/groups-mobile.png" height="400">
 
-### 🆚 Matches
+### Matches
 
 <img src="frontend/img/preview/matches-pc.png" height="400">
 
 <img src="frontend/img/preview/matches-mobile.png" height="400">
 
-### 🏆 Knockout Stage
+### Knockout Stage
 
 <img src="frontend/img/preview/knockout-pc.png" height="400">
 
 <img src="frontend/img/preview/knockout-mobile.png" height="400">
 
-### 📈 Player Performance Ranking
+### Player Performance Ranking
 
 <img src="frontend/img/preview/performance-pc.png" height="400">
 
 <img src="frontend/img/preview/performance-mobile.png" height="400">
 
-## 💡 Context
+## Context
 
 With the FIFA World Cup expanding to **48 teams** in 2026, the tournament format became more complex, especially regarding group-stage qualification, best third-place teams, and knockout bracket generation.
 
@@ -55,7 +57,7 @@ The idea came up when I noticed that many existing simulators only allow users t
 
 This project was created to simulate the **entire World Cup 2026 structure**, allowing both automated statistical simulation and manual match control in the same system.
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 wc-2026/
@@ -97,7 +99,7 @@ wc-2026/
 └─ README.md
 ```
 
-## ⚙️ How It Works
+## How It Works
 
 1. User selects a simulation mode: **real** or **manual**
 2. The system generates all **group stage matches**
@@ -110,38 +112,37 @@ wc-2026/
 7. Player statistics and match events are recorded
 8. The tournament progresses until the final match
 
-## ⚽ Simulation Logic
+## Simulation Logic
 
 ### Automatic Simulation Mode
 
 Match results are generated using:
 
-- FIFA ranking data  
-- average rating of starting players  
-- probability calculations based on ELO logic  
-- Poisson distribution for expected goals (**xG**)  
+- FIFA ranking data
+- average rating of starting players
+- probability calculations based on ELO logic
+- Poisson distribution for expected goals (**xG**)
 
 The system simulates:
 
-- match scores  
-- scorers  
-- assists  
-- player ratings  
-- clean sheets  
-- minute-by-minute goal events  
-- penalty shootouts  
+- match scores
+- scorers
+- assists
+- player ratings
+- clean sheets
+- minute-by-minute goal events
+- penalty shootouts
 
 ### Manual Mode
 
 Allows users to:
 
-- manually enter match scores  
-- simulate custom tournament scenarios  
-- automatically calculate group standings  
-- determine knockout winners  
+- manually enter match scores
+- simulate custom tournament scenarios
+- automatically calculate group standings
+- determine knockout winners
 
-
-## 🗄️ Database Design
+## Database Design
 
 The system uses a relational database structured to manage the following main entities:
 
@@ -157,33 +158,35 @@ The system uses a relational database structured to manage the following main en
 
 This design allows:
 
-- persistent match tracking  
-- real-time standings calculation  
-- player performance tracking  
-- tournament progression logic  
+- persistent match tracking
+- real-time standings calculation
+- player performance tracking
+- tournament progression logic
 
-## 📡 API Documentation
+## API Documentation
 
 Swagger documentation is available at: [Swagger](http://localhost:8000/docs)
 
 <img src="frontend/img/preview/swagger.png" height="400">
 
-## 🌐 Deployment & SEO
+## Deployment & SEO
 
 The application is deployed on **Hostinger** using Node.js hosting with a custom domain.
 
 Production setup:
+
 - Entry point: `backend/src/server.js`
 - Frontend served as static files via `express.static`, with `simulation.html` as the index
 - Environment variables configured via `.env`: `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`, `PORT`, `FRONTEND_URL`
 
 SEO configuration:
+
 - `robots.txt` — allows full crawling by search engines
 - `sitemap.xml` — submitted to Google Search Console; canonical root URL points to `simulation.html`
 - `simulation.html` includes full meta tags: `title`, `description`, `keywords`, Open Graph, Twitter Card, and `hreflang` for PT/EN
 - `translation.js` dynamically updates `document.lang`, `<title>`, and all meta tags on language switch
 
-## 🌍 Internationalization
+## Internationalization
 
 The application supports **Portuguese (PT-BR)** and **English (EN)** via a custom i18n system:
 
@@ -191,7 +194,7 @@ The application supports **Portuguese (PT-BR)** and **English (EN)** via a custo
 - All UI strings defined in `frontend/js/translation.js`
 - `hreflang` tags configured for bilingual SEO indexing
 
-## 📖 References
+## References
 
 - [FIFA World Cup 2026 Official Format](https://www.fifa.com/pt/tournaments/mens/worldcup/canadamexicousa2026)
 - [FIFA Ranking Data](https://inside.fifa.com/fifa-world-ranking/men) — Last update: 12/04/2026
@@ -203,6 +206,6 @@ The application supports **Portuguese (PT-BR)** and **English (EN)** via a custo
 - [UI Components Inspiration](https://uiverse.io/alexruix/slippery-frog-10)
 - [UI Components Inspiration](https://uiverse.io/aryamitra06/silent-lion-21)
 
-## 👨‍💻 Author
+## Author
 
-**Lucas Nicolau** — Software Engineering Student at [@UFAM](https://www.ufam.edu.br).
+Lucas Nicolau — Software Engineering Student at @UFAM
