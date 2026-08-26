@@ -9,7 +9,7 @@
 ![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=flat&logo=swagger&logoColor=black)
 ![Hostinger](https://img.shields.io/badge/Hostinger-673DE6?style=flat&logo=hostinger&logoColor=white)
 
-Read in: [Português](README.pt-br.md) | English
+Read in: [Português](README.pt.md) | English
 
 Full-stack web application developed to simulate the FIFA World Cup 2026, including group stage logic, best third-place qualification, knockout generation, and player-level statistics, supporting both probabilistic automatic simulation and fully manual match input modes.
 
